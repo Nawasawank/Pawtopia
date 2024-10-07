@@ -29,7 +29,6 @@ export default function (sequelize, Sequelize) {
         freezeTableName: true
     });
 
-    // Define the association in a static method
     User.associate = function (models) {
         User.hasMany(models.Pet, {
             foreignKey: 'user_id',

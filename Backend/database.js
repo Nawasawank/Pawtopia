@@ -30,13 +30,12 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     }
 })();
 
-// Initialize models
+
 const db = {};
 db.sequelize = sequelize;
 db.User = SignUpModel(sequelize, Sequelize);
 db.Pet = PetModel(sequelize, Sequelize);
 
-// Automatically associate models
 Object.keys(db).forEach((modelName) => {
     if (db[modelName].associate) {
         db[modelName].associate(db);

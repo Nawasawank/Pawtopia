@@ -15,7 +15,6 @@ export const register = async (req, res) => {
             }
         }
 
-        // Exclude sensitive fields like password before returning
         const userInfo = {
             id: result.user_id,
             firstname: result.firstName,
