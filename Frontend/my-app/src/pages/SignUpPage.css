@@ -1,0 +1,205 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: flex-start; 
+  align-items: flex-start; 
+  background-color: #a0522d; 
+  font-family: "Lato", sans-serif;
+  padding-left: 250px; 
+}
+
+.signup-container {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  padding-top: 65px; 
+}
+
+.register-title {
+  color: #5a3e22;
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.form-container {
+  width: 140%; 
+  max-width: 800px; 
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 40px; 
+  margin-bottom: 160px; 
+  padding: 100px;
+}
+
+.section-title {
+  text-align: center; 
+  font-weight: bold;
+  font-size: 28px;
+  color: #8b4513;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #dcdcdc;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+  padding-bottom: 20px;
+}
+
+.input-container input {
+  padding: 14px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 100%; 
+  background-color: #f9f9f9;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.radio-container {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.radio-container label {
+  color: #333;
+  font-size: 16px;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center; 
+  margin-top: 20px; 
+}
+
+button {
+  padding: 15px;
+  background-color: #70be70;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  width: 25%; 
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #2e8b57;
+}
+
+@media (max-width: 600px) {
+  .form-container {
+    width: 95%; 
+  }
+
+  .input-container input {
+    width: 100%;
+  }
+}
+
+.lato-thin {
+  font-family: "Lato", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.lato-light {
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.lato-regular {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.lato-bold {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.lato-black {
+  font-family: "Lato", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.lato-thin-italic {
+  font-family: "Lato", sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.lato-light-italic {
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.lato-regular-italic {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.lato-bold-italic {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.lato-black-italic {
+  font-family: "Lato", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+}
+
+.radio-container-wrapper {
+  display: flex;
+  align-items: center; 
+  margin-bottom: 20px;
+}
+
+
+.radio-container {
+  display: flex;
+  align-items: center;
+  gap: 30px; 
+}
+
+.radio-container label {
+  margin-top: 0px;
+  margin-right: 20px;
+}
+
+.radio-container-wrapper {
+  display: flex;
+  align-items: center; 
+  gap: 15px; 
+  margin-bottom: 2px;
+}
+
+
+.input-container label {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 5px;
+  display: block; 
+}
+
+.input-container input {
+  display: block;
+  margin-top: 5px; 
+}
