@@ -1,40 +1,107 @@
-export default function (sequelize, Sequelize) {
-    const User = sequelize.define('User', {
-        user_id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
-        },
-        firstName: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        lastName: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        email: {
-            type: Sequelize.STRING,
-            allowNull: false,
-            unique: true
-        },
-        tel: {
-            type: Sequelize.STRING,
-            allowNull: false,
-            unique: true
-        },
-    }, {
-        timestamps: true,
-        paranoid: true,
-        freezeTableName: true
-    });
+import bcrypt from 'bcrypt';
 
-    User.associate = function (models) {
-        User.hasMany(models.Pet, {
-            foreignKey: 'user_id',
-            as: 'pets',
-            onDelete: 'CASCADE'
-        });
+export default function UserModel(db) {
+    const User = {
+        createTable: async () => {
+            const sql = `
+                CREATE TABLE IF NOT EXISTS users (
+                    user_id INT AUTO_INCREMENT PRIMARY KEY,
+                    firstName VARCHAR(255) NOT NULL,
+                    lastName VARCHAR(255) NOT NULL,
+                    email VARCHAR(255) NOT NULL UNIQUE,
+                    tel VARCHAR(50) NOT NULL UNIQUE,
+                    password VARCHAR(255) NOT NULL,
+                    image VARCHAR(255),
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                );
+            `;
+            await db.query(sql);
+        },
+        createUser: async (userData) => {
+            try {
+                const sql = `
+                    INSERT INTO users (firstName, lastName, email, tel, password, image) 
+                    VALUES (?, ?, ?, ?, ?, ?)
+                `;
+                const params = [
+                    userData.firstName,
+                    userData.lastName,
+                    userData.email,
+                    userData.tel,
+                    userData.password,
+                    userData.image || null 
+                ];
+                
+                const result = await db.query(sql, params);
+                return result;
+            } catch (error) {
+                console.error('Error creating user:', error);
+                throw error;
+            }
+        },
+
+        updateUser: async (userId, updateData) => {
+            try {
+                if (updateData.password) {
+                    const salt = await bcrypt.genSalt(10);
+                    updateData.password = await bcrypt.hash(updateData.password, salt);
+                }
+
+                const sql = `
+                    UPDATE users 
+                    SET firstName = ?, lastName = ?, email = ?, tel = ?, password = ?, image = ?
+                    WHERE user_id = ?
+                `;
+                const params = [
+                    updateData.firstName,
+                    updateData.lastName,
+                    updateData.email,
+                    updateData.tel,
+                    updateData.password,
+                    updateData.image || null,
+                    userId
+                ];
+
+                const result = await db.query(sql, params);
+                return result;
+            } catch (error) {
+                console.error('Error updating user:', error);
+                throw error;
+            }
+        },
+
+        findUserByEmail: async (email) => {
+            const sql = 'SELECT * FROM users WHERE email = ?';
+            const users = await db.query(sql, [email]);
+            return users[0]; 
+        },
+
+        findUserById: async (userId) => {
+            const sql = 'SELECT * FROM users WHERE user_id = ?';
+            const users = await db.query(sql, [userId]);
+            return users[0];
+        },
+        findUserByTel: async (tel) => {
+            const sql = 'SELECT * FROM users WHERE tel = ?';
+            const users = await db.query(sql, [tel]);
+            return users[0]; 
+        },
+
+        getUserWithPets: async (userId) => {
+            const userSql = 'SELECT * FROM users WHERE user_id = ?';
+            const user = await db.query(userSql, [userId]);
+
+            const petsSql = 'SELECT * FROM pets WHERE user_id = ?';
+            const pets = await db.query(petsSql, [userId]);
+
+            if (user.length > 0) {
+                user[0].pets = pets;
+                return user[0];
+            } else {
+                return null;
+            }
+        }
     };
 
     return User;

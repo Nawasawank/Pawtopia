@@ -1,17 +1,15 @@
 import bcrypt from 'bcrypt';
-import db from '../database.js';
-
-const { User, Pet } = db;
+import { User, Pet } from '../database.js';
 
 export const registerUser = async (firstname, lastname, email, password, tel, name, type, gender, weight, vaccination, health_condition) => {
     try {
-        const existingUser = await User.findOne({ where: { email } });
-        if (existingUser) {
+        const existingUserByEmail = await User.findUserByEmail(email);
+        if (existingUserByEmail) {
             console.warn(`Email already exists: ${email}`);
             return { error: 'Email already exists' };
         }
 
-        const existingUserByTel = await User.findOne({ where: { tel } });
+        const existingUserByTel = await User.findUserByTel(tel);
         if (existingUserByTel) {
             console.warn(`Phone number already exists: ${tel}`);
             return { error: 'Phone number already exists' };
@@ -20,7 +18,7 @@ export const registerUser = async (firstname, lastname, email, password, tel, na
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newUser = await User.create({
+        const newUser = await User.createUser({
             firstName: firstname,
             lastName: lastname,
             email,
@@ -28,8 +26,8 @@ export const registerUser = async (firstname, lastname, email, password, tel, na
             password: hashedPassword
         });
 
-        const newPet = await Pet.create({
-            user_id: newUser.user_id,
+        const newPet = await Pet.createPet({
+            user_id: newUser.insertId,
             name,
             type,
             gender,

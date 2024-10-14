@@ -25,20 +25,35 @@
 // export default App;
 
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Ensure 'Routes' is imported
-import SignUpPage from '../src/pages/SignUpPage.js';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import SignUpPage from '../src/pages/SignUpPage';
+import LogInPage from './pages/LogInPage';
+import HomePage from './pages/HomePage';
+import ProtectedRoute from './pages/ProtectedRoute';
+
+
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/" element={<SignUpPage />} /> 
+        <Route path="/login" element={<LogInPage />} />
+        <Route 
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/" element={<SignUpPage />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
+
 
 
 
