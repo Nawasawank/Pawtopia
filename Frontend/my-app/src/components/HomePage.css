@@ -39,23 +39,8 @@ body {
     gap: 10px;
 }
 
-.login-btn, .register-btn {
-    background-color: #6cc3c0;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-}
 
-.register-btn {
-    background-color: #a8d0e6;
-}
-
-.login-btn:hover, .register-btn:hover {
-    opacity: 0.9;
-}
-
+/* Hero Section */
 .hero-section {
     font-family: Georgia, serif;
     display: flex;
@@ -63,12 +48,20 @@ body {
     align-items: center;
     padding: 50px;
     background-color: #fdf6e5;
+    flex-wrap: wrap;  /* Allow wrapping for smaller screens */
+}
+
+.hero-content {
+    flex: 1;
+    max-width: 600px;  /* Control the width of the text block */
+    text-align: center;
+    margin-bottom: 30px;
 }
 
 .hero-content h2 {
-    text-align: center;
+    font-weight: 300;
     line-height: 1.4;
-    font-size: 2.7rem;
+    font-size: 2.4rem;  /* Adjust font size slightly */
     color: #333;
 }
 
@@ -78,10 +71,22 @@ body {
     color: #666;
 }
 
-.hero-image img {
-    max-width: 100%;
-    height: auto;
+/* Resize dog image */
+.hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+.hero-image img {
+    margin-top: 100px;
+    max-width: 800px;  /* Resize the image to make it a bit smaller */
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
 
 
 .services-section {
@@ -169,48 +174,6 @@ body {
     margin-top: 20px;
 }
 
-.contact-section {
-    padding: 20px;
-    background-color: #fdf6e5;
-    text-align: center;
-}
-
-.contact-section {
-    margin-left: -140px;
-    background-color: #fdf6e5; 
-    padding: 40px; 
-}
-
-.contact-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start; 
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.contact-info {
-    width: 60%; 
-    font-size: 1.1rem;
-    color: #333;
-    line-height: 1.6;
-    margin-bottom: -40px;
-}
-
-.contact-info h4 {
-    text-align: left;
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-    margin-bottom: 10px;
-}
-
-.contact-info p {
-    text-align: left;
-    font-size: 14px;
-    color: #333;
-    line-height: 1.8;
-}
 
 .cat-section {
     padding: 30px;
@@ -253,6 +216,7 @@ body {
     border-bottom: 1px solid #333; 
     padding-bottom: 20px; 
     margin-bottom: 15px; 
+    font-weight: 100;
 }
 
 .cat-text p {
@@ -262,35 +226,7 @@ body {
     line-height: 1.6;
 }
 
-.social-links {
-    width: 20%; 
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    text-align: left;
-    margin-top: 50px;
-}
 
-.social-links a {
-    margin-left: 200px;
-    display: flex;
-    align-items: left; 
-    text-decoration: none;
-    font-size: 14px;
-    color: #333;
-    white-space: nowrap;
-}
-
-.social-links a:hover {
-    color: #555;
-}
-
-.social-links img.social-icon {
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
-    object-fit: contain;
-}
 
 .paw-image {
     position: absolute;
@@ -319,7 +255,7 @@ body {
 .paw-image-4 {
     top: 140px;  
     left: 20px;
-    width: 260px;
+    width: 200px;
 }
 
 .paw-image-5 {
@@ -328,108 +264,4 @@ body {
     width: 190px;
 }
 
-/* Default styles go here */
-
-@media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 10px;
-    }
-    .navbar .logo {
-        margin-bottom: 10px;
-        text-align: center;
-    }
-
-
-    .logo img {
-        margin-left: 0;
-        display: block;
-        margin: 0 auto;
-    }
-    .hero-section {
-        flex-direction: column;
-        padding: 30px;
-        justify-content: center;
-        text-align: center;
-    }
-
-    .hero-content h2 {
-        font-size: 2rem;
-    }
-
-    .hero-content p {
-        font-size: 1rem;
-    }
-
-    .hero-image img {
-        width: 80%;
-        margin: 0 auto;
-    }
-
-    .services-section {
-        padding: 30px;
-    }
-
-    .service-cards {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .service-card {
-        width: 100%;
-        max-width: 250px;
-        height: auto;
-        margin: 0 auto;
-    }
-
-    .about-section {
-        padding: 30px;
-    }
-
-    .contact-section {
-        padding: 30px;
-        margin-left: 0;
-    }
-
-    .contact-container {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .contact-info, .social-links {
-        width: 100%;
-        text-align: center;
-    }
-
-    .social-links a {
-        margin-left: 0;
-    }
-
-    .cat-section {
-        flex-direction: column;
-        padding: 20px;
-    }
-
-    .cat-image img {
-        width: 80%;
-        margin-left: 0;
-    }
-
-    .cat-text {
-        margin-top: 0;
-        margin-left: 0;
-        max-width: 90%;
-    }
-
-    .paw-image-1,
-    .paw-image-2,
-    .paw-image-3,
-    .paw-image-4,
-    .paw-image-5 {
-        display: none; /* Hide paw images on smaller screens */
-    }
-}
 
