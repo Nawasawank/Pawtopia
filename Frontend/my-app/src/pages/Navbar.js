@@ -89,7 +89,7 @@ function Navbar() {
           </ul>
         </nav>
         <div className="user-info">
-          {/* Display the profile image with the full path */}
+
           <span>Hi! {userInfo.firstName}</span>
           {userInfo.image && <img src={userInfo.image} alt="Profile" className="profile-img" />}
         </div>

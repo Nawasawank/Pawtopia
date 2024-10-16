@@ -1,11 +1,14 @@
 .navbar {
-    font-family: 'Lato', sans-serif;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 30px; 
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10; 
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;  /* Ensure that the content inside the navbar is properly aligned */
+    justify-content: space-between;  /* Space out the logo, nav links, and user info */
+    padding: 10px 50px;  /* Add some padding to give it room and ensure proper alignment */
 }
 
 .logo {
@@ -39,6 +42,7 @@ nav ul {
     gap: 50px;  /* You can adjust this value to control spacing between links */
     margin: 0;
     padding: 0;
+    position: relative;  /* Added to allow proper dropdown positioning */
 }
 
 nav a, .dropdown-toggle {
@@ -58,22 +62,13 @@ nav a:hover, .dropdown-toggle:hover {
     text-decoration: none;
 }
 
-.dropdown-toggle {
-    font-weight: bold;
-    font-size: 16px;
-    color: #333;
-    padding: 5px 15px;
-    background-color: transparent;
-    border: none;
-    text-decoration: none;
-}
-
 .dropdown-menu {
     padding: 0;
     border-radius: 4px;
     background-color: #fff;
     border: 1px solid rgba(0, 0, 0, 0.15);
-    min-width: 160px;  /* Ensure dropdown has enough width */
+    min-width: 160px;  
+    position: absolute; 
 }
 
 .dropdown-item {
