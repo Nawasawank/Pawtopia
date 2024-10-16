@@ -1,0 +1,63 @@
+/* Make sure to remove the duplicate .contact-section class */
+.contact-section {
+    padding: 30px;
+    background-color: #fdf6e5;
+    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.contact-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 10000px; 
+    margin: 0 auto; 
+    flex-wrap: wrap;
+}
+
+.contact-info {
+    width: 60%;
+    font-size: 1.1rem;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.contact-info h4 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.contact-info p {
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.social-links {
+    width: 15%; /* Adjust width to give enough space */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 50px;
+}
+
+.social-links a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-size: 14px;
+    color: #333;
+}
+
+.social-links a:hover {
+    color: #555;
+}
+
+.social-links img.social-icon {
+    width: 30px;
+    height: auto;
+    margin-right: 10px;
+}
