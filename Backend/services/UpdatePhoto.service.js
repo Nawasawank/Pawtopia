@@ -1,22 +1,16 @@
-import db from '../database.js';
-
-const { User } = db;
+import { User } from '../database.js'; 
 
 export const updateProfileImage = async (userId, profileImagePath) => {
     try {
-        // Find the user by their ID
-        const user = await User.findByPk(userId);
-        console.log(userId);
 
-        if (!user) {
-            return { error: 'User not found' };
+        const updateResult = await User.updateUserImage(userId, profileImagePath);
+
+        if (updateResult.affectedRows === 0) {
+            return { error: 'Failed to update profile image' };
         }
 
-        // Update the user's image
-        user.image = profileImagePath;
-        await user.save();
-
-        return user;  // Return the updated user
+        const updatedUser = await User.findUserById(userId);
+        return updatedUser;  
     } catch (error) {
         console.error(`Error updating profile image: ${error.message}`);
         return { error: 'Error updating profile image' };

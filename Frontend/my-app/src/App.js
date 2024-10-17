@@ -26,10 +26,10 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import SignUpPage from '../src/pages/SignUpPage.js';
-import LogInPage from './pages/LogInPage.js';
-import HomePage from './pages/HomePage.js';
-import HotelBookingPage from './pages/HotelBookingPage.js';
+import SignUpPage from '../src/pages/SignUpPage.jsx';
+import LogInPage from './pages/LogInPage.jsx';
+import HomePage from './pages/HomePage.jsx';
+import HotelBookingPage from './pages/HotelBookingPage.jsx';
 import ProtectedRoute from './pages/ProtectedRoute';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'daterangepicker/daterangepicker.css';

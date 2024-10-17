@@ -35,7 +35,9 @@ export default function PetModel(db) {
                 ];
 
                 const result = await db.query(sql, params);
-                return result;
+                
+                const newPet = await Pet.findPetById(result.insertId);
+                return newPet;
             } catch (error) {
                 console.error('Error creating pet:', error);
                 throw error;
@@ -81,7 +83,11 @@ export default function PetModel(db) {
         deletePet: async (petId) => {
             const sql = 'DELETE FROM pets WHERE pet_id = ?';
             return db.query(sql, [petId]);
-        }
+        },
+        findPetNamesAndTypesByUserId: async (userId) => {
+            const sql = 'SELECT pet_id, name, type FROM pets WHERE user_id = ?';
+            return db.query(sql, [userId]);
+        },
     };
 
     return Pet;

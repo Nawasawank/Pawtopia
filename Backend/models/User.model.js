@@ -101,6 +101,22 @@ export default function UserModel(db) {
             } else {
                 return null;
             }
+        },
+        updateUserImage: async (userId, imagePath) => {
+            try {
+                const sql = `
+                    UPDATE users 
+                    SET image = ?
+                    WHERE user_id = ?
+                `;
+                const params = [imagePath, userId];
+        
+                const result = await db.query(sql, params);
+                return result;
+            } catch (error) {
+                console.error('Error updating user image:', error);
+                throw error;
+            }
         }
     };
 
