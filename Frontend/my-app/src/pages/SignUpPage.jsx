@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../components/SignUpPage.css';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 const SignUpPage = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [tel, setTel] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useLocalStorage('firstName', ''); 
+  const [lastName, setLastName] = useLocalStorage('lastName', ''); 
+  const [email, setEmail] = useLocalStorage('email', ''); 
+  const [tel, setTel] = useLocalStorage('tel', ''); 
+  const [password, setPassword] = useLocalStorage('password', ''); 
+  const [confirmPassword, setConfirmPassword] = useLocalStorage('confirmPassword', ''); 
 
   // Pet Information
-  const [petName, setPetName] = useState('');
-  const [petType, setPetType] = useState('');
-  const [petGender, setPetGender] = useState('');
-  const [petWeight, setPetWeight] = useState('');
-  const [vaccination, setVaccination] = useState('');
-  const [healthCondition, setHealthCondition] = useState('');
+  const [petName, setPetName] = useLocalStorage('petName', ''); 
+  const [petType, setPetType] = useLocalStorage('petType', ''); 
+  const [petGender, setPetGender] = useLocalStorage('petGender', ''); 
+  const [petWeight, setPetWeight] = useLocalStorage('petWeight', ''); 
+  const [vaccination, setVaccination] = useLocalStorage('vaccination', ''); 
+  const [healthCondition, setHealthCondition] = useLocalStorage('healthCondition', '');
 
   const handleSignUp = async (event) => {
     event.preventDefault();

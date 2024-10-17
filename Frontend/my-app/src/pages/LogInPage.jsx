@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../components/LogInPage.css';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 const LogInPage = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useLocalStorage('email', '');
+    const [password, setPassword] = useState(''); 
     const [error, setError] = useState(null); 
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();

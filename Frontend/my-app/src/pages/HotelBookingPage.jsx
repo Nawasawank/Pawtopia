@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import useLocalStorage from '../hooks/useLocalStorage';
 import Navbar from '../utils/navbar.jsx';
 import ContactSection from '../utils/ContactSection.jsx';
 import { DateRangePicker } from 'rsuite';
@@ -6,11 +7,12 @@ import 'rsuite/dist/rsuite.min.css';
 import '../components/HotelBooking.css';
 
 const HotelBookingPage = () => {
-  const [dateRange, setDateRange] = useState(null);
-  const [selectedRoom, setSelectedRoom] = useState('');
-  const [selectedPet, setSelectedPet] = useState('');
+  const [dateRange, setDateRange] = useLocalStorage('dateRange', null);
+  const [selectedRoom, setSelectedRoom] = useLocalStorage('selectedRoom', '');
+  const [selectedPet, setSelectedPet] = useLocalStorage('selectedPet', '');
   const [pets, setPets] = useState([]); 
   const [loading, setLoading] = useState(true); 
+
 
   useEffect(() => {
     const fetchPets = async () => {

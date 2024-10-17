@@ -1,4 +1,3 @@
-// HomePage.js
 import React from 'react';
 import Navbar from '../utils/navbar.jsx';
 import ContactSection from '../utils/ContactSection.jsx';
