@@ -1,7 +1,7 @@
 // HomePage.js
 import React from 'react';
-import Navbar from './navbar.js';
-import ContactSection from './ContactSection';
+import Navbar from '../utils/navbar.jsx';
+import ContactSection from '../utils/ContactSection.jsx';
 import '../components/HomePage.css';
 import dog from '../pictures/dog_home.png';
 import hotel from '../pictures/hotel.png';

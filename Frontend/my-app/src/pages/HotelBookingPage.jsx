@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './navbar.js';
-import ContactSection from './ContactSection.js';
+import Navbar from '../utils/navbar.jsx';
+import ContactSection from '../utils/ContactSection.jsx';
 import { DateRangePicker } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css'; 
 import '../components/HotelBooking.css';
