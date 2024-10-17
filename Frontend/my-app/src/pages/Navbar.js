@@ -79,7 +79,7 @@ function Navbar() {
                   <Dropdown.Item href="#grooming">Grooming</Dropdown.Item>
                   <Dropdown.Item href="#veterinary">Veterinary</Dropdown.Item>
                   <Dropdown.Item href="#vaccination">Vaccination</Dropdown.Item>
-                  <Dropdown.Item href="#pet-hotel">Pet Hotel</Dropdown.Item>
+                  <Dropdown.Item href="/hotel-booking">Pet Hotel</Dropdown.Item>
                   <Dropdown.Item href="#pet-park">Pet Park</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

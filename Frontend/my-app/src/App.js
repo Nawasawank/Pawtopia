@@ -26,10 +26,17 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import SignUpPage from '../src/pages/SignUpPage';
-import LogInPage from './pages/LogInPage';
-import HomePage from './pages/HomePage';
+import SignUpPage from '../src/pages/SignUpPage.js';
+import LogInPage from './pages/LogInPage.js';
+import HomePage from './pages/HomePage.js';
+import HotelBookingPage from './pages/HotelBookingPage.js';
 import ProtectedRoute from './pages/ProtectedRoute';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'daterangepicker/daterangepicker.css';
+import 'jquery';
+import 'moment';
+import 'daterangepicker';
+
 
 
 function App() {
@@ -38,6 +45,7 @@ function App() {
       <Routes>
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LogInPage />} />
+
         <Route 
           path="/home"
           element={
@@ -46,7 +54,17 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/" element={<SignUpPage />} />
+
+        <Route 
+          path="/hotel-booking" 
+          element={
+            <ProtectedRoute>
+              <HotelBookingPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/" element={<LogInPage />} />
       </Routes>
     </Router>
   );
