@@ -19,7 +19,7 @@ const SwimmingService = {
             const newBooking = await OtherService.createBooking({
                 pet_id: bookingData.pet_id,
                 employee_id,
-                service_id: 3,
+                service_id: 2,
                 booking_date: bookingData.booking_date,
                 time_slot: bookingData.time_slot,
             });

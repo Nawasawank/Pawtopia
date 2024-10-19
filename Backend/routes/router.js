@@ -8,6 +8,7 @@ import upload from '../utils/MulterConfig.js';
 import PetController from '../controllers/Pet.Controller.js';
 import HotelController from '../controllers/Hotel.controller.js';
 import VaccineController from '../controllers/Vaccine.controller.js';
+import SwimmingController from '../controllers/Swimming.controller.js';
 
 
 const route = Router();
@@ -24,5 +25,8 @@ route.get('/pet/NameAndType',isAuth,PetController.getPetNamesAndTypes);
 
 route.post('/booking/Hotel',isAuth,HotelController.addHotelBooking);
 route.post('/booking/Vaccine',isAuth,VaccineController.addBooking);
+
+route.post('/booking/Swimming',isAuth,SwimmingController.addBooking);
+
 
 export default route;
