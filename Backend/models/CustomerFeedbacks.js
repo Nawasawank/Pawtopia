@@ -1,6 +1,6 @@
 export default function CustomerFeedbackModel(db) {
     const CustomerFeedback = {
-        createTable: async () => {
+        async createTable() {
             const sql = `
                 CREATE TABLE IF NOT EXISTS customer_feedback (
                     feedback_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -19,7 +19,7 @@ export default function CustomerFeedbackModel(db) {
             await db.query(sql);
         },
 
-        createFeedback: async (feedbackData) => {
+        async createFeedback(feedbackData) {
             try {
                 const sql = `
                     INSERT INTO customer_feedback (user_id, booking_id, hotel_booking_id, comment, rating) 
@@ -41,7 +41,7 @@ export default function CustomerFeedbackModel(db) {
             }
         },
 
-        updateFeedback: async (feedbackId, updateData) => {
+        async updateFeedback(feedbackId, updateData) {
             try {
                 const sql = `
                     UPDATE customer_feedback 
@@ -65,23 +65,23 @@ export default function CustomerFeedbackModel(db) {
             }
         },
 
-        findFeedbackById: async (feedbackId) => {
+        async findFeedbackById(feedbackId) {
             const sql = 'SELECT * FROM customer_feedback WHERE feedback_id = ?';
             const feedbacks = await db.query(sql, [feedbackId]);
             return feedbacks[0];
         },
 
-        findFeedbackByBookingId: async (bookingId) => {
+        async findFeedbackByBookingId(bookingId) {
             const sql = 'SELECT * FROM customer_feedback WHERE booking_id = ?';
             return db.query(sql, [bookingId]);
         },
 
-        findFeedbackByHotelBookingId: async (hotelBookingId) => {
+        async findFeedbackByHotelBookingId(hotelBookingId) {
             const sql = 'SELECT * FROM customer_feedback WHERE hotel_booking_id = ?';
             return db.query(sql, [hotelBookingId]);
         },
         
-        deleteFeedback: async (feedbackId) => {
+        async deleteFeedback(feedbackId) {
             const sql = 'DELETE FROM customer_feedback WHERE feedback_id = ?';
             return db.query(sql, [feedbackId]);
         }

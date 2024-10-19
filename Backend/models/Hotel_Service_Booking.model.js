@@ -1,6 +1,6 @@
 export default function HotelBookingModel(db) {
     const Hotel = {
-        createTable: async () => {
+        async createTable() {
             const sql = `
                 CREATE TABLE IF NOT EXISTS hotel_service_booking (
                     hotel_booking_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -16,7 +16,7 @@ export default function HotelBookingModel(db) {
             await db.query(sql);
         },
 
-        createHotelBooking: async (bookingData) => {
+        async createHotelBooking(bookingData) {
             try {
                 const sql = `
                     INSERT INTO hotel_service_booking (pet_id, check_in_date, check_out_date, room_size) 
@@ -39,7 +39,7 @@ export default function HotelBookingModel(db) {
             }
         },
 
-        updateHotelBooking: async (bookingId, updateData) => {
+        async updateHotelBooking(bookingId, updateData) {
             try {
                 const sql = `
                     UPDATE hotel_service_booking 
@@ -62,18 +62,18 @@ export default function HotelBookingModel(db) {
             }
         },
 
-        findHotelBookingById: async (bookingId) => {
+        async findHotelBookingById(bookingId) {
             const sql = 'SELECT * FROM hotel_service_booking WHERE hotel_booking_id = ?';
             const bookings = await db.query(sql, [bookingId]);
             return bookings[0];
         },
 
-        findHotelBookingsByPetId: async (petId) => {
+        async findHotelBookingsByPetId(petId) {
             const sql = 'SELECT * FROM hotel_service_booking WHERE pet_id = ?';
             return db.query(sql, [petId]);
         },
 
-        deleteHotelBooking: async (bookingId) => {
+        async deleteHotelBooking(bookingId) {
             const sql = 'DELETE FROM hotel_service_booking WHERE hotel_booking_id = ?';
             return db.query(sql, [bookingId]);
         }

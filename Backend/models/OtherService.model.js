@@ -1,6 +1,6 @@
 export default function OtherServicesBookingModel(db) {
     const OtherServicesBooking = {
-        createTable: async () => {
+        async createTable() {
             const sql = `
                 CREATE TABLE IF NOT EXISTS other_services_bookings (
                     booking_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -19,9 +19,9 @@ export default function OtherServicesBookingModel(db) {
             await db.query(sql);
         },
 
-        createBooking: async (bookingData) => {
+        async createBooking(bookingData) {
             try {
-                const sql = `
+                const insertSql = `
                     INSERT INTO other_services_bookings (pet_id, employee_id, service_id, booking_date, time_slot) 
                     VALUES (?, ?, ?, ?, ?)
                 `;
@@ -33,15 +33,18 @@ export default function OtherServicesBookingModel(db) {
                     bookingData.time_slot
                 ];
 
-                const result = await db.query(sql, params);
-                return result;
+                const insertResult = await db.query(insertSql, params);
+
+                const newBooking = await OtherServicesBooking.findBookingById(insertResult.insertId);
+
+                return newBooking;
             } catch (error) {
                 console.error('Error creating service booking:', error);
                 throw error;
             }
         },
 
-        updateBooking: async (bookingId, updateData) => {
+        async updateBooking(bookingId, updateData) {
             try {
                 const sql = `
                     UPDATE other_services_bookings 
@@ -58,28 +61,37 @@ export default function OtherServicesBookingModel(db) {
                 ];
 
                 const result = await db.query(sql, params);
-                return result;
+                return result[0];
             } catch (error) {
                 console.error('Error updating service booking:', error);
                 throw error;
             }
         },
 
-        findBookingById: async (bookingId) => {
+        async findBookingById(bookingId) {
             const sql = 'SELECT * FROM other_services_bookings WHERE booking_id = ?';
             const bookings = await db.query(sql, [bookingId]);
             return bookings[0];
         },
 
-        findBookingsByPetId: async (petId) => {
+        async findAvailableBooking(employee_id, booking_date, time_slot) {
+            const sql = `
+                SELECT * FROM other_services_bookings 
+                WHERE employee_id = ? AND booking_date = ? AND time_slot = ?
+            `;
+            const bookings = await db.query(sql, [employee_id, booking_date, time_slot]);
+            return bookings.length > 0 ? bookings[0] : null;
+        },
+
+        async findBookingsByPetId(petId) {
             const sql = 'SELECT * FROM other_services_bookings WHERE pet_id = ?';
             return db.query(sql, [petId]);
         },
 
-        deleteBooking: async (bookingId) => {
+        async deleteBooking(bookingId) {
             const sql = 'DELETE FROM other_services_bookings WHERE booking_id = ?';
             return db.query(sql, [bookingId]);
-        }
+        },
     };
 
     return OtherServicesBooking;

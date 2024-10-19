@@ -1,15 +1,26 @@
-import {loginUser} from '../services/LogIn.services.js' 
+import LoginService from '../services/LogIn.services.js';
 
-export const login = async (req, res) => {
-    const { email, password } = req.body;
-    try {
-        const result = await loginUser(email, password);
-        if (result.error) {
-            const status = (result.error === 'User not found' || result.error === 'Invalid credentials') ? 401 : 500;
-            return res.send(result.error);
+const LoginController = {
+    async login(req, res) {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and password are required' });
         }
-        return res.json({ token: result.token });
-    } catch (error) {
-        return res.status(500).send('Internal Server Error');
+
+        try {
+            const result = await LoginService.loginUser(email, password);
+
+            if (result.error) {
+                const status = (result.error === 'Email not found' || result.error === 'Invalid Password') ? 401 : 500;
+                return res.status(status).send(result.error);
+            }
+
+            return res.json({ token: result.token });
+        } catch (error) {
+            return res.status(500).send('Internal Server Error');
+        }
     }
-}; 
+};
+
+export default LoginController;

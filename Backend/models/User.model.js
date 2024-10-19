@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 
 export default function UserModel(db) {
     const User = {
-        createTable: async () => {
+        async createTable() {
             const sql = `
                 CREATE TABLE IF NOT EXISTS users (
                     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -18,7 +18,8 @@ export default function UserModel(db) {
             `;
             await db.query(sql);
         },
-        createUser: async (userData) => {
+
+        async createUser(userData) {
             try {
                 const sql = `
                     INSERT INTO users (firstName, lastName, email, tel, password, image) 
@@ -41,7 +42,7 @@ export default function UserModel(db) {
             }
         },
 
-        updateUser: async (userId, updateData) => {
+        async updateUser(userId, updateData) {
             try {
                 if (updateData.password) {
                     const salt = await bcrypt.genSalt(10);
@@ -71,24 +72,25 @@ export default function UserModel(db) {
             }
         },
 
-        findUserByEmail: async (email) => {
+        async findUserByEmail(email) {
             const sql = 'SELECT * FROM users WHERE email = ?';
             const users = await db.query(sql, [email]);
             return users[0]; 
         },
 
-        findUserById: async (userId) => {
+        async findUserById(userId) {
             const sql = 'SELECT * FROM users WHERE user_id = ?';
             const users = await db.query(sql, [userId]);
             return users[0];
         },
-        findUserByTel: async (tel) => {
+
+        async findUserByTel(tel) {
             const sql = 'SELECT * FROM users WHERE tel = ?';
             const users = await db.query(sql, [tel]);
             return users[0]; 
         },
 
-        getUserWithPets: async (userId) => {
+        async getUserWithPets(userId) {
             const userSql = 'SELECT * FROM users WHERE user_id = ?';
             const user = await db.query(userSql, [userId]);
 
@@ -102,7 +104,8 @@ export default function UserModel(db) {
                 return null;
             }
         },
-        updateUserImage: async (userId, imagePath) => {
+
+        async updateUserImage(userId, imagePath) {
             try {
                 const sql = `
                     UPDATE users 

@@ -7,6 +7,7 @@ import EmployeeModel from './models/Employee.model.js'
 import ServiceModel from './models/Service.model.js';
 import ServiceAssignmentsModel from './models/ServiceAssignment.model.js';
 import OtherServicesBookingModel from './models/OtherService.model.js';
+import CustomerFeedbackModel from './models/CustomerFeedbacks.js';
 
 dotenv.config();
 const pool = mysql.createPool({
@@ -34,6 +35,7 @@ const Employee = EmployeeModel(db);
 const Service = ServiceModel(db);
 const ServiceAssignment = ServiceAssignmentsModel(db);
 const OtherService = OtherServicesBookingModel(db);
+const CustomerFeedback = CustomerFeedbackModel(db);
 
 (async () => {
     try {
@@ -47,6 +49,7 @@ const OtherService = OtherServicesBookingModel(db);
         await Service.createTable();
         await ServiceAssignment.createTable();
         await OtherService.createTable();
+        await CustomerFeedback.createTable();
 
         connection.release();
     } catch (error) {
@@ -54,5 +57,5 @@ const OtherService = OtherServicesBookingModel(db);
     }
 })();
 
-export { User, Pet, Hotel };
+export { User, Pet, Hotel,Employee,Service,ServiceAssignment,OtherService,CustomerFeedback };
 export default db;

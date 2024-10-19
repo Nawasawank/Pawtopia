@@ -1,6 +1,6 @@
 export default function PetModel(db) {
     const Pet = {
-        createTable: async () => {
+        async createTable() {
             const sql = `
                 CREATE TABLE IF NOT EXISTS pets (
                     pet_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -18,7 +18,8 @@ export default function PetModel(db) {
             `;
             await db.query(sql);
         },
-        createPet: async (petData) => {
+
+        async createPet(petData) {
             try {
                 const sql = `
                     INSERT INTO pets (user_id, name, vaccination, gender, type, Health_Condition, weight) 
@@ -35,7 +36,6 @@ export default function PetModel(db) {
                 ];
 
                 const result = await db.query(sql, params);
-                
                 const newPet = await Pet.findPetById(result.insertId);
                 return newPet;
             } catch (error) {
@@ -44,7 +44,7 @@ export default function PetModel(db) {
             }
         },
 
-        updatePet: async (petId, updateData) => {
+        async updatePet(petId, updateData) {
             try {
                 const sql = `
                     UPDATE pets 
@@ -69,22 +69,23 @@ export default function PetModel(db) {
             }
         },
 
-        findPetById: async (petId) => {
+        async findPetById(petId) {
             const sql = 'SELECT * FROM pets WHERE pet_id = ?';
             const pets = await db.query(sql, [petId]);
             return pets[0];
         },
 
-        findPetsByUserId: async (userId) => {
+        async findPetsByUserId(userId) {
             const sql = 'SELECT * FROM pets WHERE user_id = ?';
             return db.query(sql, [userId]);
         },
 
-        deletePet: async (petId) => {
+        async deletePet(petId) {
             const sql = 'DELETE FROM pets WHERE pet_id = ?';
             return db.query(sql, [petId]);
         },
-        findPetNamesAndTypesByUserId: async (userId) => {
+
+        async findPetNamesAndTypesByUserId(userId) {
             const sql = 'SELECT pet_id, name, type FROM pets WHERE user_id = ?';
             return db.query(sql, [userId]);
         },

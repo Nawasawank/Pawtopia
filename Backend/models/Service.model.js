@@ -1,6 +1,6 @@
 export default function ServiceModel(db) {
     const Service = {
-        createTable: async () => {
+        async createTable() {
             const sql = `
                 CREATE TABLE IF NOT EXISTS services (
                     service_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -12,7 +12,7 @@ export default function ServiceModel(db) {
             await db.query(sql);
         },
 
-        createService: async (serviceData) => {
+        async createService(serviceData) {
             try {
                 const sql = `
                     INSERT INTO services (service_name) 
@@ -28,7 +28,7 @@ export default function ServiceModel(db) {
             }
         },
 
-        updateService: async (serviceId, updateData) => {
+        async updateService(serviceId, updateData) {
             try {
                 const sql = `
                     UPDATE services 
@@ -48,18 +48,18 @@ export default function ServiceModel(db) {
             }
         },
 
-        findServiceById: async (serviceId) => {
+        async findServiceById(serviceId) {
             const sql = 'SELECT * FROM services WHERE service_id = ?';
             const services = await db.query(sql, [serviceId]);
             return services[0];
         },
 
-        findAllServices: async () => {
+        async findAllServices() {
             const sql = 'SELECT * FROM services';
             return db.query(sql);
         },
 
-        deleteService: async (serviceId) => {
+        async deleteService(serviceId) {
             const sql = 'DELETE FROM services WHERE service_id = ?';
             return db.query(sql, [serviceId]);
         }

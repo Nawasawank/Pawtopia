@@ -1,26 +1,28 @@
 import { Router } from 'express';
-import { register } from '../controllers/SignUp.controller.js';
-import { login } from '../controllers/LogIn.controller.js';
-import { uploadProfileImage } from '../controllers/UpdatePhoto.controller.js';
-import { getUserProfile } from '../controllers/Info.controller.js';
+import SignUpController from '../controllers/SignUp.controller.js';
+import LoginController from '../controllers/LogIn.controller.js';
+import UpdatePhotoController from '../controllers/UpdatePhoto.controller.js';
+import InfoController from '../controllers/Info.controller.js';
 import { isAuth } from '../utils/Auth.js';
 import upload from '../utils/MulterConfig.js'; 
-import { addPetController, deletePetController,getPetNamesAndTypesController } from '../controllers/Pet.Controller.js';
-import { addHotelBookingController, deleteHotelBookingController, getHotelBookingByIdController } from '../controllers/Hotel.controller.js';
+import PetController from '../controllers/Pet.Controller.js';
+import HotelController from '../controllers/Hotel.controller.js';
+import VaccineController from '../controllers/Vaccine.controller.js';
 
 
 const route = Router();
 
-route.post('/upload-photo', upload.single('profileImage'), uploadProfileImage);
+route.put('/upload-photo',isAuth, upload.single('profileImage'), UpdatePhotoController.uploadProfileImage);
 
-route.post('/register', register);
-route.post('/login', login);
-route.get('/profile', isAuth, getUserProfile);
+route.post('/register', SignUpController.register);
+route.post('/login', LoginController.login);
+route.get('/profile', isAuth, InfoController.getUserProfile);
 
-route.post('/pet/add', isAuth, addPetController);
-route.delete('/pets/delete/:petId', isAuth, deletePetController);
-route.get('/pet/NameAndType',isAuth,getPetNamesAndTypesController);
+route.post('/pet/add', isAuth, PetController.addPet);
+route.delete('/pets/delete/:petId', isAuth, PetController.deletePet);
+route.get('/pet/NameAndType',isAuth,PetController.getPetNamesAndTypes);
 
-route.post('/booking/Hotel',isAuth,addHotelBookingController);
+route.post('/booking/Hotel',isAuth,HotelController.addHotelBooking);
+route.post('/booking/Vaccine',isAuth,VaccineController.addBooking);
 
 export default route;

@@ -1,6 +1,6 @@
 export default function ServiceAssignmentsModel(db) {
     const ServiceAssignment = {
-        createTable: async () => {
+        async createTable() {
             const sql = `
                 CREATE TABLE IF NOT EXISTS service_assignments (
                     assignment_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -14,7 +14,7 @@ export default function ServiceAssignmentsModel(db) {
             await db.query(sql);
         },
 
-        assignService: async (assignmentData) => {
+        async assignService(assignmentData) {
             try {
                 const sql = `
                     INSERT INTO service_assignments (employee_id, service_id, assignment_date) 
@@ -34,7 +34,7 @@ export default function ServiceAssignmentsModel(db) {
             }
         },
 
-        findAssignmentsByEmployeeId: async (employeeId) => {
+        async findAssignmentsByEmployeeId(employeeId) {
             const sql = `
                 SELECT s.service_name, sa.assignment_date
                 FROM service_assignments sa
@@ -44,7 +44,7 @@ export default function ServiceAssignmentsModel(db) {
             return db.query(sql, [employeeId]);
         },
 
-        deleteAssignment: async (assignmentId) => {
+        async deleteAssignment(assignmentId) {
             const sql = 'DELETE FROM service_assignments WHERE assignment_id = ?';
             return db.query(sql, [assignmentId]);
         }

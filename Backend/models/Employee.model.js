@@ -70,7 +70,19 @@ export default function EmployeeModel(db) {
         deleteEmployee: async (employeeId) => {
             const sql = 'DELETE FROM employees WHERE employee_id = ?';
             return db.query(sql, [employeeId]);
-        }
+        },
+        getRandomEmployeeForService: async (service_id) => {
+            const sql = `
+                SELECT e.employee_id 
+                FROM employees e
+                JOIN service_assignments sa ON e.employee_id = sa.employee_id
+                WHERE sa.service_id = ? 
+                ORDER BY RAND() 
+                LIMIT 1
+            `;
+            const employees = await db.query(sql, [service_id]);
+            return employees[0]; 
+        },
     };
 
     return Employee;
