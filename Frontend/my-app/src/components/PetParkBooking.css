@@ -1,0 +1,148 @@
+.PetPark-appointment-wrapper {
+    margin-top: 100px;
+    font-family: 'Lato', sans-serif;
+    display: flex;
+    flex-direction: column;
+    background-color: #f3edde;
+    overflow-x: hidden;
+  }
+  
+  .PetPark-appointment-title{
+    margin-top: 70px;
+  }
+  
+  .PetPark-appointment-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    width: 100%;
+  }
+  
+  .PetPark-appointment-title {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .date-picker-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; 
+    margin-bottom: 40px;
+  }
+  
+  .PetPark-section-heading {
+    margin-left: 650px;
+    text-align: left; 
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+    width: 100%;
+  }
+  
+  .time-selection-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    width: 100%;
+    margin-bottom: 40px;
+  }
+  
+  .time-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 600px;
+  }
+  
+  .time-option-button {
+    padding: 15px;
+    border: 2px solid #d4b890;
+    background-color: #fffbea;
+    cursor: pointer;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    width: 100%;
+  }
+  
+  .time-option-button.selected {
+    background-color: #d4b890;
+    color: white;
+  }
+  
+  .time-option-button:hover {
+    background-color: #e3c2a2;
+  }
+  
+  .pet-selection-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 40px;
+  }
+  
+  .pet-selection-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 600px;
+  }
+  
+  .pet-selection-option {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border: 2px solid #ddd;
+    border-radius: 15px;
+    background-color: #f7f7f7;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pet-selection-option input {
+    margin-right: 10px;
+    transform: scale(1.5);
+  }
+  
+  .pet-selection-option:hover {
+    background-color: #ececec;
+  }
+  
+  .PetPark-submit-button {
+    margin-top: 20px;
+    padding: 15px 10px;
+    width: 200px;
+    background-color: #9d502f;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .PetPark-submit-button:hover {
+    background-color: #8b4513;
+  }
+  
+  .time-section {
+    margin-bottom: 20px;
+  }
+  
+  .time-label {
+    font-size: 1rem;
+    text-align: left;
+    margin-bottom: 10px;
+    color: #5b4035;
+  }
+  
+  

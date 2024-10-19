@@ -1,0 +1,36 @@
+.time-selection-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    width: 100%;
+    margin-bottom: 40px;
+  }
+  
+  .time-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 600px;
+  }
+  
+  .time-option-button {
+    padding: 15px;
+    border: 2px solid #d4b890;
+    background-color: #fffbea;
+    cursor: pointer;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    width: 100%;
+  }
+  
+  .time-option-button.selected {
+    background-color: #d4b890;
+    color: white;
+  }
+  
+  .time-option-button:hover {
+    background-color: #e3c2a2;
+  }
+  
