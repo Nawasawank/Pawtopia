@@ -55,12 +55,12 @@ const GroomingAppointmentPage = () => {
 
     const bookingData = {
       pet_id: selectedPetObj.pet_id,
-      appointment_date: selectedDate.toISOString().split('T')[0],
-      appointment_time: selectedTime,
+      booking_date: selectedDate.toISOString().split('T')[0],
+      time_slot: selectedTime,
     };
 
     try {
-      const response = await fetch('', { // Waiting for API URL
+      const response = await fetch('http://localhost:5000/api/booking/Grooming', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
