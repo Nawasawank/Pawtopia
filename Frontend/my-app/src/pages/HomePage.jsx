@@ -1,7 +1,7 @@
 import React from 'react';
-import Navbar from '../utils/navbar.jsx';
-import ContactSection from '../utils/ContactSection.jsx';
-import '../components/HomePage.css';
+import Navbar from '../components/navbar.jsx';
+import ContactSection from '../components/ContactSection.jsx';
+import '../styles/HomePage.css';
 import dog from '../pictures/dog_home.png';
 import hotel from '../pictures/hotel.png';
 import vaccine from '../pictures/vaccine.png';
@@ -16,6 +16,7 @@ import paw4 from '../pictures/paw4.png';
 import paw5 from '../pictures/paw5.png';
 
 const HomePage = () => {
+  console.log("Token: ", localStorage.getItem('token'))
   return (
     <div className="homepage-container">
       <Navbar />

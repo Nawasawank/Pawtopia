@@ -83,6 +83,15 @@ export default function OtherServicesBookingModel(db) {
             return bookings.length > 0 ? bookings[0] : null;
         },
 
+        async findBooking(pet_id, booking_date, time_slot, service_id) {
+            const sql = `
+                SELECT * FROM other_services_bookings 
+                WHERE pet_id = ? AND booking_date = ? AND time_slot = ? AND service_id =?
+            `;
+            const bookings = await db.query(sql, [pet_id, booking_date, time_slot,service_id]);
+            return bookings.length > 0 ? bookings[0] : null;
+        },
+
         async findBookingsByPetId(petId) {
             const sql = 'SELECT * FROM other_services_bookings WHERE pet_id = ?';
             return db.query(sql, [petId]);

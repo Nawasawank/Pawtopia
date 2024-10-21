@@ -8,7 +8,8 @@ export default function CustomerFeedbackModel(db) {
                     booking_id INT NULL,
                     hotel_booking_id INT NULL,
                     comment TEXT,
-                    rating INT,
+                    rating INT NULL,
+                    type ENUM('review', 'technical_issue'),
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
@@ -22,7 +23,7 @@ export default function CustomerFeedbackModel(db) {
         async createFeedback(feedbackData) {
             try {
                 const sql = `
-                    INSERT INTO customer_feedback (user_id, booking_id, hotel_booking_id, comment, rating) 
+                    INSERT INTO customer_feedback (user_id, booking_id, hotel_booking_id, comment, rating, type) 
                     VALUES (?, ?, ?, ?, ?)
                 `;
                 const params = [

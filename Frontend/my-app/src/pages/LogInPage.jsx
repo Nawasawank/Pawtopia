@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../components/LogInPage.css';
+import '../styles/LogInPage.css';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 const LogInPage = () => {

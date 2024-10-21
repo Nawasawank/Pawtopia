@@ -68,10 +68,19 @@ export default function HotelBookingModel(db) {
             return bookings[0];
         },
 
-        async findHotelBookingsByPetId(petId) {
-            const sql = 'SELECT * FROM hotel_service_booking WHERE pet_id = ?';
-            return db.query(sql, [petId]);
+        async findHotelBookingsByPetId(petId, check_in_date, check_out_date) {
+            const sql = `
+                SELECT * 
+                FROM hotel_service_booking 
+                WHERE pet_id = ? 
+                AND (
+                    (check_in_date <= ? AND check_out_date >= ?) 
+                    OR (check_in_date <= ? AND check_out_date >= ?)
+                )`;
+            const bookings = await db.query(sql, [petId, check_out_date, check_in_date, check_in_date, check_out_date]);
+            return bookings[0];
         },
+        
 
         async deleteHotelBooking(bookingId) {
             const sql = 'DELETE FROM hotel_service_booking WHERE hotel_booking_id = ?';

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import logo from '../pictures/logo.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../components/Navbar.css';
+import '../styles/Navbar.css';
 
 function Navbar() {
   // Initialize state for user information

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../components/SelectPet.css';
+import '../styles/SelectPet.css';
 
 const SelectPet = ({ pets, selectedPet, setSelectedPet }) => {
   return (

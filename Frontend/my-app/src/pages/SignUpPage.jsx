@@ -1,5 +1,5 @@
 import React from 'react';
-import '../components/SignUpPage.css';
+import '../styles/SignUpPage.css';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 const SignUpPage = () => {

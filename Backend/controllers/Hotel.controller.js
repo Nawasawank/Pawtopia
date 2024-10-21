@@ -9,7 +9,7 @@ const HotelController = {
             const newBooking = await HotelService.addHotelBooking(bookingData);
 
             if (newBooking.error) {
-                return res.status(400).json({ error: newBooking.error });
+                return res.status(200).json({ error: newBooking.error });
             }
 
             return res.status(201).json({

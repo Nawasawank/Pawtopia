@@ -2,7 +2,7 @@ import React from 'react';
 import facebook from '../pictures/facebook.png';
 import ig from '../pictures/ig.png';
 import line from '../pictures/line.png';
-import '../components/ContactSection.css';
+import '../styles/ContactSection.css';
 
 const ContactSection = () => {
   return (

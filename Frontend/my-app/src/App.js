@@ -31,7 +31,7 @@ import LogInPage from './pages/LogInPage.jsx';
 import HomePage from './pages/HomePage.jsx';
 import HotelBookingPage from './pages/HotelBookingPage.jsx';
 import VaccineAppointmentPage from './pages/VaccinationBookingPage.jsx';
-import ProtectedRoute from './utils/ProtectedRoute.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 import PetParkAppointmentPage from './pages/PetParkBookingPage.jsx';
 import GroomingAppointmentPage from './pages/GroomingBookingPage.jsx';
 import SwimmingAppointmentPage from './pages/SwimmingBookingPage.jsx';

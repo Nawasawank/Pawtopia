@@ -1,37 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../utils/navbar.jsx';
-import ContactSection from '../utils/ContactSection.jsx';
+import Navbar from '../components/navbar.jsx';
+import ContactSection from '../components/ContactSection.jsx';
 import { DatePicker } from 'rsuite'; 
 import 'rsuite/dist/rsuite.min.css'; 
-import '../components/SwimBooking.css';
-import SelectTime from './SelectTime.jsx';
-import SelectPet from './SelectPet.jsx';   
+import '../styles/SwimBooking.css';
+import SelectTime from '../components/SelectTime.jsx';
+import SelectPet from '../components/SelectPet.jsx';   
+import axios from 'axios';
+import Overlay from '../components/Overlay.jsx'; // Import Overlay component
 
-const SwimmingAppointmentPage= () => {
+const SwimmingAppointmentPage = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedPet, setSelectedPet] = useState('');
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showOverlay, setShowOverlay] = useState(false); // Overlay state
+  const [overlayMessage, setOverlayMessage] = useState(''); // Overlay message
 
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/pet/NameAndType', {
-          method: 'GET',
+        const response = await axios.get('http://localhost:5000/api/pet/NameAndType', {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('token')}`, 
           },
         });
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch pets');
-        }
-
-        const data = await response.json();
-        setPets(data.pets);
-        setLoading(false);
+        setPets(response.data.pets);
+        setLoading(false); 
       } catch (error) {
         console.error('Error fetching pets:', error);
         setLoading(false);
@@ -43,46 +41,49 @@ const SwimmingAppointmentPage= () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const selectedPetObj = pets.find(
       pet => `${pet.name} - ${pet.type}` === selectedPet
     );
-
+  
     if (!selectedPetObj || !selectedDate || !selectedTime) {
-      alert('Please complete all fields.');
+      setOverlayMessage('Please complete all fields.');
+      setShowOverlay(true);
       return;
     }
-
+  
     const bookingData = {
       pet_id: selectedPetObj.pet_id,
       booking_date: selectedDate.toISOString().split('T')[0],
       time_slot: selectedTime,
     };
-
+  
     try {
-      const response = await fetch('http://localhost:5000/api/booking/Swimming', { 
-        method: 'POST',
+      const response = await axios.post('http://localhost:5000/api/booking/Swimming', bookingData, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify(bookingData),
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to submit booking');
+  
+      if (response.data.error) {
+        setOverlayMessage(response.data.error);
+      } else {
+        setOverlayMessage('Swimming appointment successful!');
+        setSelectedDate(null);
+        setSelectedTime('');
+        setSelectedPet('');
       }
-
-      const result = await response.json();
-      console.log('Swimming appointment successful:', result);
-      alert('Swimming appointment successful!');
-      setSelectedDate(null);
-      setSelectedTime('');
-      setSelectedPet('');
+      
+      setShowOverlay(true);
     } catch (error) {
-      console.error('Error submitting booking:', error);
-      alert('Error submitting booking');
+      setOverlayMessage('Error submitting booking');
+      setShowOverlay(true);
     }
+  };
+
+  const handleCloseOverlay = () => {
+    setShowOverlay(false);
   };
 
   if (loading) {
@@ -115,6 +116,10 @@ const SwimmingAppointmentPage= () => {
       </div>
 
       <ContactSection />
+
+      {showOverlay && (
+        <Overlay message={overlayMessage} show={showOverlay} onClose={handleCloseOverlay} />
+      )}
     </div>
   );
 };

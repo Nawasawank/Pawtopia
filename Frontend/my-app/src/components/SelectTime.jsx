@@ -1,5 +1,5 @@
 import React from 'react';
-import '../components/SelectTime.css'
+import '../styles/SelectTime.css'
 
 const SelectTime = ({ selectedTime, setSelectedTime }) => {
   return (

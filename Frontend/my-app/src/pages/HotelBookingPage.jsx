@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
-import Navbar from '../utils/navbar.jsx';
-import ContactSection from '../utils/ContactSection.jsx';
+import Navbar from '../components/navbar.jsx';
+import ContactSection from '../components/ContactSection.jsx';
 import { DateRangePicker } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css'; 
-import '../components/HotelBooking.css';
+import '../styles/HotelBooking.css';
+import axios from 'axios';
+import Overlay from '../components/Overlay.jsx'; 
 
 const HotelBookingPage = () => {
   const [dateRange, setDateRange] = useLocalStorage('dateRange', null);
@@ -12,34 +14,39 @@ const HotelBookingPage = () => {
   const [selectedPet, setSelectedPet] = useLocalStorage('selectedPet', '');
   const [pets, setPets] = useState([]); 
   const [loading, setLoading] = useState(true); 
-
+  const [showOverlay, setShowOverlay] = useState(false); 
+  const [overlayMessage, setOverlayMessage] = useState(''); 
 
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/pet/NameAndType', {
-          method: 'GET',
+        const response = await axios.get('http://localhost:5000/api/pet/NameAndType', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`, 
           },
         });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch pets');
-        }
-
-        const data = await response.json();
-        setPets(data.pets);
+  
+        setPets(response.data.pets);
         setLoading(false); 
       } catch (error) {
         console.error('Error fetching pets:', error);
         setLoading(false);
       }
     };
-
+  
     fetchPets();
-  }, []);
+  
+    return () => {
+      setDateRange(null); 
+      setSelectedRoom(''); 
+      setSelectedPet('');  
+      localStorage.removeItem('dateRange');   
+      localStorage.removeItem('selectedRoom'); 
+      localStorage.removeItem('selectedPet'); 
+    };
+  }, [setDateRange, setSelectedRoom, setSelectedPet]); 
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,29 +68,37 @@ const HotelBookingPage = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/booking/Hotel', {
-        method: 'POST',
+      const response = await axios.post('http://localhost:5000/api/booking/Hotel', bookingData, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`, 
         },
-        body: JSON.stringify(bookingData), 
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to submit booking');
+      if (response.data.error) {
+        setOverlayMessage(response.data.error); 
+      } else {
+        setOverlayMessage('Booking successful!');
+        setDateRange(null);
+        setSelectedRoom('');
+        setSelectedPet('');
       }
+      
+      setShowOverlay(true); 
 
-      const result = await response.json();
-      console.log('Booking successful:', result);
-      alert('Hotel booking successful!');
-      setDateRange(null);
-      setSelectedRoom('');
-      setSelectedPet('');
+      setTimeout(() => {
+        setShowOverlay(false);
+      }, 3000);
+
     } catch (error) {
       console.error('Error submitting booking:', error);
-      alert('Error submitting booking');
+      setOverlayMessage('Error submitting booking');
+      setShowOverlay(true);
     }
+  };
+
+  const handleCloseOverlay = () => {
+    setShowOverlay(false); 
   };
 
   if (loading) {
@@ -147,6 +162,10 @@ const HotelBookingPage = () => {
       </div>
 
       <ContactSection />
+
+      {showOverlay && (
+        <Overlay message={overlayMessage} show={showOverlay} onClose={handleCloseOverlay} />
+      )}
     </div>
   );
 };

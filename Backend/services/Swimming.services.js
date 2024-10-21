@@ -4,16 +4,34 @@ const SwimmingService = {
     async addSwimmingBooking(bookingData) {
         try {
             const employee = await Employee.getRandomEmployeeForService(2);
+            if (!employee) {
+                return { error: 'No available employee for the service' };
+            }
             const employee_id = employee.employee_id;
 
-            const existingBooking = await OtherService.findAvailableBooking(
+            if (new Date(bookingData.booking_date) < Date.now()) {
+                return { error: 'You cannot book a date in the past' };
+            }
+
+            const available = await OtherService.findAvailableBooking(
                 employee_id,
                 bookingData.booking_date,
                 bookingData.time_slot
             );
 
-            if (existingBooking) {
-                return { error: 'Employee is already booked for the selected date and time slot.' };
+            if (available) {
+                return { error: 'Time slot not available' };
+            }
+
+            const isBook = await OtherService.findBooking(
+                bookingData.pet_id,
+                bookingData.booking_date,
+                bookingData.time_slot,
+                2
+            );
+
+            if (isBook) {
+                return { error: 'You have already booked this slot' };
             }
 
             const newBooking = await OtherService.createBooking({
