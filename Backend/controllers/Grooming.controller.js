@@ -28,7 +28,7 @@ const GroomingController = {
             const result = await GroomingService.deleteGroomingBooking(bookingId);
 
             if (result.error) {
-                return res.status(400).json({ error: result.error });
+                return res.status(200).json({ error: result.error });
             }
 
             return res.status(200).json({ message: 'Grooming booking deleted successfully' });

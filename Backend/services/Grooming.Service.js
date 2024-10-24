@@ -13,6 +13,7 @@ const GroomingService = {
                 return { error: 'You cannot book a date in the past' };
             }
             
+            console.log(Date.now())
             const available = await OtherService.findAvailableBooking(
                 employee_id,
                 bookingData.booking_date,

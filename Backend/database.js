@@ -8,6 +8,9 @@ import ServiceModel from './models/Service.model.js';
 import ServiceAssignmentsModel from './models/ServiceAssignment.model.js';
 import OtherServicesBookingModel from './models/OtherService.model.js';
 import CustomerFeedbackModel from './models/CustomerFeedbacks.js';
+import AdminModel from './models/Admin.model.js';
+import DeveloperModel from './models/Developer.model.js';
+import IssueModel from './models/Issues.model.js';
 
 dotenv.config();
 const pool = mysql.createPool({
@@ -36,6 +39,9 @@ const Service = ServiceModel(db);
 const ServiceAssignment = ServiceAssignmentsModel(db);
 const OtherService = OtherServicesBookingModel(db);
 const CustomerFeedback = CustomerFeedbackModel(db);
+const Admin = AdminModel(db);
+const Developer = DeveloperModel(db);
+const Issues = IssueModel(db);
 
 (async () => {
     try {
@@ -50,6 +56,9 @@ const CustomerFeedback = CustomerFeedbackModel(db);
         await ServiceAssignment.createTable();
         await OtherService.createTable();
         await CustomerFeedback.createTable();
+        await Admin.createTable();
+        await Developer.createTable();
+        await Issues.createTable();
 
         connection.release();
     } catch (error) {

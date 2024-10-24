@@ -15,11 +15,11 @@ import PetParkController from '../controllers/PetPArk.controller.js';
 
 const route = Router();
 
-//Change Profile Picture
-route.put('/upload-photo',isAuth, upload.single('profileImage'), UpdatePhotoController.uploadProfileImage);
-
 route.post('/register', SignUpController.register);
 route.post('/login', LoginController.login);
+
+//Change Profile Picture
+route.put('/upload-photo',isAuth, upload.single('profileImage'), UpdatePhotoController.uploadProfileImage);
 
 //Get user name and picture for navbar
 route.get('/profile', isAuth, InfoController.getUserProfile);

@@ -7,7 +7,7 @@ import '../styles/SwimBooking.css';
 import SelectTime from '../components/SelectTime.jsx';
 import SelectPet from '../components/SelectPet.jsx';   
 import axios from 'axios';
-import Overlay from '../components/Overlay.jsx'; // Import Overlay component
+import Overlay from '../components/Overlay.jsx'; 
 
 const SwimmingAppointmentPage = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -15,8 +15,8 @@ const SwimmingAppointmentPage = () => {
   const [selectedPet, setSelectedPet] = useState('');
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showOverlay, setShowOverlay] = useState(false); // Overlay state
-  const [overlayMessage, setOverlayMessage] = useState(''); // Overlay message
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [overlayMessage, setOverlayMessage] = useState(''); 
 
   useEffect(() => {
     const fetchPets = async () => {
@@ -54,7 +54,7 @@ const SwimmingAppointmentPage = () => {
   
     const bookingData = {
       pet_id: selectedPetObj.pet_id,
-      booking_date: selectedDate.toISOString().split('T')[0],
+      booking_date: new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000).toISOString().split('T')[0],
       time_slot: selectedTime,
     };
   

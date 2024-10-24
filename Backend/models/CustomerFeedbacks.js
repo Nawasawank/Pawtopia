@@ -9,12 +9,14 @@ export default function CustomerFeedbackModel(db) {
                     hotel_booking_id INT NULL,
                     comment TEXT,
                     rating INT NULL,
-                    type ENUM('review', 'technical_issue'),
+                    feedback_type ENUM('General', 'Technical'),
+                    admin_id INT NULL,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
                     FOREIGN KEY (booking_id) REFERENCES other_services_bookings(booking_id) ON DELETE SET NULL,
-                    FOREIGN KEY (hotel_booking_id) REFERENCES hotel_service_booking(hotel_booking_id) ON DELETE SET NULL
+                    FOREIGN KEY (hotel_booking_id) REFERENCES hotel_service_booking(hotel_booking_id) ON DELETE SET NULL,
+                    FOREIGN KEY (admin_id) REFERENCES admins(admin_id) ON DELETE SET NULL
                 );
             `;
             await db.query(sql);
@@ -23,15 +25,17 @@ export default function CustomerFeedbackModel(db) {
         async createFeedback(feedbackData) {
             try {
                 const sql = `
-                    INSERT INTO customer_feedback (user_id, booking_id, hotel_booking_id, comment, rating, type) 
-                    VALUES (?, ?, ?, ?, ?)
+                    INSERT INTO customer_feedback (user_id, booking_id, hotel_booking_id, comment, rating, feedback_type, admin_id) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
                 `;
                 const params = [
                     feedbackData.user_id,
                     feedbackData.booking_id || null,
                     feedbackData.hotel_booking_id || null,  
                     feedbackData.comment,
-                    feedbackData.rating
+                    feedbackData.rating,
+                    feedbackData.feedback_type, // 'General' or 'Technical'
+                    feedbackData.admin_id || null
                 ];
 
                 const result = await db.query(sql, params);
@@ -46,7 +50,7 @@ export default function CustomerFeedbackModel(db) {
             try {
                 const sql = `
                     UPDATE customer_feedback 
-                    SET user_id = ?, booking_id = ?, hotel_booking_id = ?, comment = ?, rating = ?
+                    SET user_id = ?, booking_id = ?, hotel_booking_id = ?, comment = ?, rating = ?, feedback_type = ?, admin_id = ? 
                     WHERE feedback_id = ?
                 `;
                 const params = [
@@ -55,6 +59,8 @@ export default function CustomerFeedbackModel(db) {
                     updateData.hotel_booking_id || null, 
                     updateData.comment,
                     updateData.rating,
+                    updateData.feedback_type, // 'General' or 'Technical'
+                    updateData.admin_id || null,
                     feedbackId
                 ];
 

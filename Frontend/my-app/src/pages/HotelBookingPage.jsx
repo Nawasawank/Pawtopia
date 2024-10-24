@@ -62,8 +62,8 @@ const HotelBookingPage = () => {
 
     const bookingData = {
       pet_id: selectedPetObj.pet_id, 
-      check_in_date: dateRange[0].toISOString().split('T')[0],
-      check_out_date: dateRange[1].toISOString().split('T')[0],
+      check_in_date: new Date(dateRange[0].getTime() - dateRange[0].getTimezoneOffset() * 60000).toISOString().split('T')[0],
+      check_out_date: new Date(dateRange[1].getTime() - dateRange[1].getTimezoneOffset() * 60000).toISOString().split('T')[0],
       room_size: selectedRoom,
     };
 

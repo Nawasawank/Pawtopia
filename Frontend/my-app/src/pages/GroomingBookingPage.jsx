@@ -54,10 +54,11 @@ const GroomingAppointmentPage = () => {
   
     const bookingData = {
       pet_id: selectedPetObj.pet_id,
-      booking_date: selectedDate.toISOString().split('T')[0],
+      booking_date: new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000).toISOString().split('T')[0],
       time_slot: selectedTime,
     };
-  
+
+    console.log(selectedDate.toISOString().split('T')[0])
     try {
       const response = await axios.post('http://localhost:5000/api/booking/Grooming', bookingData, {
         headers: {
