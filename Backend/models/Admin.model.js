@@ -69,7 +69,12 @@ export default function AdminModel(db) {
         async deleteAdmin(adminId) {
             const sql = 'DELETE FROM admins WHERE admin_id = ?';
             return db.query(sql, [adminId]);
-        }
+        },
+        async findRandomAdminId() {
+            const sql = `SELECT admin_id FROM admins ORDER BY RAND() LIMIT 1`;
+            const result = await db.query(sql);
+            return result;
+        }        
     };
 
     return Admin;

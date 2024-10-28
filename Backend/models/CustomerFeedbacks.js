@@ -34,12 +34,14 @@ export default function CustomerFeedbackModel(db) {
                     feedbackData.hotel_booking_id || null,  
                     feedbackData.comment,
                     feedbackData.rating,
-                    feedbackData.feedback_type, // 'General' or 'Technical'
-                    feedbackData.admin_id || null
+                    feedbackData.feedback_type,
+                    feedbackData.admin_id
                 ];
 
                 const result = await db.query(sql, params);
-                return result;
+                return {
+                    ...feedbackData,
+                };
             } catch (error) {
                 console.error('Error creating feedback:', error);
                 throw error;

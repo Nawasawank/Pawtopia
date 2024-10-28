@@ -120,7 +120,51 @@ export default function UserModel(db) {
                 console.error('Error updating user image:', error);
                 throw error;
             }
-        }
+        },
+        async getUserBookings(userId, startDate, endDate) {
+            const otherServicesSql = `
+                SELECT 
+                    p.name AS pet_name,
+                    CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
+                    s.service_name,
+                    o.booking_id,
+                    o.booking_date AS date,
+                    'other_service' AS booking_type
+                FROM other_services_bookings o
+                JOIN pets p ON o.pet_id = p.pet_id
+                JOIN employees e ON o.employee_id = e.employee_id
+                JOIN services s ON o.service_id = s.service_id
+                WHERE p.user_id = ?
+                AND (o.booking_date BETWEEN ? AND ? OR o.booking_date = ? OR o.booking_date = ?)
+            `;
+        
+            const hotelServicesSql = `
+                SELECT 
+                    h.hotel_booking_id,
+                    p.name AS pet_name,
+                    'Hotel Booking' AS service_name,
+                    h.check_in_date AS date,
+                    'hotel_service' AS booking_type
+                FROM hotel_service_booking h
+                JOIN pets p ON h.pet_id = p.pet_id
+                WHERE p.user_id = ?
+                AND (
+                    (h.check_in_date BETWEEN ? AND ?)
+                    OR (h.check_out_date BETWEEN ? AND ?)
+                    OR h.check_out_date = ?
+                )
+            `;
+            
+            const params = [userId, startDate, endDate, startDate, endDate];
+            const hotelParams = [userId, startDate, endDate, startDate, endDate, endDate];
+            
+            const otherServicesBookings = await db.query(otherServicesSql, params);
+            const hotelBookings = await db.query(hotelServicesSql, hotelParams);
+            
+            const bookings = [...otherServicesBookings, ...hotelBookings];
+            return bookings;
+        }        
+        
     };
 
     return User;

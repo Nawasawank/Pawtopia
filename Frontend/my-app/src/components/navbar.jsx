@@ -5,32 +5,30 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/Navbar.css';
 
 function Navbar() {
-  // Initialize state for user information
   const [userInfo, setUserInfo] = useState({ firstName: '', image: '' });
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const token = localStorage.getItem('token');  // Get token from localStorage
+      const token = localStorage.getItem('token');  
 
-      if (!token) return; // No token means no need to fetch profile info
+      if (!token) return; 
 
       try {
         const response = await fetch('http://localhost:5000/api/profile', {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${token}`,  // Pass token in headers
+            'Authorization': `Bearer ${token}`,  
           },
         });
 
         if (response.ok) {
           const data = await response.json();
 
-          // Prepend the backend server URL to the image path
           const profileImageUrl = `http://localhost:5000${data.image}`;
 
           setUserInfo({
             firstName: data.firstName,
-            image: profileImageUrl  // Set the full URL for the image
+            image: profileImageUrl
           });
           
           console.log(data);
@@ -84,8 +82,8 @@ function Navbar() {
                 </Dropdown.Menu>
               </Dropdown>
             </li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="#about">History</a></li>
+            <li><a href="">Contact</a></li>
+            <li><a href="/history">History</a></li>
           </ul>
         </nav>
         <div className="user-info">

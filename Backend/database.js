@@ -66,5 +66,5 @@ const Issues = IssueModel(db);
     }
 })();
 
-export { User, Pet, Hotel,Employee,Service,ServiceAssignment,OtherService,CustomerFeedback };
+export { User, Pet, Hotel,Employee,Service,ServiceAssignment,OtherService,CustomerFeedback,Admin };
 export default db;

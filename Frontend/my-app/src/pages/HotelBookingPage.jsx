@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import useLocalStorage from '../hooks/useLocalStorage';
 import Navbar from '../components/navbar.jsx';
 import ContactSection from '../components/ContactSection.jsx';
 import { DateRangePicker } from 'rsuite';
-import 'rsuite/dist/rsuite.min.css'; 
+import 'rsuite/dist/rsuite.min.css';
 import '../styles/HotelBooking.css';
 import axios from 'axios';
-import Overlay from '../components/Overlay.jsx'; 
+import Overlay from '../components/Overlay.jsx';
 
 const HotelBookingPage = () => {
-  const [dateRange, setDateRange] = useLocalStorage('dateRange', null);
+  const { booking_id } = useParams(); // Capture booking_id for edit mode
+  const [dateRange, setDateRange] = useLocalStorage('dateRange', []);
   const [selectedRoom, setSelectedRoom] = useLocalStorage('selectedRoom', '');
   const [selectedPet, setSelectedPet] = useLocalStorage('selectedPet', '');
-  const [pets, setPets] = useState([]); 
-  const [loading, setLoading] = useState(true); 
-  const [showOverlay, setShowOverlay] = useState(false); 
-  const [overlayMessage, setOverlayMessage] = useState(''); 
+  const [pets, setPets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [overlayMessage, setOverlayMessage] = useState('');
 
   useEffect(() => {
     const fetchPets = async () => {
@@ -23,30 +25,56 @@ const HotelBookingPage = () => {
         const response = await axios.get('http://localhost:5000/api/pet/NameAndType', {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-  
         setPets(response.data.pets);
-        setLoading(false); 
+        return response.data.pets;
       } catch (error) {
         console.error('Error fetching pets:', error);
-        setLoading(false);
+        return [];
       }
     };
-  
-    fetchPets();
-  
-    return () => {
-      setDateRange(null); 
-      setSelectedRoom(''); 
-      setSelectedPet('');  
-      localStorage.removeItem('dateRange');   
-      localStorage.removeItem('selectedRoom'); 
-      localStorage.removeItem('selectedPet'); 
+
+    const fetchBookingDetails = async (loadedPets) => {
+      if (!booking_id) return;
+
+      try {
+        const response = await axios.get(`http://localhost:5000/api/booking/Hotel/${booking_id}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+
+        const booking = response.data.booking;
+        setDateRange([new Date(booking.check_in_date), new Date(booking.check_out_date)]);
+        setSelectedRoom(booking.room_size);
+        const pet = loadedPets.find(p => p.pet_id === booking.pet_id);
+        setSelectedPet(pet ? `${pet.name} - ${pet.type}` : '');
+      } catch (error) {
+        console.error('Error fetching booking details:', error);
+      }
     };
-  }, [setDateRange, setSelectedRoom, setSelectedPet]); 
-  
+
+    const initializeForm = async () => {
+      const loadedPets = await fetchPets();
+      
+      if (booking_id) {
+        // Fetch booking details if we are in edit mode
+        fetchBookingDetails(loadedPets);
+      } else {
+        // Clear form fields if we're in create mode
+        setDateRange([]);
+        setSelectedRoom('');
+        setSelectedPet('');
+      }
+
+      setLoading(false);
+    };
+
+    initializeForm();
+  }, [booking_id, setDateRange, setSelectedRoom, setSelectedPet]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,41 +83,49 @@ const HotelBookingPage = () => {
       pet => `${pet.name} - ${pet.type}` === selectedPet
     );
 
-    if (!selectedPetObj || !dateRange || !selectedRoom) {
-      alert('Please complete all fields.');
+    if (!selectedPetObj || dateRange.length < 2 || !selectedRoom) {
+      setOverlayMessage('Please complete all fields.');
+      setShowOverlay(true);
       return;
     }
 
     const bookingData = {
-      pet_id: selectedPetObj.pet_id, 
+      pet_id: selectedPetObj.pet_id,
       check_in_date: new Date(dateRange[0].getTime() - dateRange[0].getTimezoneOffset() * 60000).toISOString().split('T')[0],
       check_out_date: new Date(dateRange[1].getTime() - dateRange[1].getTimezoneOffset() * 60000).toISOString().split('T')[0],
       room_size: selectedRoom,
     };
 
     try {
-      const response = await axios.post('http://localhost:5000/api/booking/Hotel', bookingData, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, 
-        },
-      });
+      const endpoint = booking_id
+        ? `http://localhost:5000/api/update-booking/hotel/${booking_id}`
+        : 'http://localhost:5000/api/booking/Hotel';
 
-      if (response.data.error) {
-        setOverlayMessage(response.data.error); 
-      } else {
-        setOverlayMessage('Booking successful!');
-        setDateRange(null);
+      const response = booking_id
+        ? await axios.patch(endpoint, bookingData, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          })
+        : await axios.post(endpoint, bookingData, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
+
+      setOverlayMessage(
+        response.data.error ? response.data.error : booking_id ? 'Booking updated successfully!' : 'Booking successful!'
+      );
+      setShowOverlay(true);
+
+      if (!booking_id) {
+        setDateRange([]);
         setSelectedRoom('');
         setSelectedPet('');
       }
       
-      setShowOverlay(true); 
-
-      setTimeout(() => {
-        setShowOverlay(false);
-      }, 3000);
-
     } catch (error) {
       console.error('Error submitting booking:', error);
       setOverlayMessage('Error submitting booking');
@@ -98,11 +134,11 @@ const HotelBookingPage = () => {
   };
 
   const handleCloseOverlay = () => {
-    setShowOverlay(false); 
+    setShowOverlay(false);
   };
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   return (
@@ -157,7 +193,7 @@ const HotelBookingPage = () => {
         </div>
 
         <button className="hotel-submit-button" onClick={handleSubmit}>
-          Submit
+          {booking_id ? 'Update Booking' : 'Submit'}
         </button>
       </div>
 

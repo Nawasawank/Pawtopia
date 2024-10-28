@@ -82,9 +82,9 @@ export default function HotelBookingModel(db) {
         },
         
 
-        async deleteHotelBooking(bookingId) {
+        async deleteHotelBooking(booking_id) {
             const sql = 'DELETE FROM hotel_service_booking WHERE hotel_booking_id = ?';
-            return db.query(sql, [bookingId]);
+            return db.query(sql, [booking_id]);
         }
     };
 

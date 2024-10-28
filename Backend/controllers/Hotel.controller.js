@@ -23,10 +23,10 @@ const HotelController = {
     },
 
     async deleteHotelBooking(req, res) {
-        const { bookingId } = req.params;
+        const { booking_id } = req.params;
 
         try {
-            const result = await HotelService.deleteHotelBooking(bookingId);
+            const result = await HotelService.deleteHotelBooking(booking_id);
 
             if (result.error) {
                 return res.status(400).json({ error: result.error });
@@ -40,10 +40,10 @@ const HotelController = {
     },
 
     async getHotelBookingById(req, res) {
-        const { bookingId } = req.params;
+        const { booking_id } = req.params;
 
         try {
-            const booking = await HotelService.getHotelBookingById(bookingId);
+            const booking = await HotelService.getHotelBookingById(booking_id);
 
             if (booking.error) {
                 return res.status(404).json({ error: booking.error });
@@ -55,6 +55,26 @@ const HotelController = {
             });
         } catch (error) {
             console.error(`Error in getHotelBookingByIdController: ${error.message}`);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+    },
+    async updateHotelBooking(req, res) {
+        const { booking_id } = req.params;
+        const updateData = req.body;
+
+        try {
+            const updatedBooking = await HotelService.updateHotelBooking(booking_id, updateData);
+
+            if (updatedBooking.error) {
+                return res.status(400).json({ error: updatedBooking.error });
+            }
+
+            return res.status(200).json({
+                message: 'Hotel booking updated successfully',
+                booking: updatedBooking,
+            });
+        } catch (error) {
+            console.error(`Error in updateHotelBookingController: ${error.message}`);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     }

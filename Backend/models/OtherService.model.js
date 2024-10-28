@@ -44,33 +44,35 @@ export default function OtherServicesBookingModel(db) {
             }
         },
 
-        async updateBooking(bookingId, updateData) {
+        async updateBooking(booking_id, updateData) {
             try {
                 const sql = `
                     UPDATE other_services_bookings 
-                    SET pet_id = ?, employee_id = ?, service_id = ?, booking_date = ?, time_slot = ?
+                    SET pet_id = ?, booking_date = ?, time_slot = ?
                     WHERE booking_id = ?
                 `;
                 const params = [
                     updateData.pet_id,
-                    updateData.employee_id,
-                    updateData.service_id,
                     updateData.booking_date,
                     updateData.time_slot,
-                    bookingId
+                    booking_id
                 ];
-
+        
                 const result = await db.query(sql, params);
-                return result[0];
+                
+                console.log("Update result:", result);
+
+        
+                return updateData ;
             } catch (error) {
                 console.error('Error updating service booking:', error);
-                throw error;
+                return { error: 'Database error occurred while updating booking' };
             }
-        },
+        },              
 
-        async findBookingById(bookingId) {
+        async findBookingById(booking_id) {
             const sql = 'SELECT * FROM other_services_bookings WHERE booking_id = ?';
-            const bookings = await db.query(sql, [bookingId]);
+            const bookings = await db.query(sql, [booking_id]);
             return bookings[0];
         },
 
@@ -97,9 +99,9 @@ export default function OtherServicesBookingModel(db) {
             return db.query(sql, [petId]);
         },
 
-        async deleteBooking(bookingId) {
+        async deleteBooking(booking_id) {
             const sql = 'DELETE FROM other_services_bookings WHERE booking_id = ?';
-            return db.query(sql, [bookingId]);
+            return db.query(sql, [booking_id]);
         },
     };
 

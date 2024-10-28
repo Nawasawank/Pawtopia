@@ -35,6 +35,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import PetParkAppointmentPage from './pages/PetParkBookingPage.jsx';
 import GroomingAppointmentPage from './pages/GroomingBookingPage.jsx';
 import SwimmingAppointmentPage from './pages/SwimmingBookingPage.jsx';
+import HistoryPage from './pages/HistoryPage.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'daterangepicker/daterangepicker.css';
 import 'jquery';
@@ -68,6 +69,14 @@ function App() {
           }
         />
         <Route 
+        path="/hotel-booking/:booking_id?" 
+        element={
+          <ProtectedRoute>
+            <HotelBookingPage />
+          </ProtectedRoute>
+        }
+      />
+        <Route 
           path="/vaccine-booking" 
           element={
             <ProtectedRoute>
@@ -76,7 +85,23 @@ function App() {
           }
         />
         <Route 
+          path="/vaccine-booking/:booking_id?" 
+          element={
+            <ProtectedRoute>
+              <VaccineAppointmentPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
           path="/petpark-booking" 
+          element={
+            <ProtectedRoute>
+              <PetParkAppointmentPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/petpark-booking/:booking_id?" 
           element={
             <ProtectedRoute>
               <PetParkAppointmentPage />
@@ -99,6 +124,33 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route 
+          path="/swimming-booking/:booking_id?" 
+          element={
+            <ProtectedRoute>
+              <SwimmingAppointmentPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route 
+          path="/history" 
+          element={
+            <ProtectedRoute>
+              <HistoryPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/grooming-booking/:booking_id?" 
+          element={
+            <ProtectedRoute>
+              <GroomingAppointmentPage />
+            </ProtectedRoute>
+          }
+        />
+
+
 
         <Route path="/" element={<LogInPage />} />
       </Routes>

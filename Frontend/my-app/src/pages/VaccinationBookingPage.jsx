@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Navbar from '../components/navbar.jsx';
 import ContactSection from '../components/ContactSection.jsx';
-import { DatePicker } from 'rsuite'; 
-import 'rsuite/dist/rsuite.min.css'; 
+import { DatePicker } from 'rsuite';
+import 'rsuite/dist/rsuite.min.css';
 import '../styles/VaccinationBooking.css';
 import SelectTime from '../components/SelectTime.jsx';
-import SelectPet from '../components/SelectPet.jsx';   
+import SelectPet from '../components/SelectPet.jsx';
 import axios from 'axios';
 import Overlay from '../components/Overlay.jsx';
 
 const VaccineAppointmentPage = () => {
+  const { booking_id } = useParams();
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedPet, setSelectedPet] = useState('');
@@ -24,60 +26,104 @@ const VaccineAppointmentPage = () => {
         const response = await axios.get('http://localhost:5000/api/pet/NameAndType', {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-
         setPets(response.data.pets);
-        setLoading(false); 
+        return response.data.pets; // Return pets to be used in fetchBookingDetails
       } catch (error) {
         console.error('Error fetching pets:', error);
-        setLoading(false);
+        return [];
       }
     };
 
-    fetchPets();
-  }, []);
+    const fetchBookingDetails = async (loadedPets) => {
+      if (!booking_id) return;
+
+      try {
+        const response = await axios.get(`http://localhost:5000/api/booking/Vaccination/${booking_id}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+
+        const booking = response.data.booking;
+        setSelectedDate(new Date(booking.booking_date));
+        setSelectedTime(booking.time_slot);
+
+        // Find the pet from loadedPets to avoid timing issues
+        const pet = loadedPets.find(p => p.pet_id === booking.pet_id);
+        if (pet) {
+          setSelectedPet(`${pet.name} - ${pet.type}`);
+        }
+      } catch (error) {
+        console.error('Error fetching booking details:', error);
+      }
+    };
+
+    const initializeData = async () => {
+      const loadedPets = await fetchPets();
+      if (booking_id) {
+        await fetchBookingDetails(loadedPets);
+      }
+      setLoading(false);
+    };
+
+    initializeData();
+  }, [booking_id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const selectedPetObj = pets.find(
-      pet => `${pet.name} - ${pet.type}` === selectedPet
-    );
-  
+
+    const selectedPetObj = pets.find(pet => `${pet.name} - ${pet.type}` === selectedPet);
     if (!selectedPetObj || !selectedDate || !selectedTime) {
       setOverlayMessage('Please complete all fields.');
       setShowOverlay(true);
       return;
     }
-  
+
     const bookingData = {
       pet_id: selectedPetObj.pet_id,
       booking_date: new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000).toISOString().split('T')[0],
       time_slot: selectedTime,
     };
-  
+
     try {
-      const response = await axios.post('http://localhost:5000/api/booking/Vaccine', bookingData, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      
-      if (response.data.error) {
-        setOverlayMessage(response.data.error);
-      } else {
-        setOverlayMessage('Vaccine appointment successful!');
+      const endpoint = booking_id
+        ? `http://localhost:5000/api/update-booking/vaccination/${booking_id}`
+        : 'http://localhost:5000/api/booking/Vaccine';
+
+      const response = booking_id
+        ? await axios.patch(endpoint, bookingData, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          })
+        : await axios.post(endpoint, bookingData, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
+
+      setOverlayMessage(
+        response.data.error
+          ? response.data.error
+          : booking_id
+          ? 'Vaccine appointment updated!'
+          : 'Vaccine appointment successful!'
+      );
+      setShowOverlay(true);
+
+      if (!booking_id) {
         setSelectedDate(null);
         setSelectedTime('');
         setSelectedPet('');
       }
-
-      setShowOverlay(true);
-      
     } catch (error) {
+      console.error('Error submitting booking:', error);
       setOverlayMessage('Error submitting booking');
       setShowOverlay(true);
     }
@@ -97,7 +143,6 @@ const VaccineAppointmentPage = () => {
 
       <h1 className="vaccine-appointment-title">Vaccination Appointment</h1>
       <div className="vaccine-appointment-main">
-
         <div className="date-picker-wrapper">
           <h3 className="vaccine-section-heading">Select Date</h3>
           <DatePicker
@@ -108,11 +153,10 @@ const VaccineAppointmentPage = () => {
         </div>
 
         <SelectTime selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
-
         <SelectPet pets={pets} selectedPet={selectedPet} setSelectedPet={setSelectedPet} />
 
         <button className="vaccine-submit-button" onClick={handleSubmit}>
-          Submit
+          {booking_id ? 'Update Booking' : 'Submit'}
         </button>
       </div>
 

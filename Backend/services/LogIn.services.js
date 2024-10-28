@@ -19,7 +19,7 @@ const LoginService = {
             const token = jwt.sign(
                 { id: user.user_id, username: user.firstName },
                 process.env.JWT_SECRET,
-                { expiresIn: '1d' }
+                { expiresIn: '3h' }
             );
 
             return { token };
