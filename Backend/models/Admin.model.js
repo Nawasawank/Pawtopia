@@ -42,7 +42,7 @@ export default function AdminModel(db) {
                 `;
                 const params = [
                     updateData.employee_id,
-                    updateData.password, // Assuming password is already hashed
+                    updateData.password,
                     adminId
                 ];
 
@@ -66,15 +66,38 @@ export default function AdminModel(db) {
             return admins[0];
         },
 
+        async findAdminByEmail(email) {
+            const sql = `
+                SELECT *
+                FROM admins 
+                JOIN employees ON admins.employee_id = employees.employee_id 
+                WHERE employees.email = ?
+            `;
+            const admins = await db.query(sql, [email]);
+            return admins[0];
+        },
+
+        async findAdminByTel(tel) {
+            const sql = `
+                SELECT admins.* 
+                FROM admins 
+                JOIN employees ON admins.employee_id = employees.employee_id 
+                WHERE employees.tel = ?
+            `;
+            const admins = await db.query(sql, [tel]);
+            return admins[0];
+        },
+
         async deleteAdmin(adminId) {
             const sql = 'DELETE FROM admins WHERE admin_id = ?';
             return db.query(sql, [adminId]);
         },
+
         async findRandomAdminId() {
             const sql = `SELECT admin_id FROM admins ORDER BY RAND() LIMIT 1`;
             const result = await db.query(sql);
             return result;
-        }        
+        }
     };
 
     return Admin;

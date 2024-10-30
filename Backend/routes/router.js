@@ -12,6 +12,7 @@ import GroomingController from '../controllers/Grooming.controller.js';
 import PetParkController from '../controllers/PetPArk.controller.js';
 import HistoryController from '../controllers/History.controller.js';
 import FeedbackController from '../controllers/Feedback.controller.js';
+import AdminController from '../controllers/Admin.controller.js';
 
 
 const route = Router();
@@ -60,5 +61,9 @@ route.delete('/delete-booking/grooming/:booking_id',isAuth,GroomingController.de
 route.delete('/delete-booking/petpark/:booking_id',isAuth,PetParkController.deleteBooking);
 route.delete('/delete-booking/swimming/:booking_id',isAuth,SwimmingController.deleteBooking);
 route.delete('/delete-booking/vaccination/:booking_id',isAuth,VaccineController.deleteBooking);
+
+//Admin
+route.post('/admin/register',AdminController.AdminSignUp);
+route.post('/admin/login',AdminController.AdminLogIn)
 
 export default route;
