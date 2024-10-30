@@ -9,6 +9,7 @@ import SelectTime from '../components/SelectTime.jsx';
 import SelectPet from '../components/SelectPet.jsx';
 import axios from 'axios';
 import Overlay from '../components/Overlay.jsx';
+import api from '../api.js';
 
 const SwimmingAppointmentPage = () => {
   const { booking_id } = useParams();
@@ -23,7 +24,7 @@ const SwimmingAppointmentPage = () => {
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/pet/NameAndType', {
+        const response = await api.get('/api/pet/NameAndType', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -41,7 +42,7 @@ const SwimmingAppointmentPage = () => {
       if (!booking_id) return;
 
       try {
-        const response = await axios.get(`http://localhost:5000/api/booking/Swimming/${booking_id}`, {
+        const response = await axios.get(`/api/booking/Swimming/${booking_id}`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -86,19 +87,17 @@ const SwimmingAppointmentPage = () => {
 
     try {
       const endpoint = booking_id
-        ? `http://localhost:5000/api/update-booking/swimming/${booking_id}`
-        : 'http://localhost:5000/api/booking/Swimming';
+        ? `/api/update-booking/swimming/${booking_id}`
+        : '/api/booking/Swimming';
 
       const response = booking_id
-        ? await axios.patch(endpoint, bookingData, {
+        ? await api.patch(endpoint, bookingData, {
             headers: {
-              'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           })
-        : await axios.post(endpoint, bookingData, {
+        : await api.post(endpoint, bookingData, {
             headers: {
-              'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           });

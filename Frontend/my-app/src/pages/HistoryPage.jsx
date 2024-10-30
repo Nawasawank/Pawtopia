@@ -9,6 +9,7 @@ import Feedback_Overlay from '../components/Feedback_Overlay.jsx';
 import '../styles/History.css';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import api from '../api.js'
 
 const HistoryPage = () => {
     const [dateRange, setDateRange] = useLocalStorage('dateRange', null);
@@ -18,13 +19,12 @@ const HistoryPage = () => {
     const [showOverlay, setShowOverlay] = useState(false);
     const [overlayMessage, setOverlayMessage] = useState('');
     const [selectedBookingId, setSelectedBookingId] = useState(null);
-    const [selectedHotelBookingId, setSelectedHotelBookingId] = useState(null);
 
     const fetchHistory = async (startDate, endDate) => {
         try {
             const formattedStartDate = dayjs(startDate).format('YYYY-MM-DD');
             const formattedEndDate = dayjs(endDate).format('YYYY-MM-DD');
-            const response = await axios.get(`http://localhost:5000/api/history`, {
+            const response = await api.get(`/api/history`, {
                 params: {
                     startDate: formattedStartDate,
                     endDate: formattedEndDate
@@ -59,44 +59,37 @@ const HistoryPage = () => {
         setOverlayMessage("Add Feedback or Rating here!");
         if (appointment.booking_type === 'other_service') {
             setSelectedBookingId(appointment.booking_id);
-            setSelectedHotelBookingId(null);
-        } else if (appointment.booking_type === 'hotel_service') {
-            setSelectedHotelBookingId(appointment.hotel_booking_id);
-            setSelectedBookingId(null);
         }
         setShowOverlay(true);
     };
 
     const handleDeleteBooking = async (appointment) => {
         const { booking_id, service_name } = appointment;
-        console.log(booking_id)
+    
         if (!window.confirm('Are you sure you want to delete this booking?')) return;
-
+    
         let deleteEndpoint = '';
-
-        switch (appointment.service_name) {
+    
+        switch (service_name) {
             case 'Grooming':
-                deleteEndpoint = `http://localhost:5000/api/delete-booking/grooming/${booking_id}`;
+                deleteEndpoint = `/api/delete-booking/grooming/${booking_id}`;
                 break;
             case 'Pet Park':
-                deleteEndpoint = `http://localhost:5000/api/delete-booking/petpark/${booking_id}`;
+                deleteEndpoint = `/api/delete-booking/petpark/${booking_id}`;
                 break;
             case 'Swimming':
-                deleteEndpoint = `http://localhost:5000/api/delete-booking/swimming/${booking_id}`;
+                deleteEndpoint = `/api/delete-booking/swimming/${booking_id}`;
                 break;
             case 'Vaccination':
-                deleteEndpoint = `http://localhost:5000/api/delete-booking/vaccination/${booking_id}`;
-                break;
-            case 'Hotel Booking':
-                deleteEndpoint = `http://localhost:5000/api/delete-booking/hotel/${appointment.hotel_booking_id}`;
+                deleteEndpoint = `/api/delete-booking/vaccination/${booking_id}`;
                 break;
             default:
                 console.error('Unknown service name:', service_name);
                 return;
         }
-
+    
         try {
-            await axios.delete(deleteEndpoint, {
+            await api.delete(deleteEndpoint, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -113,7 +106,6 @@ const HistoryPage = () => {
         try {
             const feedbackData = {
                 booking_id: selectedBookingId,
-                hotel_booking_id: selectedHotelBookingId,
                 comment: feedback.comment,
                 rating: feedback.rating,
                 feedback_type: 'General',
@@ -147,9 +139,7 @@ const HistoryPage = () => {
         const { booking_id, service_name } = appointment;
         if (service_name === 'Grooming') {
             navigate(`/grooming-booking/${booking_id}`);
-        } else if (service_name === 'Hotel') {
-            navigate(`/hotel-booking/${booking_id}`);
-        } else if (service_name === 'Vaccination') {
+        }  else if (service_name === 'Vaccination') {
             navigate(`/vaccine-booking/${booking_id}`);
         } else if (service_name === 'Swimming') {
             navigate(`/swimming-booking/${booking_id}`);
@@ -195,7 +185,7 @@ const HistoryPage = () => {
                     {dateRange && dateRange[0] && dateRange[1] && (
                         <div className="history-appointments">
                             {currentAppointments.map((appointment) => (
-                                <div key={appointment.booking_id || appointment.hotel_booking_id} className="appointment-card">
+                                <div key={appointment.booking_id} className="appointment-card">
                                     <div className="appointment-info">
                                         <h2>{appointment.pet_name}</h2>
                                         <p>{appointment.employee_name}</p>

@@ -2,7 +2,6 @@ import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
 import UserModel from './models/User.model.js'; 
 import PetModel from './models/Pet.model.js';  
-import HotelBookingModel from './models/Hotel_Service_Booking.model.js';  
 import EmployeeModel from './models/Employee.model.js'
 import ServiceModel from './models/Service.model.js';
 import ServiceAssignmentsModel from './models/ServiceAssignment.model.js';
@@ -33,7 +32,6 @@ const db = {
 
 const User = UserModel(db);
 const Pet = PetModel(db);
-const Hotel = HotelBookingModel(db);
 const Employee = EmployeeModel(db);
 const Service = ServiceModel(db);
 const ServiceAssignment = ServiceAssignmentsModel(db);
@@ -50,7 +48,6 @@ const Issues = IssueModel(db);
 
         await User.createTable();
         await Pet.createTable();
-        await Hotel.createTable();
         await Employee.createTable();
         await Service.createTable();
         await ServiceAssignment.createTable();
@@ -66,5 +63,5 @@ const Issues = IssueModel(db);
     }
 })();
 
-export { User, Pet, Hotel,Employee,Service,ServiceAssignment,OtherService,CustomerFeedback,Admin };
+export { User, Pet,Employee,Service,ServiceAssignment,OtherService,CustomerFeedback,Admin };
 export default db;

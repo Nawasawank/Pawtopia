@@ -29,7 +29,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SignUpPage from '../src/pages/SignUpPage.jsx';
 import LogInPage from './pages/LogInPage.jsx';
 import HomePage from './pages/HomePage.jsx';
-import HotelBookingPage from './pages/HotelBookingPage.jsx';
 import VaccineAppointmentPage from './pages/VaccinationBookingPage.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import PetParkAppointmentPage from './pages/PetParkBookingPage.jsx';
@@ -59,23 +58,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        <Route 
-          path="/hotel-booking" 
-          element={
-            <ProtectedRoute>
-              <HotelBookingPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route 
-        path="/hotel-booking/:booking_id?" 
-        element={
-          <ProtectedRoute>
-            <HotelBookingPage />
-          </ProtectedRoute>
-        }
-      />
         <Route 
           path="/vaccine-booking" 
           element={

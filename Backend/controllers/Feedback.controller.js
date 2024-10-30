@@ -3,13 +3,12 @@ import FeedbackService from '../services/Feedback.service.js';
 const FeedbackController = {
     async createFeedback(req, res) {
         const { id: user_id } = req.user;
-        const { booking_id, hotel_booking_id, comment, rating, feedback_type } = req.body;
+        const { booking_id, comment, rating, feedback_type } = req.body;
 
         try {
             const feedbackData = {
                 user_id,
-                booking_id: booking_id || null,
-                hotel_booking_id: hotel_booking_id || null,
+                booking_id: booking_id ,
                 comment,
                 rating,
                 feedback_type

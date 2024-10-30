@@ -138,30 +138,14 @@ export default function UserModel(db) {
                 AND (o.booking_date BETWEEN ? AND ? OR o.booking_date = ? OR o.booking_date = ?)
             `;
         
-            const hotelServicesSql = `
-                SELECT 
-                    h.hotel_booking_id,
-                    p.name AS pet_name,
-                    'Hotel Booking' AS service_name,
-                    h.check_in_date AS date,
-                    'hotel_service' AS booking_type
-                FROM hotel_service_booking h
-                JOIN pets p ON h.pet_id = p.pet_id
-                WHERE p.user_id = ?
-                AND (
-                    (h.check_in_date BETWEEN ? AND ?)
-                    OR (h.check_out_date BETWEEN ? AND ?)
-                    OR h.check_out_date = ?
-                )
-            `;
+           
             
             const params = [userId, startDate, endDate, startDate, endDate];
-            const hotelParams = [userId, startDate, endDate, startDate, endDate, endDate];
+          
             
             const otherServicesBookings = await db.query(otherServicesSql, params);
-            const hotelBookings = await db.query(hotelServicesSql, hotelParams);
             
-            const bookings = [...otherServicesBookings, ...hotelBookings];
+            const bookings = [...otherServicesBookings];
             return bookings;
         }        
         

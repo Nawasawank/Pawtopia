@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/LogInPage.css';
 import useLocalStorage from '../hooks/useLocalStorage';
+import api from '../api'; // Import the Axios instance
 
 const LogInPage = () => {
     const [email, setEmail] = useLocalStorage('email', '');
@@ -18,23 +19,16 @@ const LogInPage = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:5000/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(loginData), 
-            });
-
-            if (response.ok) {
-                const data = await response.json();
+            const response = await api.post('/api/login', loginData);
+            
+            if (response.status === 200) {
+                const data = response.data;
                 localStorage.setItem('token', data.token);
                 alert('Login successful!');
                 console.log('Token:', data.token);
                 navigate('/home');
             } else {
-                const errorData = await response.json();
-                setError(errorData.error || 'Login failed');
+                setError(response.data.error || 'Login failed');
             }
         } catch (error) {
             console.error('Error logging in:', error);

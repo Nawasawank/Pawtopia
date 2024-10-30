@@ -9,6 +9,7 @@ import SelectTime from '../components/SelectTime.jsx';
 import SelectPet from '../components/SelectPet.jsx';
 import axios from 'axios';
 import Overlay from '../components/Overlay.jsx';
+import api from '../api.js'
 
 const VaccineAppointmentPage = () => {
   const { booking_id } = useParams();
@@ -23,14 +24,13 @@ const VaccineAppointmentPage = () => {
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/pet/NameAndType', {
+        const response = await api.get('/api/pet/NameAndType', {
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
         setPets(response.data.pets);
-        return response.data.pets; // Return pets to be used in fetchBookingDetails
+        return response.data.pets;
       } catch (error) {
         console.error('Error fetching pets:', error);
         return [];
@@ -41,7 +41,7 @@ const VaccineAppointmentPage = () => {
       if (!booking_id) return;
 
       try {
-        const response = await axios.get(`http://localhost:5000/api/booking/Vaccination/${booking_id}`, {
+        const response = await api.get(`/api/booking/Vaccination/${booking_id}`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -52,7 +52,6 @@ const VaccineAppointmentPage = () => {
         setSelectedDate(new Date(booking.booking_date));
         setSelectedTime(booking.time_slot);
 
-        // Find the pet from loadedPets to avoid timing issues
         const pet = loadedPets.find(p => p.pet_id === booking.pet_id);
         if (pet) {
           setSelectedPet(`${pet.name} - ${pet.type}`);
@@ -91,19 +90,17 @@ const VaccineAppointmentPage = () => {
 
     try {
       const endpoint = booking_id
-        ? `http://localhost:5000/api/update-booking/vaccination/${booking_id}`
-        : 'http://localhost:5000/api/booking/Vaccine';
+        ? `/api/update-booking/vaccination/${booking_id}`
+        : '/api/booking/Vaccine';
 
       const response = booking_id
-        ? await axios.patch(endpoint, bookingData, {
+        ? await api.patch(endpoint, bookingData, {
             headers: {
-              'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           })
-        : await axios.post(endpoint, bookingData, {
+        : await api.post(endpoint, bookingData, {
             headers: {
-              'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           });

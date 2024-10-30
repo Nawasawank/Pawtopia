@@ -1,6 +1,7 @@
 import React from 'react';
 import '../styles/SignUpPage.css';
 import useLocalStorage from '../hooks/useLocalStorage';
+import api from '../api.js'
 
 const SignUpPage = () => {
   const [firstName, setFirstName] = useLocalStorage('firstName', ''); 
@@ -41,19 +42,12 @@ const SignUpPage = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await api.post('/api/register', data);
       if (response.status === 201) {
         alert('Sign up successful!');
         clearForm();
       } else {
-        const errorData = await response.json();
-        alert(`${errorData.error || 'An unknown error occurred'}`);
+        alert(response.data.error || 'An unknown error occurred');
       }
     } catch (error) {
       alert('Error occurred during sign-up: ' + error);

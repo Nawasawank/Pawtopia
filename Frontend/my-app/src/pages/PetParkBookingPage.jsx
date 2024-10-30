@@ -9,6 +9,7 @@ import SelectTime from '../components/SelectTime.jsx';
 import SelectPet from '../components/SelectPet.jsx';
 import axios from 'axios';
 import Overlay from '../components/Overlay.jsx';
+import api from '../api.js'
 
 const PetParkAppointmentPage = () => {
   const { booking_id } = useParams();
@@ -23,7 +24,7 @@ const PetParkAppointmentPage = () => {
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/pet/NameAndType', {
+        const response = await api.get('/api/pet/NameAndType', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -37,7 +38,7 @@ const PetParkAppointmentPage = () => {
 
     const fetchBookingDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/booking/PetPark/${booking_id}`, {
+        const response = await api.get(`/api/booking/PetPark/${booking_id}`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -48,7 +49,6 @@ const PetParkAppointmentPage = () => {
         setSelectedDate(new Date(booking.booking_date));
         setSelectedTime(booking.time_slot);
 
-        // Ensure pets are loaded before trying to set selectedPet
         if (pets.length > 0) {
           const pet = pets.find(p => p.pet_id === booking.pet_id);
           setSelectedPet(pet ? `${pet.name} - ${pet.type}` : '');
@@ -60,7 +60,6 @@ const PetParkAppointmentPage = () => {
       }
     };
 
-    // Fetch pets first, then booking details if booking_id is provided
     fetchPets().then(() => {
       if (booking_id) fetchBookingDetails();
       else setLoading(false);
@@ -71,7 +70,7 @@ const PetParkAppointmentPage = () => {
     if (pets.length > 0 && booking_id && selectedPet === '') {
       const fetchBookingDetails = async () => {
         try {
-          const response = await axios.get(`http://localhost:5000/api/booking/PetPark/${booking_id}`, {
+          const response = await api.get(`/api/booking/PetPark/${booking_id}`, {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -108,17 +107,17 @@ const PetParkAppointmentPage = () => {
 
     try {
       const endpoint = booking_id
-        ? `http://localhost:5000/api/update-booking/petpark/${booking_id}`
-        : 'http://localhost:5000/api/booking/PetPark';
+        ? `/api/update-booking/petpark/${booking_id}`
+        : '/api/booking/PetPark';
 
       const response = booking_id
-        ? await axios.patch(endpoint, bookingData, {
+        ? await api.patch(endpoint, bookingData, {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           })
-        : await axios.post(endpoint, bookingData, {
+        : await api.post(endpoint, bookingData, {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
