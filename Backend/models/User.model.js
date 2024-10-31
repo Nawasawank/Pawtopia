@@ -130,7 +130,7 @@ export default function UserModel(db) {
                     o.booking_id,
                     o.booking_date AS date,
                     'other_service' AS booking_type
-                FROM other_services_bookings o
+                FROM services_bookings o
                 JOIN pets p ON o.pet_id = p.pet_id
                 JOIN employees e ON o.employee_id = e.employee_id
                 JOIN services s ON o.service_id = s.service_id

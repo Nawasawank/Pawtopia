@@ -13,7 +13,7 @@ export default function CustomerFeedbackModel(db) {
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-                    FOREIGN KEY (booking_id) REFERENCES other_services_bookings(booking_id) ON DELETE CASCADE,
+                    FOREIGN KEY (booking_id) REFERENCES services_bookings(booking_id) ON DELETE CASCADE,
                     FOREIGN KEY (admin_id) REFERENCES admins(admin_id) ON DELETE SET NULL
                 );
             `;
