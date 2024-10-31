@@ -25,11 +25,15 @@ route.put('/upload-photo',isAuth, upload.single('profileImage'), UpdatePhotoCont
 
 //Get user name and picture for navbar
 route.get('/profile', isAuth, InfoController.getUserProfile);
+//Get all user information
+route.get('/info', isAuth, InfoController.getUserInfo);
+
 
 //add pet, delete pet, get pet name and type
 route.post('/pet/add', isAuth, PetController.addPet); 
 route.delete('/pets/delete/:petId', isAuth, PetController.deletePet);
 route.get('/pet/NameAndType',isAuth,PetController.getPetNamesAndTypes);
+route.get('/pet/AllPet',isAuth,PetController.getPetByUserId);
 
 //Booking
 route.post('/booking/Vaccine',isAuth,VaccineController.addBooking);
