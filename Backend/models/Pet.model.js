@@ -89,6 +89,10 @@ export default function PetModel(db) {
             const sql = 'SELECT pet_id, name, type FROM pets WHERE user_id = ?';
             return db.query(sql, [userId]);
         },
+        async findAllPet(userId) {
+            const sql = 'SELECT * FROM pets WHERE user_id = ?';
+            return db.query(sql, [userId]);
+        }
     };
 
     return Pet;

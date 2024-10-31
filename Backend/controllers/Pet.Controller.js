@@ -58,6 +58,25 @@ const PetController = {
             console.error(`Error in getPetNamesAndTypesController: ${error.message}`);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
+    },
+    async getPetByUserId(req, res) {
+        const { id: userId } = req.user;
+
+        try {
+            const pets = await PetService.findPet(userId);
+
+            if (pets.error) {
+                return res.status(400).json({ error: pets.error });
+            }
+
+            return res.status(200).json({
+                message: 'Pet names and types retrieved successfully',
+                pets
+            });
+        } catch (error) {
+            console.error(`Error in getPetNamesAndTypesController: ${error.message}`);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
     }
 };
 
