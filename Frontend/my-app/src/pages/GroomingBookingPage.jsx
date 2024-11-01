@@ -7,7 +7,6 @@ import 'rsuite/dist/rsuite.min.css';
 import '../styles/GroomingBooking.css';
 import SelectTime from '../components/SelectTime.jsx';
 import SelectPet from '../components/SelectPet.jsx';
-import axios from 'axios';
 import Overlay from '../components/Overlay.jsx';
 import api from '../api.js'
 
@@ -20,6 +19,8 @@ const GroomingAppointmentPage = () => {
   const [loading, setLoading] = useState(true);
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayMessage, setOverlayMessage] = useState('');
+  const [previousBookingData, setPreviousBookingData] = useState(null);
+
 
   useEffect(() => {
     const fetchPets = async () => {
@@ -48,13 +49,19 @@ const GroomingAppointmentPage = () => {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-
+    
         const booking = response.data.booking;
         setSelectedDate(new Date(booking.booking_date));
         setSelectedTime(booking.time_slot);
-
+    
         const pet = loadedPets.find(p => p.pet_id === booking.pet_id);
         setSelectedPet(pet ? `${pet.name} - ${pet.type}` : '');
+    
+        setPreviousBookingData({
+          pet_id: booking.pet_id,
+          booking_date: booking.booking_date,
+          time_slot: booking.time_slot,
+        });
       } catch (error) {
         console.error('Error fetching booking details:', error);
       }
@@ -71,27 +78,27 @@ const GroomingAppointmentPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const selectedPetObj = pets.find(pet => `${pet.name} - ${pet.type}` === selectedPet);
     if (!selectedPetObj || !selectedDate || !selectedTime) {
       setOverlayMessage('Please complete all fields.');
       setShowOverlay(true);
       return;
     }
-
+  
     const bookingData = {
       pet_id: selectedPetObj.pet_id,
       booking_date: new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000).toISOString().split('T')[0],
       time_slot: selectedTime,
     };
-
+  
     try {
       const endpoint = booking_id
         ? `/api/update-booking/grooming/${booking_id}`
         : '/api/booking/Grooming';
-
+  
       const response = booking_id
-        ? await api.patch(endpoint, bookingData, {
+        ? await api.put(endpoint, bookingData, {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -103,10 +110,16 @@ const GroomingAppointmentPage = () => {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           });
-
-      setOverlayMessage(response.data.error ? response.data.error : booking_id ? 'Grooming appointment updated!' : 'Grooming appointment successful!');
+  
+      setOverlayMessage(
+        response.data.error
+          ? response.data.error
+          : booking_id
+          ? 'Grooming appointment updated!'
+          : 'Grooming appointment successful!'
+      );
       setShowOverlay(true);
-
+  
       if (!booking_id) {
         setSelectedDate(null);
         setSelectedTime('');
@@ -114,10 +127,12 @@ const GroomingAppointmentPage = () => {
       }
     } catch (error) {
       console.error('Error submitting booking:', error);
-      setOverlayMessage('Error submitting booking');
+      console.log(error.response?.data); 
+      setOverlayMessage(error.response?.data?.message || 'Error submitting booking');
       setShowOverlay(true);
     }
   };
+  
 
   const handleCloseOverlay = () => {
     setShowOverlay(false);

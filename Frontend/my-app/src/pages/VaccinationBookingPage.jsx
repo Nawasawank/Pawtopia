@@ -7,7 +7,6 @@ import 'rsuite/dist/rsuite.min.css';
 import '../styles/VaccinationBooking.css';
 import SelectTime from '../components/SelectTime.jsx';
 import SelectPet from '../components/SelectPet.jsx';
-import axios from 'axios';
 import Overlay from '../components/Overlay.jsx';
 import api from '../api.js'
 
@@ -94,7 +93,7 @@ const VaccineAppointmentPage = () => {
         : '/api/booking/Vaccine';
 
       const response = booking_id
-        ? await api.patch(endpoint, bookingData, {
+        ? await api.put(endpoint, bookingData, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },

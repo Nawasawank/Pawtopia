@@ -91,19 +91,42 @@ export default function UserModel(db) {
         },
 
         async getUserWithPets(userId) {
-            const userSql = 'SELECT * FROM users WHERE user_id = ?';
-            const user = await db.query(userSql, [userId]);
-
-            const petsSql = 'SELECT * FROM pets WHERE user_id = ?';
-            const pets = await db.query(petsSql, [userId]);
-
-            if (user.length > 0) {
-                user[0].pets = pets;
-                return user[0];
-            } else {
+            const sql = `
+                SELECT users.*, pets.pet_id, pets.name AS pet_name, pets.type AS pet_type, 
+                       pets.gender AS pet_gender, pets.weight AS pet_weight, 
+                       pets.health_condition_id
+                FROM users
+                LEFT JOIN pets ON users.user_id = pets.user_id
+                WHERE users.user_id = ?
+            `;
+            const rows = await db.query(sql, [userId]);
+        
+            if (rows.length === 0) {
                 return null;
             }
-        },
+        
+            const user = {
+                user_id: rows[0].user_id,
+                firstName: rows[0].firstName,
+                lastName: rows[0].lastName,
+                email: rows[0].email,
+                tel: rows[0].tel,
+                pets: []
+            };
+        
+            user.pets = rows
+                .filter(row => row.pet_id !== null)
+                .map(row => ({
+                    pet_id: row.pet_id,
+                    name: row.pet_name,
+                    type: row.pet_type,
+                    gender: row.pet_gender,
+                    weight: row.pet_weight,
+                    health_condition_id: row.health_condition_id,
+                }));
+        
+            return user;
+        },          
 
         async updateUserImage(userId, imagePath) {
             try {
@@ -147,6 +170,26 @@ export default function UserModel(db) {
             
             const bookings = [...otherServicesBookings];
             return bookings;
+        },
+        async getAllUsersWithPetCount() {
+            const sql = `
+                SELECT users.user_id, users.firstName, users.lastName, users.email, users.tel, users.image,
+                       COUNT(pets.pet_id) AS pet_count
+                FROM users
+                LEFT JOIN pets ON users.user_id = pets.user_id
+                GROUP BY users.user_id
+            `;
+            const rows = await db.query(sql);
+    
+            return rows.map(row => ({
+                user_id: row.user_id,
+                firstName: row.firstName,
+                lastName: row.lastName,
+                email: row.email,
+                tel: row.tel,
+                image: row.image,
+                pet_count: row.pet_count
+            }));
         }        
         
     };

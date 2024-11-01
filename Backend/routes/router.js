@@ -28,6 +28,8 @@ route.get('/profile', isAuth, InfoController.getUserProfile);
 //Get all user information
 route.get('/info', isAuth, InfoController.getUserInfo);
 
+//Get all user and pet count 
+route.get('/allUsers', InfoController.getUserInfoAndPetCount);
 
 //add pet, delete pet, get pet name and type
 route.post('/pet/add', isAuth, PetController.addPet); 
@@ -55,10 +57,10 @@ route.get('/history',isAuth,HistoryController.getAppointmentHistory);
 route.post('/feedback',isAuth,FeedbackController.createFeedback);
 
 //update Booking
-route.patch('/update-booking/grooming/:booking_id',isAuth,GroomingController.updateBooking);
-route.patch('/update-booking/petpark/:booking_id',isAuth,PetParkController.updateBooking);
-route.patch('/update-booking/swimming/:booking_id',isAuth,SwimmingController.updateBooking);
-route.patch('/update-booking/vaccination/:booking_id',isAuth,VaccineController.updateBooking);
+route.put('/update-booking/grooming/:booking_id',isAuth,GroomingController.updateBooking);
+route.put('/update-booking/petpark/:booking_id',isAuth,PetParkController.updateBooking);
+route.put('/update-booking/swimming/:booking_id',isAuth,SwimmingController.updateBooking);
+route.put('/update-booking/vaccination/:booking_id',isAuth,VaccineController.updateBooking);
 
 //delete booking
 route.delete('/delete-booking/grooming/:booking_id',isAuth,GroomingController.deleteBooking);

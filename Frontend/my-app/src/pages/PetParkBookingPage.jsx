@@ -7,7 +7,6 @@ import 'rsuite/dist/rsuite.min.css';
 import '../styles/PetParkBooking.css';
 import SelectTime from '../components/SelectTime.jsx';
 import SelectPet from '../components/SelectPet.jsx';
-import axios from 'axios';
 import Overlay from '../components/Overlay.jsx';
 import api from '../api.js'
 
@@ -111,7 +110,7 @@ const PetParkAppointmentPage = () => {
         : '/api/booking/PetPark';
 
       const response = booking_id
-        ? await api.patch(endpoint, bookingData, {
+        ? await api.put(endpoint, bookingData, {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('token')}`,

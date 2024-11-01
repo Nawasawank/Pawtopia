@@ -20,24 +20,49 @@ const InfoService = {
     },
     async getUserInfo(userId) {
         try {
-            const user = await User.findUserById(userId);
+            const user = await User.getUserWithPets(userId);
+    
             if (!user) {
                 return { error: 'User not found' };
             }
-
+    
             return {
-                id: userId,
+                id: user.user_id,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
                 tel: user.tel,
-                image: user.image
+                image: user.image,
+                pets: user.pets
             };
         } catch (error) {
-            console.error('Error in getUserProfile:', error);
+            console.error('Error in getUserInfo:', error);
             return { error: 'Error retrieving user profile' };
         }
     },
+    async getAllUsersAndPetCount() {
+        try {
+            const users = await User.getAllUsersWithPetCount();
+    
+            if (!users || users.length === 0) {
+                return { error: 'No users found' };
+            }
+    
+            return users.map(user => ({
+                id: user.user_id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                tel: user.tel,
+                pet_count: user.pet_count
+            }));
+        } catch (error) {
+            console.error('Error in getAllUsersAndPetCount:', error);
+            return { error: 'Error retrieving users' };
+        }
+    }
+    
+    
 };
 
 export default InfoService;
