@@ -22,13 +22,13 @@ const GroomingController = {
     },
 
     async deleteBooking(req, res) {
-        const { bookingId } = req.params;
+        const { booking_id } = req.params;
 
         try {
-            const result = await GroomingService.deleteGroomingBooking(bookingId);
+            const result = await GroomingService.deleteGroomingBooking(booking_id);
 
             if (result.error) {
-                return res.status(400).json({ error: result.error });
+                return res.status(200).json({ error: result.error });
             }
 
             return res.status(200).json({ message: 'Grooming booking deleted successfully' });
@@ -39,10 +39,11 @@ const GroomingController = {
     },
 
     async getBookingById(req, res) {
-        const { bookingId } = req.params;
+        const { booking_id } = req.params;
 
+        console.log(booking_id);
         try {
-            const booking = await GroomingService.getGroomingBookingById(bookingId);
+            const booking = await GroomingService.getGroomingBookingById(booking_id);
 
             if (booking.error) {
                 return res.status(404).json({ error: booking.error });
@@ -54,6 +55,28 @@ const GroomingController = {
             });
         } catch (error) {
             console.error(`Error in getBookingById: ${error.message}`);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+    },
+    async updateBooking(req, res) {
+        const { booking_id } = req.params;
+        const updateData = req.body;
+        console.log(booking_id)
+        
+
+        try {
+            const updatedBooking = await GroomingService.updateGroomingBooking(booking_id, updateData);
+
+            if (updatedBooking.error) {
+                return res.status(400).json({ error: updatedBooking.error });
+            }
+
+            return res.status(200).json({
+                message: 'Grooming booking updated successfully',
+                booking: updatedBooking
+            });
+        } catch (error) {
+            console.error(`Error in updateBooking: ${error.message}`);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     }

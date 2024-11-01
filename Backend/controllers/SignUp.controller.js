@@ -2,8 +2,8 @@ import SignUpService from '../services/SignUp.services.js';
 
 const SignUpController = {
     async register(req, res) {
-        const { firstname, lastname, email, password, tel, name, type, gender, weight, vaccination, health_condition } = req.body;
-
+        const { firstname, lastname, email, password, tel, name, type, gender, weight, health_condition_id } = req.body;
+        console.log(req.body)
         try {
             const result = await SignUpService.registerUser(
                 firstname,
@@ -15,8 +15,7 @@ const SignUpController = {
                 type,
                 gender,
                 weight,
-                vaccination,
-                health_condition
+                health_condition_id
             );
 
             if (result.error) {
@@ -36,8 +35,7 @@ const SignUpController = {
                     type,
                     gender,
                     weight,
-                    vaccination,
-                    health_condition
+                    health_condition_id
                 }
             };
 

@@ -4,17 +4,17 @@ export default function CustomerFeedbackModel(db) {
             const sql = `
                 CREATE TABLE IF NOT EXISTS customer_feedback (
                     feedback_id INT AUTO_INCREMENT PRIMARY KEY,
-                    user_id INT,
-                    booking_id INT NULL,
-                    hotel_booking_id INT NULL,
+                    user_id INT NOT NULL,
+                    booking_id INT NOT NULL,
                     comment TEXT,
                     rating INT NULL,
-                    type ENUM('review', 'technical_issue'),
+                    feedback_type ENUM('General', 'Technical'),
+                    employee_id INT NULL,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-                    FOREIGN KEY (booking_id) REFERENCES other_services_bookings(booking_id) ON DELETE SET NULL,
-                    FOREIGN KEY (hotel_booking_id) REFERENCES hotel_service_booking(hotel_booking_id) ON DELETE SET NULL
+                    FOREIGN KEY (booking_id) REFERENCES services_bookings(booking_id) ON DELETE CASCADE,
+                    FOREIGN KEY (employee_id) REFERENCES emp_admins(employee_id) ON DELETE SET NULL
                 );
             `;
             await db.query(sql);
@@ -23,19 +23,22 @@ export default function CustomerFeedbackModel(db) {
         async createFeedback(feedbackData) {
             try {
                 const sql = `
-                    INSERT INTO customer_feedback (user_id, booking_id, hotel_booking_id, comment, rating, type) 
-                    VALUES (?, ?, ?, ?, ?)
+                    INSERT INTO customer_feedback (user_id, booking_id, comment, rating, feedback_type, employee_id) 
+                    VALUES (?, ?, ?, ?, ?, ?)
                 `;
                 const params = [
                     feedbackData.user_id,
-                    feedbackData.booking_id || null,
-                    feedbackData.hotel_booking_id || null,  
+                    feedbackData.booking_id,
                     feedbackData.comment,
-                    feedbackData.rating
+                    feedbackData.rating,
+                    feedbackData.feedback_type,
+                    feedbackData.employee_id
                 ];
 
                 const result = await db.query(sql, params);
-                return result;
+                return {
+                    ...feedbackData,
+                };
             } catch (error) {
                 console.error('Error creating feedback:', error);
                 throw error;
@@ -46,15 +49,16 @@ export default function CustomerFeedbackModel(db) {
             try {
                 const sql = `
                     UPDATE customer_feedback 
-                    SET user_id = ?, booking_id = ?, hotel_booking_id = ?, comment = ?, rating = ?
+                    SET user_id = ?, booking_id = ?, comment = ?, rating = ?, feedback_type = ?, employee_id = ? 
                     WHERE feedback_id = ?
                 `;
                 const params = [
                     updateData.user_id,
-                    updateData.booking_id || null,
-                    updateData.hotel_booking_id || null, 
+                    updateData.booking_id,
                     updateData.comment,
                     updateData.rating,
+                    updateData.feedback_type,
+                    updateData.employee_id,
                     feedbackId
                 ];
 
@@ -75,11 +79,6 @@ export default function CustomerFeedbackModel(db) {
         async findFeedbackByBookingId(bookingId) {
             const sql = 'SELECT * FROM customer_feedback WHERE booking_id = ?';
             return db.query(sql, [bookingId]);
-        },
-
-        async findFeedbackByHotelBookingId(hotelBookingId) {
-            const sql = 'SELECT * FROM customer_feedback WHERE hotel_booking_id = ?';
-            return db.query(sql, [hotelBookingId]);
         },
         
         async deleteFeedback(feedbackId) {

@@ -83,6 +83,11 @@ export default function EmployeeModel(db) {
             const employees = await db.query(sql, [service_id]);
             return employees[0]; 
         },
+        findEmployeeByDetails: async (first_name, last_name, email) => {
+            const sql = 'SELECT * FROM employees WHERE first_name = ? AND last_name = ? AND email = ?';
+            const employees = await db.query(sql, [first_name, last_name, email]);
+            return employees[0];
+        },   
     };
 
     return Employee;

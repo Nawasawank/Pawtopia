@@ -120,7 +120,35 @@ export default function UserModel(db) {
                 console.error('Error updating user image:', error);
                 throw error;
             }
-        }
+        },
+        async getUserBookings(userId, startDate, endDate) {
+            const otherServicesSql = `
+                SELECT 
+                    p.name AS pet_name,
+                    CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
+                    s.service_name,
+                    o.booking_id,
+                    o.booking_date AS date,
+                    'other_service' AS booking_type
+                FROM services_bookings o
+                JOIN pets p ON o.pet_id = p.pet_id
+                JOIN employees e ON o.employee_id = e.employee_id
+                JOIN services s ON o.service_id = s.service_id
+                WHERE p.user_id = ?
+                AND (o.booking_date BETWEEN ? AND ? OR o.booking_date = ? OR o.booking_date = ?)
+            `;
+        
+           
+            
+            const params = [userId, startDate, endDate, startDate, endDate];
+          
+            
+            const otherServicesBookings = await db.query(otherServicesSql, params);
+            
+            const bookings = [...otherServicesBookings];
+            return bookings;
+        }        
+        
     };
 
     return User;

@@ -39,6 +39,15 @@ const PetService = {
             console.error(`Error fetching pet names and types: ${error.message}`);
             return { error: 'Error fetching pet names and types' };
         }
+    },
+    async findPet(userId) {
+        try {
+            const pets = await Pet.findPetsByUserId(userId);
+            return pets;
+        } catch (error) {
+            console.error(`Error fetching pet names and types: ${error.message}`);
+            return { error: 'Error fetching pet names and types' };
+        }
     }
 };
 

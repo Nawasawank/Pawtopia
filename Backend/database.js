@@ -2,12 +2,15 @@ import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
 import UserModel from './models/User.model.js'; 
 import PetModel from './models/Pet.model.js';  
-import HotelBookingModel from './models/Hotel_Service_Booking.model.js';  
 import EmployeeModel from './models/Employee.model.js'
 import ServiceModel from './models/Service.model.js';
 import ServiceAssignmentsModel from './models/ServiceAssignment.model.js';
 import OtherServicesBookingModel from './models/OtherService.model.js';
 import CustomerFeedbackModel from './models/CustomerFeedbacks.js';
+import AdminModel from './models/Admin.model.js';
+import DeveloperModel from './models/Developer.model.js';
+import IssueModel from './models/Issues.model.js';
+import HealthConditionModel from './models/HealthCondition.model.js';
 
 dotenv.config();
 const pool = mysql.createPool({
@@ -30,12 +33,15 @@ const db = {
 
 const User = UserModel(db);
 const Pet = PetModel(db);
-const Hotel = HotelBookingModel(db);
 const Employee = EmployeeModel(db);
 const Service = ServiceModel(db);
 const ServiceAssignment = ServiceAssignmentsModel(db);
 const OtherService = OtherServicesBookingModel(db);
 const CustomerFeedback = CustomerFeedbackModel(db);
+const Admin = AdminModel(db);
+const Developer = DeveloperModel(db);
+const Issues = IssueModel(db);
+const Health_Condition = HealthConditionModel(db);
 
 (async () => {
     try {
@@ -44,12 +50,15 @@ const CustomerFeedback = CustomerFeedbackModel(db);
 
         await User.createTable();
         await Pet.createTable();
-        await Hotel.createTable();
         await Employee.createTable();
         await Service.createTable();
         await ServiceAssignment.createTable();
         await OtherService.createTable();
         await CustomerFeedback.createTable();
+        await Admin.createTable();
+        await Developer.createTable();
+        await Issues.createTable();
+        await Health_Condition.createTable();
 
         connection.release();
     } catch (error) {
@@ -57,5 +66,5 @@ const CustomerFeedback = CustomerFeedbackModel(db);
     }
 })();
 
-export { User, Pet, Hotel,Employee,Service,ServiceAssignment,OtherService,CustomerFeedback };
+export { User, Pet,Employee,Service,ServiceAssignment,OtherService,CustomerFeedback,Admin,Health_Condition };
 export default db;

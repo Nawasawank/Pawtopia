@@ -3,7 +3,6 @@ import Navbar from '../components/navbar.jsx';
 import ContactSection from '../components/ContactSection.jsx';
 import '../styles/HomePage.css';
 import dog from '../pictures/dog_home.png';
-import hotel from '../pictures/hotel.png';
 import vaccine from '../pictures/vaccine.png';
 import petpark from '../pictures/petpark.png';
 import grooming from '../pictures/grooming.png';
@@ -39,10 +38,6 @@ const HomePage = () => {
       <section id="services" className="services-section">
         <h2 className="services-title">Services</h2>
         <div className="service-cards">
-          <div className="service-card">
-            <img src={hotel} alt="Hotel" className="hotel-img" />
-            <p>Hotel</p>
-          </div>
           <div className="service-card">
             <img src={vaccine} alt="Vaccination" className="vaccine-img" />
             <p>Vaccination</p>

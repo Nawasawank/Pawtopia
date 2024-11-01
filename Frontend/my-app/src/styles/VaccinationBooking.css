@@ -109,3 +109,15 @@
   color: #5b4035;
 }
 
+.rs-input-group.rs-input-group-inside .rs-input {
+  border: none;
+  display: block;
+  outline: none;
+  width: 500px;
+  height: 45px;
+}
+
+.rs-btn {
+  padding: 8px 35px;
+}
+
