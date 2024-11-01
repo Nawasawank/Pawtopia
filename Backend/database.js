@@ -10,6 +10,7 @@ import CustomerFeedbackModel from './models/CustomerFeedbacks.js';
 import AdminModel from './models/Admin.model.js';
 import DeveloperModel from './models/Developer.model.js';
 import IssueModel from './models/Issues.model.js';
+import HealthConditionModel from './models/HealthCondition.model.js';
 
 dotenv.config();
 const pool = mysql.createPool({
@@ -40,6 +41,7 @@ const CustomerFeedback = CustomerFeedbackModel(db);
 const Admin = AdminModel(db);
 const Developer = DeveloperModel(db);
 const Issues = IssueModel(db);
+const Health_Condition = HealthConditionModel(db);
 
 (async () => {
     try {
@@ -56,6 +58,7 @@ const Issues = IssueModel(db);
         await Admin.createTable();
         await Developer.createTable();
         await Issues.createTable();
+        await Health_Condition.createTable();
 
         connection.release();
     } catch (error) {
@@ -63,5 +66,5 @@ const Issues = IssueModel(db);
     }
 })();
 
-export { User, Pet,Employee,Service,ServiceAssignment,OtherService,CustomerFeedback,Admin };
+export { User, Pet,Employee,Service,ServiceAssignment,OtherService,CustomerFeedback,Admin,Health_Condition };
 export default db;

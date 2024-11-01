@@ -4,6 +4,7 @@ const FeedbackController = {
     async createFeedback(req, res) {
         const { id: user_id } = req.user;
         const { booking_id, comment, rating, feedback_type } = req.body;
+        console.log(req.body)
 
         try {
             const feedbackData = {

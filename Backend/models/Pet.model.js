@@ -3,36 +3,36 @@ export default function PetModel(db) {
         async createTable() {
             const sql = `
                 CREATE TABLE IF NOT EXISTS pets (
-                    pet_id INT AUTO_INCREMENT PRIMARY KEY,
-                    user_id INT,
-                    name VARCHAR(255) NOT NULL,
-                    vaccination VARCHAR(255) NOT NULL,
-                    gender VARCHAR(50) NOT NULL,
-                    type VARCHAR(50) NOT NULL,
-                    Health_Condition VARCHAR(255),
-                    weight VARCHAR(50),
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
-                );
+                pet_id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT,
+                name VARCHAR(255) NOT NULL,
+                gender VARCHAR(50) NOT NULL,
+                type VARCHAR(50) NOT NULL,
+                weight VARCHAR(50),
+                health_condition_id INT ,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX (health_condition_id),
+                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+            );
             `;
             await db.query(sql);
         },
 
         async createPet(petData) {
+
             try {
                 const sql = `
-                    INSERT INTO pets (user_id, name, vaccination, gender, type, Health_Condition, weight) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO pets (user_id, name, gender, type, health_condition_id, weight) 
+                    VALUES (?, ?, ?, ?, ?, ?)
                 `;
                 const params = [
                     petData.user_id,
                     petData.name,
-                    petData.vaccination,
                     petData.gender,
                     petData.type,
-                    petData.Health_Condition || null,
-                    petData.weight || null
+                    petData.health_condition_id ,
+                    petData.weight
                 ];
 
                 const result = await db.query(sql, params);
@@ -48,12 +48,11 @@ export default function PetModel(db) {
             try {
                 const sql = `
                     UPDATE pets 
-                    SET name = ?, vaccination = ?, gender = ?, type = ?, Health_Condition = ?, weight = ?
+                    SET name = ?, gender = ?, type = ?, Health_Condition = ?, weight = ?
                     WHERE pet_id = ?
                 `;
                 const params = [
                     updateData.name,
-                    updateData.vaccination,
                     updateData.gender,
                     updateData.type,
                     updateData.Health_Condition || null,
@@ -70,16 +69,26 @@ export default function PetModel(db) {
         },
 
         async findPetById(petId) {
-            const sql = 'SELECT * FROM pets WHERE pet_id = ?';
+            const sql = `
+                SELECT pets.*, health_conditions.health_condition
+                FROM pets
+                LEFT JOIN health_conditions ON pets.health_condition_id = health_conditions.health_condition_id
+                WHERE pets.pet_id = ?
+            `;
             const pets = await db.query(sql, [petId]);
             return pets[0];
         },
-
+        
         async findPetsByUserId(userId) {
-            const sql = 'SELECT * FROM pets WHERE user_id = ?';
+            const sql = `
+                SELECT pets.*, health_conditions.health_condition
+                FROM pets
+                LEFT JOIN health_conditions ON pets.health_condition_id = health_conditions.health_condition_id
+                WHERE pets.user_id = ?
+            `;
             return db.query(sql, [userId]);
         },
-
+        
         async deletePet(petId) {
             const sql = 'DELETE FROM pets WHERE pet_id = ?';
             return db.query(sql, [petId]);

@@ -4,6 +4,7 @@ const PetController = {
     async addPet(req, res) {
         const { id: userId } = req.user;
         const petData = req.body;
+        console.log(petData)
 
         try {
             const newPet = await PetService.addPet(userId, petData);

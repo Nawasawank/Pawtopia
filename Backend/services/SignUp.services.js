@@ -2,8 +2,9 @@ import bcrypt from 'bcrypt';
 import { User, Pet } from '../database.js';
 
 const SignUpService = {
-    async registerUser(firstname, lastname, email, password, tel, name, type, gender, weight, vaccination, health_condition) {
+    async registerUser(firstname, lastname, email, password, tel, name, type, gender, weight, health_condition_id) {
         try {
+            console.log(health_condition_id)
             const existingUserByEmail = await User.findUserByEmail(email);
             if (existingUserByEmail) {
                 console.warn(`Email already exists: ${email}`);
@@ -33,8 +34,7 @@ const SignUpService = {
                 type,
                 gender,
                 weight,
-                vaccination,
-                health_condition
+                health_condition_id
             });
 
             return newUser;

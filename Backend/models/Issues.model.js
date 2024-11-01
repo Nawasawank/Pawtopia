@@ -4,15 +4,15 @@ export default function IssueModel(db) {
             const sql = `
                 CREATE TABLE IF NOT EXISTS issues (
                     issue_id INT AUTO_INCREMENT PRIMARY KEY,
-                    admin_id INT,
+                    employee_id INT,
                     developer_id INT,
                     issue VARCHAR(255) NOT NULL,
                     issue_description TEXT,
                     status ENUM('in_progress', 'resolved') DEFAULT 'in_progress',
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                    FOREIGN KEY (admin_id) REFERENCES admins(admin_id) ON DELETE SET NULL,
-                    FOREIGN KEY (developer_id) REFERENCES developers(developer_id) ON DELETE SET NULL
+                    FOREIGN KEY (employee_id) REFERENCES emp_admins(employee_id) ON DELETE CASCADE,
+                    FOREIGN KEY (developer_id) REFERENCES developers(developer_id) ON DELETE CASCADE
                 );
             `;
             await db.query(sql);
@@ -21,12 +21,12 @@ export default function IssueModel(db) {
         async createIssue(issueData) {
             try {
                 const sql = `
-                    INSERT INTO issues (admin_id, developer_id, issue, issue_description, status)
+                    INSERT INTO issues (employee_id, developer_id, issue, issue_description, status)
                     VALUES (?, ?, ?, ?, ?)
                 `;
                 const params = [
-                    issueData.admin_id || null,
-                    issueData.developer_id || null,
+                    issueData.admin_id,
+                    issueData.developer_id ,
                     issueData.issue,
                     issueData.issue_description,
                     issueData.status || 'open'
@@ -44,11 +44,11 @@ export default function IssueModel(db) {
             try {
                 const sql = `
                     UPDATE issues 
-                    SET admin_id = ?, developer_id = ?, issue = ?, issue_description = ?, status = ?
+                    SET employee = ?, developer_id = ?, issue = ?, issue_description = ?, status = ?
                     WHERE issue_id = ?
                 `;
                 const params = [
-                    updateData.admin_id || null,
+                    updateData.employee_id || null,
                     updateData.developer_id || null,
                     updateData.issue,
                     updateData.issue_description,
