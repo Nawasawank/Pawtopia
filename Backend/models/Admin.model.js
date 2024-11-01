@@ -3,12 +3,11 @@ export default function AdminModel(db) {
         async createTable() {
             const sql = `
                 CREATE TABLE IF NOT EXISTS emp_admins (
-                employee_id INT,
+                employee_id INT PRIMARY KEY,
                 email VARCHAR(255),
                 password VARCHAR(255) NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                PRIMARY KEY (employee_id, email),
                 FOREIGN KEY (employee_id) REFERENCES employees(employee_id) ON DELETE CASCADE
                 );
             `;
