@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { User, Pet } from '../database.js';
 
 const SignUpService = {

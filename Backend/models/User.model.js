@@ -1,5 +1,3 @@
-import bcrypt from 'bcrypt';
-
 export default function UserModel(db) {
     const User = {
         async createTable() {
@@ -44,10 +42,6 @@ export default function UserModel(db) {
 
         async updateUser(userId, updateData) {
             try {
-                if (updateData.password) {
-                    const salt = await bcrypt.genSalt(10);
-                    updateData.password = await bcrypt.hash(updateData.password, salt);
-                }
 
                 const sql = `
                     UPDATE users 
