@@ -13,12 +13,13 @@ const LoginController = {
 
             if (result.error) {
                 const status = (result.error === 'Email not found' || result.error === 'Invalid Password') ? 401 : 500;
-                return res.status(status).send(result.error);
+                return res.status(status).json({ error: result.error });
             }
 
-            return res.json({ token: result.token });
+            const { token, role } = result;  
+            return res.json({ token, role });
         } catch (error) {
-            return res.status(500).send('Internal Server Error');
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
     }
 };

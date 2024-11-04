@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/LogInPage.css';
 import useLocalStorage from '../hooks/useLocalStorage';
-import api from '../api'; // Import the Axios instance
+import api from '../api'; 
 
 const LogInPage = () => {
     const [email, setEmail] = useLocalStorage('email', '');
@@ -20,13 +20,20 @@ const LogInPage = () => {
 
         try {
             const response = await api.post('/api/login', loginData);
-            
             if (response.status === 200) {
-                const data = response.data;
-                localStorage.setItem('token', data.token);
+                const { token, role } = response.data;
+                localStorage.setItem('token', token);
+                localStorage.setItem('role', role);  
                 alert('Login successful!');
-                console.log('Token:', data.token);
-                navigate('/home');
+                console.log('Token:', token);
+                console.log('Role:', role);
+                if (role === 'admin') {
+                    navigate('/admin-dashboard');
+                } else if (role === 'developer') {
+                    navigate('/developer-dashboard');
+                } else {
+                    navigate('/home');  
+                }
             } else {
                 setError(response.data.error || 'Login failed');
             }
