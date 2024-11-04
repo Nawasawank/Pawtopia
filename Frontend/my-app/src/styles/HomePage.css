@@ -1,5 +1,5 @@
 
-body {
+html,body {
     font-family: 'Lato', sans-serif;
     margin: 0;
     padding: 0;
@@ -11,7 +11,6 @@ body {
 .homepage {
     padding: 0;
     overflow-x: hidden;
-    margin-left: -5px;
     background-color: #f3edde;
 }
 
@@ -54,7 +53,7 @@ body {
     align-items: center;
     padding: 50px;
     background-color: #fdf6e5;
-    flex-wrap: wrap;  /* Allow wrapping for smaller screens */
+    flex-wrap: wrap;  
 }
 
 .hero-content {
@@ -99,6 +98,7 @@ body {
     text-align: center;
     padding: 50px;
     background-color: #fff;
+    max-width: 100%;
 }
 
 .services-title {
