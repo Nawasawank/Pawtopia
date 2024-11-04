@@ -2,7 +2,7 @@ import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
 import UserModel from './models/User.model.js'; 
 import PetModel from './models/Pet.model.js';  
-import EmployeeModel from './models/Employee.model.js'
+import EmployeeModel from './models/Employee.model.js';
 import ServiceModel from './models/Service.model.js';
 import ServiceAssignmentsModel from './models/ServiceAssignment.model.js';
 import OtherServicesBookingModel from './models/OtherService.model.js';
@@ -13,6 +13,7 @@ import IssueModel from './models/Issues.model.js';
 import HealthConditionModel from './models/HealthCondition.model.js';
 
 dotenv.config();
+
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT, 10),
@@ -30,6 +31,9 @@ const db = {
         return results;
     },
 };
+
+// Export the pool directly for models that require direct connections
+export { pool, db };
 
 const User = UserModel(db);
 const Pet = PetModel(db);
@@ -66,5 +70,5 @@ const Health_Condition = HealthConditionModel(db);
     }
 })();
 
-export { User, Pet,Employee,Service,ServiceAssignment,OtherService,CustomerFeedback,Admin,Health_Condition,Developer };
+export { User, Pet, Employee, Service, ServiceAssignment, OtherService, CustomerFeedback, Admin, Health_Condition, Developer };
 export default db;

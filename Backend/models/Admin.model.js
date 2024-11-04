@@ -34,17 +34,17 @@ export default function AdminModel(db) {
             }
         },
 
-        async updateAdmin(adminId, updateData) {
+        async updateAdmin(employee_id, updateData) {
             try {
                 const sql = `
                     UPDATE emp_admins
                     SET employee_id = ?, password = ? 
-                    WHERE admin_id = ?
+                    WHERE employee_id = ?
                 `;
                 const params = [
                     updateData.employee_id,
                     updateData.password,
-                    adminId
+                    employee_id
                 ];
 
                 const result = await db.query(sql, params);
@@ -56,10 +56,15 @@ export default function AdminModel(db) {
         },
 
         async findAdminById(adminId) {
-            const sql = 'SELECT * FROM emp_admins WHERE admin_id = ?';
+            const sql = `
+                SELECT * 
+                FROM emp_admins 
+                JOIN employees ON emp_admins.employee_id = employees.employee_id 
+                WHERE emp_admins.employee_id = ?
+            `;
             const admins = await db.query(sql, [adminId]);
             return admins[0];
-        },
+        },             
 
         async findAdminByEmployeeId(employeeId) {
             const sql = 'SELECT * FROM emp_admins WHERE employee_id = ?';
@@ -90,7 +95,7 @@ export default function AdminModel(db) {
         },
 
         async deleteAdmin(adminId) {
-            const sql = 'DELETE FROM emp_admins WHERE admin_id = ?';
+            const sql = 'DELETE FROM emp_admins WHERE employee_id = ?';
             return db.query(sql, [adminId]);
         },
 

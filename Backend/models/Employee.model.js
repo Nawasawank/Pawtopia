@@ -1,3 +1,4 @@
+import { pool } from '../database.js';
 export default function EmployeeModel(db) {
     const Employee = {
         createTable: async () => {
@@ -14,47 +15,84 @@ export default function EmployeeModel(db) {
             await db.query(sql);
         },
 
-        createEmployee: async (employeeData) => {
+        addEmployeeAndService: async (employeeData) => {
+            const connection = await pool.getConnection();
+
             try {
-                const sql = `
-                    INSERT INTO employees (first_name, last_name, email) 
+                await connection.beginTransaction();
+
+                const insertEmployeeSql = `
+                    INSERT INTO employees (first_name, last_name, email)
                     VALUES (?, ?, ?)
                 `;
-                const params = [
+                const employeeParams = [
                     employeeData.first_name,
                     employeeData.last_name,
                     employeeData.email
                 ];
+                const [employeeResult] = await connection.query(insertEmployeeSql, employeeParams);
 
-                const result = await db.query(sql, params);
-                return result;
+                const employeeId = employeeResult.insertId;
+
+                const assignmentDate = employeeData.assignment_date 
+                    ? new Date(employeeData.assignment_date).toISOString().slice(0, 10)
+                    : new Date().toISOString().slice(0, 10);
+
+                const insertServiceAssignmentSql = `
+                    INSERT INTO service_assignments (employee_id, service_id, assignment_date)
+                    VALUES (?, ?, ?)
+                `;
+                const serviceParams = [
+                    employeeId,
+                    employeeData.service_id,
+                    assignmentDate
+                ];
+                await connection.query(insertServiceAssignmentSql, serviceParams);
+
+                await connection.commit();
+
+                return {
+                    message: "Employee added successfully",
+                    newEmployee: {
+                        employee_id: employeeId,
+                        first_name: employeeData.first_name,
+                        last_name: employeeData.last_name,
+                        email: employeeData.email,
+                        service_id: employeeData.service_id
+                    }
+                };
             } catch (error) {
-                console.error('Error creating employee:', error);
+                await connection.rollback();
+                console.error('Error adding new employee and service assignment:', error);
                 throw error;
+            } finally {
+                connection.release();
             }
         },
 
+
         updateEmployee: async (employeeId, updateData) => {
             try {
-                const sql = `
+                const updateEmployeeSql = `
                     UPDATE employees 
                     SET first_name = ?, last_name = ?, email = ?
                     WHERE employee_id = ?
                 `;
-                const params = [
+                const employeeParams = [
                     updateData.first_name,
                     updateData.last_name,
                     updateData.email,
                     employeeId
                 ];
-
-                const result = await db.query(sql, params);
-                return result;
+        
+                await db.query(updateEmployeeSql, employeeParams);
+        
+                return { message: "Employee information updated successfully" };
             } catch (error) {
-                console.error('Error updating employee:', error);
+                console.error('Error updating employee information:', error);
                 throw error;
             }
-        },
+        },        
 
         findEmployeeById: async (employeeId) => {
             const sql = 'SELECT * FROM employees WHERE employee_id = ?';
@@ -87,7 +125,19 @@ export default function EmployeeModel(db) {
             const sql = 'SELECT * FROM employees WHERE first_name = ? AND last_name = ? AND email = ?';
             const employees = await db.query(sql, [first_name, last_name, email]);
             return employees[0];
-        },   
+        },
+        findEmployeesWithServices: async (serviceId) => {
+            const sql = `
+                SELECT e.employee_id, e.first_name, e.last_name, e.email,s.service_name
+                FROM employees e
+                JOIN service_assignments sa ON e.employee_id = sa.employee_id
+                JOIN services s ON sa.service_id = s.service_id
+                WHERE s.service_id = ? 
+                ORDER BY e.employee_id;
+            `;
+            const employeesWithServices = await db.query(sql, [serviceId]);
+            return employeesWithServices;
+        }   
     };
 
     return Employee;
