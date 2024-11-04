@@ -17,7 +17,7 @@ import paw5 from '../pictures/paw5.png';
 const HomePage = () => {
   console.log("Token: ", localStorage.getItem('token'))
   return (
-    <div className="homepage-container">
+    <div className="homepage">
       <Navbar />
       <img src={paw1} alt="Paw Print" className="paw-image paw-image-1" />
       <img src={paw2} alt="Paw Print" className="paw-image paw-image-2" />

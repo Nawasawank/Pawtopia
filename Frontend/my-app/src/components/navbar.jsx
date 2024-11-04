@@ -4,6 +4,7 @@ import logo from '../pictures/logo.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/Navbar.css';
 import api from '../api';
+import { Link } from 'react-router-dom';
 
 function Navbar() {
   const [userInfo, setUserInfo] = useState({ firstName: '', image: '' });
@@ -21,33 +22,29 @@ function Navbar() {
           },
         });
 
-        console.log("Response Status:", response.status);
-        console.log("Response Data:", response.data);
-
         if (response.status === 200) {
           const data = response.data;
-
           const profileImageUrl = `${api.defaults.baseURL}${data.image}`;
 
           setUserInfo({
             firstName: data.firstName,
             image: profileImageUrl
           });
-          
-          console.log("User data fetched successfully:", data);
         } else {
           console.error('Failed to fetch profile info');
         }
       } catch (error) {
         console.error('Error fetching profile info:', error);
-        if (error.response) {
-          console.error('Error Response:', error.response.status, error.response.data);
-        }
       }
     };
 
     fetchUserProfile();
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); 
+    window.location.href = '/login'; 
+  };
 
   return (
     <div className="homepage-container">
@@ -85,13 +82,28 @@ function Navbar() {
                 </Dropdown.Menu>
               </Dropdown>
             </li>
-            <li><a href="">Contact</a></li>
+            <li><a href="#contact">Contact</a></li>
             <li><a href="/history">History</a></li>
           </ul>
         </nav>
         <div className="user-info">
           <span>Hi! {userInfo.firstName}</span>
-          {userInfo.image && <img src={userInfo.image} alt="Profile" className="profile-img" />}
+          <Dropdown align="end">
+            <Dropdown.Toggle as="div" className="profile-img-dropdown" bsPrefix="custom-profile-dropdown">
+              {userInfo.image && <img src={userInfo.image} alt="Profile" className="profile-img" />}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.ItemText>
+              <div className="profile-info">
+                  <Link to="/profile" className="profile-link">
+                    <strong>Profile</strong>
+                  </Link>
+                </div>
+              </Dropdown.ItemText>
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={handleLogout} className="logout-button">Log Out</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
       </header>
     </div>

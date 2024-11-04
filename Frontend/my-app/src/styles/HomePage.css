@@ -5,11 +5,17 @@ body {
     padding: 0;
     box-sizing: border-box;
     overflow-x: hidden; 
+
 }
 
-.homepage-container{
+.homepage {
+    padding: 0;
     overflow-x: hidden;
+    margin-left: -5px;
+    background-color: #f3edde;
 }
+
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -263,5 +269,6 @@ body {
     left: 20px;
     width: 190px;
 }
+
 
 
