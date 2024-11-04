@@ -7,8 +7,8 @@ export default function ServiceAssignmentsModel(db) {
                     employee_id INT,
                     service_id INT,
                     assignment_date DATE,
-                    FOREIGN KEY (employee_id) REFERENCES employees(employee_id) ON DELETE CASCADE,
-                    FOREIGN KEY (service_id) REFERENCES services(service_id) ON DELETE CASCADE
+                    FOREIGN KEY (employee_id) REFERENCES employees(employee_id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    FOREIGN KEY (service_id) REFERENCES services(service_id) ON DELETE CASCADE ON UPDATE CASCADE
                 );
             `;
             await db.query(sql);

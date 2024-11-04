@@ -6,13 +6,11 @@ import InfoController from '../controllers/Info.controller.js';
 import { isAuth } from '../utils/Auth.js';
 import upload from '../utils/MulterConfig.js'; 
 import PetController from '../controllers/Pet.Controller.js';
-import VaccineController from '../controllers/Vaccine.controller.js';
-import SwimmingController from '../controllers/Swimming.controller.js';
-import GroomingController from '../controllers/Grooming.controller.js';
-import PetParkController from '../controllers/PetPArk.controller.js';
 import HistoryController from '../controllers/History.controller.js';
 import FeedbackController from '../controllers/Feedback.controller.js';
 import AdminController from '../controllers/Admin.controller.js';
+import EmployeeController from '../controllers/Employee.controller.js';
+import bookingsController from '../controllers/Booking.controller.js';
 
 
 const route = Router();
@@ -25,6 +23,11 @@ route.put('/upload-photo',isAuth, upload.single('profileImage'), UpdatePhotoCont
 
 //Get user name and picture for navbar
 route.get('/profile', isAuth, InfoController.getUserProfile);
+//Get admin name for navbar
+route.get('/admin_name', isAuth, InfoController.getAdminProfile);
+//Get developer name for navbar
+route.get('/dev_name', isAuth, InfoController.getDeveloperProfile);
+
 //Get all user information
 route.get('/info', isAuth, InfoController.getUserInfo);
 
@@ -37,18 +40,11 @@ route.delete('/pets/delete/:petId', isAuth, PetController.deletePet);
 route.get('/pet/NameAndType',isAuth,PetController.getPetNamesAndTypes);
 route.get('/pet/AllPet',isAuth,PetController.getPetByUserId);
 
-//Booking
-route.post('/booking/Vaccine',isAuth,VaccineController.addBooking);
-route.post('/booking/Swimming',isAuth,SwimmingController.addBooking);
-route.post('/booking/Grooming',isAuth,GroomingController.addBooking);
-route.post('/booking/PetPark',isAuth,PetParkController.addBooking);
-
-
-//Get info of each booking
-route.get('/booking/Grooming/:booking_id',isAuth,GroomingController.getBookingById);
-route.get('/booking/PetPark/:booking_id',isAuth,PetParkController.getBookingById);
-route.get('/booking/Swimming/:booking_id',isAuth,SwimmingController.getBookingById);
-route.get('/booking/Vaccination/:booking_id',isAuth,VaccineController.getBookingById);
+//Add,Delete,Update Booking
+route.delete('/:service_id/:booking_id', bookingsController.deleteBooking);
+route.get('/:service_id/:booking_id',isAuth, bookingsController.getBookingsByDate);
+route.get('/bookings/:service_id/:booking_id', bookingsController.getBookingById);
+route.put('/update/:service_id/:booking_id', bookingsController.updateBooking);
 
 //Get History
 route.get('/history',isAuth,HistoryController.getAppointmentHistory);
@@ -56,20 +52,24 @@ route.get('/history',isAuth,HistoryController.getAppointmentHistory);
 //Add Fedback
 route.post('/feedback',isAuth,FeedbackController.createFeedback);
 
-//update Booking
-route.put('/update-booking/grooming/:booking_id',isAuth,GroomingController.updateBooking);
-route.put('/update-booking/petpark/:booking_id',isAuth,PetParkController.updateBooking);
-route.put('/update-booking/swimming/:booking_id',isAuth,SwimmingController.updateBooking);
-route.put('/update-booking/vaccination/:booking_id',isAuth,VaccineController.updateBooking);
-
-//delete booking
-route.delete('/delete-booking/grooming/:booking_id',isAuth,GroomingController.deleteBooking);
-route.delete('/delete-booking/petpark/:booking_id',isAuth,PetParkController.deleteBooking);
-route.delete('/delete-booking/swimming/:booking_id',isAuth,SwimmingController.deleteBooking);
-route.delete('/delete-booking/vaccination/:booking_id',isAuth,VaccineController.deleteBooking);
 
 //Admin
 route.post('/admin/register',AdminController.AdminSignUp);
-route.post('/admin/login',AdminController.AdminLogIn)
+
+//Get Employee in each service
+route.get('/employees/service/:serviceId',isAuth, EmployeeController.getEmployeesByService);
+//update employee
+route.put('/employees/update/:employeeId',isAuth, EmployeeController.updateEmployee);
+//add employee
+route.post('/employees',isAuth, EmployeeController.addEmployee);
+//delete employee
+route.delete('/employees/:employeeId',isAuth, EmployeeController.deleteEmployee);
+
+//get boooking by date
+route.get('/bookings/by-date',isAuth, bookingsController.getBookingsByDate);
+
+// Route to add a booking for a specific service
+route.post('/:service_id/book', bookingsController.addBooking);
+
 
 export default route;

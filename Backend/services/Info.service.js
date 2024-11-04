@@ -1,4 +1,4 @@
-import { User } from '../database.js';
+import { User,Admin,Developer } from '../database.js';
 
 const InfoService = {
     async getUserProfile(userId) {
@@ -60,8 +60,39 @@ const InfoService = {
             console.error('Error in getAllUsersAndPetCount:', error);
             return { error: 'Error retrieving users' };
         }
-    }
-    
+    },
+    async getAdminProfile(userId) {
+        try {
+            const admin = await Admin.findAdminById(userId);
+
+            if (!admin) {
+                return { error: 'Admin not found' };
+            }
+
+            return {
+                name: admin.first_name,
+            };
+        } catch (error) {
+            console.error(`Error fetching admin info: ${error.message}`);
+            return { error: 'Error fetching admin info' };
+        }
+    },
+    async getDeveloperProfile(userId) {
+        try {
+            const dev = await Developer.findDeveloperById(userId);
+
+            if (!dev) {
+                return { error: 'Developer not found' };
+            }
+
+            return {
+                name: dev.first_name,
+            };
+        } catch (error) {
+            console.error(`Error fetching dev info: ${error.message}`);
+            return { error: 'Error fetching dev info' };
+        }
+    },
     
 };
 

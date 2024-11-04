@@ -64,8 +64,41 @@ const InfoController = {
             console.error(`Error in getUserInfoAndPetCount: ${error.message}`);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-    }    
-    
+    },
+    async getAdminProfile(req, res) {
+        const { id: userId } = req.user;
+
+        try {
+            const admin = await InfoService.getAdminProfile(userId);
+            console.log(admin)
+
+            if (admin.error) {
+                return res.status(500).json({ error: admin.error });
+            }
+
+            return res.status(200).json({ Name: admin.name });
+        } catch (error) {
+            console.error(`Error in getUserProfile: ${error.message}`);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+    },   
+    async getDeveloperProfile(req, res) {
+        const { id: userId } = req.user;
+
+        try {
+            const dev = await InfoService.getDeveloperProfile(userId);
+            console.log(dev)
+
+            if (dev.error) {
+                return res.status(500).json({ error: dev.error });
+            }
+
+            return res.status(200).json({ Name: dev.name });
+        } catch (error) {
+            console.error(`Error in getUserProfile: ${error.message}`);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }, 
     
 };
 

@@ -49,6 +49,7 @@ function App() {
       <Routes>
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LogInPage />} />
+        
 
         <Route 
           path="/home"
@@ -131,7 +132,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
 
 
         <Route path="/" element={<LogInPage />} />

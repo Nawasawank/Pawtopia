@@ -41,7 +41,7 @@ const SwimmingAppointmentPage = () => {
       if (!booking_id) return;
 
       try {
-        const response = await api.get(`/api/booking/Swimming/${booking_id}`, {
+        const response = await api.get(`/api/bookings/2/${booking_id}`, { // Updated path
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -86,17 +86,19 @@ const SwimmingAppointmentPage = () => {
 
     try {
       const endpoint = booking_id
-        ? `/api/update-booking/swimming/${booking_id}`
-        : '/api/booking/Swimming';
+        ? `/api/update/2/${booking_id}` // Updated path for updating booking
+        : '/api/2/book'; // Updated path for creating booking
 
       const response = booking_id
         ? await api.put(endpoint, bookingData, {
             headers: {
+              'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           })
         : await api.post(endpoint, bookingData, {
             headers: {
+              'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           });

@@ -8,7 +8,7 @@ import '../styles/VaccinationBooking.css';
 import SelectTime from '../components/SelectTime.jsx';
 import SelectPet from '../components/SelectPet.jsx';
 import Overlay from '../components/Overlay.jsx';
-import api from '../api.js'
+import api from '../api.js';
 
 const VaccineAppointmentPage = () => {
   const { booking_id } = useParams();
@@ -40,7 +40,7 @@ const VaccineAppointmentPage = () => {
       if (!booking_id) return;
 
       try {
-        const response = await api.get(`/api/booking/Vaccination/${booking_id}`, {
+        const response = await api.get(`/api/bookings/3/${booking_id}`, { // Updated path
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -89,8 +89,8 @@ const VaccineAppointmentPage = () => {
 
     try {
       const endpoint = booking_id
-        ? `/api/update-booking/vaccination/${booking_id}`
-        : '/api/booking/Vaccine';
+        ? `/api/update/3/${booking_id}` // Updated path for updating booking
+        : '/api/3/book'; // Updated path for creating booking
 
       const response = booking_id
         ? await api.put(endpoint, bookingData, {

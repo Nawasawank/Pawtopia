@@ -8,7 +8,7 @@ import '../styles/GroomingBooking.css';
 import SelectTime from '../components/SelectTime.jsx';
 import SelectPet from '../components/SelectPet.jsx';
 import Overlay from '../components/Overlay.jsx';
-import api from '../api.js'
+import api from '../api.js';
 
 const GroomingAppointmentPage = () => {
   const { booking_id } = useParams();
@@ -20,7 +20,6 @@ const GroomingAppointmentPage = () => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayMessage, setOverlayMessage] = useState('');
   const [previousBookingData, setPreviousBookingData] = useState(null);
-
 
   useEffect(() => {
     const fetchPets = async () => {
@@ -43,7 +42,7 @@ const GroomingAppointmentPage = () => {
       if (!booking_id) return;
 
       try {
-        const response = await api.get(`/api/booking/Grooming/${booking_id}`, {
+        const response = await api.get(`/api/bookings/1/${booking_id}`, { 
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -94,8 +93,8 @@ const GroomingAppointmentPage = () => {
   
     try {
       const endpoint = booking_id
-        ? `/api/update-booking/grooming/${booking_id}`
-        : '/api/booking/Grooming';
+        ? `/api/update/1/${booking_id}`
+        : '/api/1/book'; 
   
       const response = booking_id
         ? await api.put(endpoint, bookingData, {

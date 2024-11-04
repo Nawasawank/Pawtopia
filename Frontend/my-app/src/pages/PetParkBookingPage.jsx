@@ -8,7 +8,7 @@ import '../styles/PetParkBooking.css';
 import SelectTime from '../components/SelectTime.jsx';
 import SelectPet from '../components/SelectPet.jsx';
 import Overlay from '../components/Overlay.jsx';
-import api from '../api.js'
+import api from '../api.js';
 
 const PetParkAppointmentPage = () => {
   const { booking_id } = useParams();
@@ -37,7 +37,7 @@ const PetParkAppointmentPage = () => {
 
     const fetchBookingDetails = async () => {
       try {
-        const response = await api.get(`/api/booking/PetPark/${booking_id}`, {
+        const response = await api.get(`/api/bookings/4/${booking_id}`, { // Updated path
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -65,29 +65,6 @@ const PetParkAppointmentPage = () => {
     });
   }, [booking_id]);
 
-  useEffect(() => {
-    if (pets.length > 0 && booking_id && selectedPet === '') {
-      const fetchBookingDetails = async () => {
-        try {
-          const response = await api.get(`/api/booking/PetPark/${booking_id}`, {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          });
-
-          const booking = response.data.booking;
-          const pet = pets.find(p => p.pet_id === booking.pet_id);
-          setSelectedPet(pet ? `${pet.name} - ${pet.type}` : '');
-        } catch (error) {
-          console.error('Error fetching booking details:', error);
-        }
-      };
-
-      fetchBookingDetails();
-    }
-  }, [pets, booking_id]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -106,8 +83,8 @@ const PetParkAppointmentPage = () => {
 
     try {
       const endpoint = booking_id
-        ? `/api/update-booking/petpark/${booking_id}`
-        : '/api/booking/PetPark';
+        ? `/api/update/4/${booking_id}` // Updated path for updating booking
+        : '/api/4/book'; // Updated path for creating booking
 
       const response = booking_id
         ? await api.put(endpoint, bookingData, {

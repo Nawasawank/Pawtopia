@@ -40,7 +40,8 @@ const AdminService = {
             console.error(`Error creating admin: ${error.message}`);
             return { error: 'Error creating admin' };
         }
-    },  async AdminLogIn(email, password) {
+    },  
+    async AdminLogIn(email, password) {
         try {
             const admin = await Admin.findAdminByEmail(email);
             if (!admin) {
@@ -64,6 +65,20 @@ const AdminService = {
         } catch (error) {
             console.error(`Error during admin login: ${error.message}`);
             return { error: 'Error during login' };
+        }
+    },
+    async addEmployee(employeeData) {
+        try {
+            const result = await Employee.addEmployeeAndService(employeeData);
+
+            if (result.error) {
+                throw new Error('Error adding new employee');
+            }
+
+            return result;
+        } catch (error) {
+            console.error(`Error adding employee: ${error.message}`);
+            return { error: 'Error adding new employee' };
         }
     }
     
