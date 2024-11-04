@@ -41,6 +41,7 @@ route.get('/pet/NameAndType',isAuth,PetController.getPetNamesAndTypes);
 route.get('/pet/AllPet',isAuth,PetController.getPetByUserId);
 
 //Add,Delete,Update Booking
+route.post('/:service_id/book', bookingsController.addBooking);
 route.delete('/:service_id/:booking_id', bookingsController.deleteBooking);
 route.get('/:service_id/:booking_id',isAuth, bookingsController.getBookingsByDate);
 route.get('/bookings/:service_id/:booking_id', bookingsController.getBookingById);
@@ -68,8 +69,6 @@ route.delete('/employees/:employeeId',isAuth, EmployeeController.deleteEmployee)
 //get boooking by date
 route.get('/bookings/by-date',isAuth, bookingsController.getBookingsByDate);
 
-// Route to add a booking for a specific service
-route.post('/:service_id/book', bookingsController.addBooking);
 
 
 export default route;
