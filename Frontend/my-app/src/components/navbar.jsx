@@ -50,7 +50,7 @@ function Navbar() {
     <div className="homepage-container">
       <header className="navbar">
         <div className="logo">
-        <Link to="/home">  {/* Wrap the h1 with Link */}
+        <Link to="/home">  
             <img src={logo} alt="Pawtopia Logo" />
             <h1>Pawtopia</h1>
           </Link>
