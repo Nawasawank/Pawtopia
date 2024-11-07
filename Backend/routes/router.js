@@ -9,8 +9,14 @@ import PetController from '../controllers/Pet.Controller.js';
 import HistoryController from '../controllers/History.controller.js';
 import FeedbackController from '../controllers/Feedback.controller.js';
 import AdminController from '../controllers/Admin.controller.js';
+<<<<<<< Updated upstream
 import EmployeeController from '../controllers/Employee.controller.js';
 import bookingsController from '../controllers/Booking.controller.js';
+=======
+import IssuesController from '../controllers/Issues.controller.js';
+
+
+>>>>>>> Stashed changes
 
 
 const route = Router();
@@ -50,13 +56,14 @@ route.put('/update/:service_id/:booking_id', bookingsController.updateBooking);
 //Get History
 route.get('/history',isAuth,HistoryController.getAppointmentHistory);
 
-//Add Fedback
+//Add Feedback
 route.post('/feedback',isAuth,FeedbackController.createFeedback);
 
 
 //Admin
 route.post('/admin/register',AdminController.AdminSignUp);
 
+<<<<<<< Updated upstream
 //Get Employee in each service
 route.get('/employees/service/:serviceId',isAuth, EmployeeController.getEmployeesByService);
 //update employee
@@ -68,6 +75,15 @@ route.delete('/employees/:employeeId',isAuth, EmployeeController.deleteEmployee)
 
 //get boooking by date
 route.get('/bookings/by-date',isAuth, bookingsController.getBookingsByDate);
+=======
+//Add TechnicalFeedback
+route.post('/user/issues', isAuth, FeedbackController.createTechnicalFeedback);
+
+route.post('/admin/issues',isAuth,IssuesController.createIssue);
+
+
+
+>>>>>>> Stashed changes
 
 
 
