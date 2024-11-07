@@ -1,6 +1,8 @@
 import { CustomerFeedback } from '../database.js'; 
 import { Admin } from '../database.js'; 
 
+
+
 const FeedbackService = {
     async createFeedback(feedbackData) {
         try {
@@ -20,6 +22,32 @@ const FeedbackService = {
         } catch (error) {
             console.error(`Error creating feedback: ${error.message}`);
             return { error: 'Error creating feedback' };
+        }
+    },
+
+    async getFeedback(serviceId) {
+        if (!serviceId) {
+            return { error: 'service_id is required to retrieve feedback' };
+        }
+
+        try {
+            // Retrieves feedback only for the specified service ID
+            const feedbackResult = await CustomerFeedback.getFeedback(serviceId);
+            return feedbackResult;
+        } catch (error) {
+            console.error(`Error retrieving feedback: ${error.message}`);
+            return { error: 'Error retrieving feedback' };
+        }
+    },
+
+    async createTechnicalFeedback(feedbackData) {
+        try {
+
+            const feedbackResult = await CustomerFeedback.createTechnicalFeedback(feedbackData);
+            return feedbackResult;
+        } catch (error) {
+            console.error(`Error creating technical feedback: ${error.message}`);
+            return { error: 'Error creating technical feedback' };
         }
     },
     async getFeedbackByTypeAndDate(type, startDate, endDate) {

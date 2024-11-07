@@ -80,6 +80,46 @@ export default function CustomerFeedbackModel(db) {
             const sql = 'SELECT * FROM customer_feedback WHERE booking_id = ?';
             return db.query(sql, [bookingId]);
         },
+        
+        async deleteFeedback(feedbackId) {
+            const sql = 'DELETE FROM customer_feedback WHERE feedback_id = ?';
+            return db.query(sql, [feedbackId]);
+        },
+
+        async getFeedback(serviceId) {
+            const sql = `
+                SELECT customer_feedback.*, services_bookings.service_id
+                FROM customer_feedback 
+                JOIN  services_bookings ON 
+                customer_feedback.booking_id = services_bookings.booking_id
+                WHERE  services_bookings.service_id = ?
+            `;
+            return db.query(sql, [serviceId]);
+        },
+
+        async createTechnicalFeedback(feedbackData) {
+            try {
+                const sql = `
+                    INSERT INTO customer_feedback (user_id, comment, feedback_type) 
+                    VALUES (?, ?, ?)
+                `;
+        
+                const params = [
+                    feedbackData.user_id,
+                    feedbackData.comment,
+                    feedbackData.feedback_type,
+                ];
+        
+                const result = await db.query(sql, params);
+                return {
+                    ...feedbackData,
+                };
+            } catch (error) {
+                console.error('Error creating technical feedback:', error);
+                throw error;
+            }
+        },
+        
         async findFeedbackByTypeAndDate(feedbackType, startDate, endDate) {
             try {
                 const sql = `

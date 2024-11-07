@@ -70,5 +70,5 @@ const Health_Condition = HealthConditionModel(db);
     }
 })();
 
-export { User, Pet, Employee, Service, ServiceAssignment, OtherService, CustomerFeedback, Admin, Health_Condition, Developer };
+export { User, Pet, Employee, Service, ServiceAssignment, OtherService, CustomerFeedback, Admin, Health_Condition, Developer,Issues };
 export default db;
