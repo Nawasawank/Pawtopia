@@ -1,0 +1,147 @@
+
+body {
+    background-color: #faf4e6; 
+    margin: 0;
+    padding: 0;
+  }
+.employee-management-container {
+    font-family: 'Lato', sans-serif;
+    padding: 40px;
+    background-color: #f9f4e6;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .page-title {
+    text-align: center;
+    font-size: 2.5em;
+    margin-top: 100px;
+    margin-bottom: 20px;
+    color: #444;
+    font-weight: bold;
+  }
+
+  .service-selection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+    font-size: 1.1em;
+  }
+  
+  .select-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .select-container label {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #444;
+  }
+  
+  .select-container select {
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 250px;
+  }
+  
+/* Styling for the Add Employee button */
+.add-employee-button {
+    font-size: 1.2em;
+    color: #666666;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: none;
+}
+
+.add-employee-button:hover,
+.add-employee-button:focus {
+    background: none; /* Ensure no background on hover */
+    color: #444; /* Optional: Darken text color on hover */
+}
+
+  
+  
+  
+  /* Table styling */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f7f3e9;
+    font-size: 1em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+  
+  table th,
+  table td {
+    padding: 15px;
+    text-align: center;
+  }
+  
+  table th {
+    background-color: #e6dccc;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  table td {
+    color: #333;
+  }
+  
+  table tr:nth-child(even) td {
+    background-color: #f0f0f0;
+  }
+  
+  table tr:hover td {
+    background-color: #f1ece1;
+  }
+  
+  /* Action buttons in the table */
+  table td .action-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #555;
+  }
+  
+  table td .action-button:hover {
+    color: #ff4d4d; /* Hover color for delete button */
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    font-size: 1.1em;
+    color: #333;
+  }
+  
+  .pagination a {
+    color: #333;
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    margin: 0 5px;
+    border-radius: 5px;
+  }
+  
+  .pagination a.active {
+    background-color: #333;
+    color: white;
+  }
+  
+  .pagination a:hover {
+    background-color: #ddd;
+  }
+  

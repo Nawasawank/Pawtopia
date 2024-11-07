@@ -53,6 +53,7 @@ const EmployeeController = {
     async deleteEmployee(req, res) {
         try {
             const { employeeId } = req.params;
+            console.log(employeeId)
 
             const result = await EmployeeService.deleteEmployee(employeeId);
 

@@ -1,0 +1,97 @@
+/* Overlay background */
+.emp_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* Dark background with transparency */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  /* Overlay content box */
+  .emp_overlay-content {
+    background: #faf4e6; /* Light yellow background */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    position: relative;
+  }
+  
+  /* Header styling */
+  .emp_overlay-content h2 {
+    font-size: 1.8em;
+    color: #444;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* Form label styling */
+  .emp_overlay-content form label {
+    display: block;
+    text-align: left;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Input field styling */
+  .emp_overlay-content form input,
+  .emp_overlay-content form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+    box-sizing: border-box;
+  }
+  
+  /* Submit button styling */
+  .emp_overlay-content button[type="submit"] {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Green background */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+  }
+  
+  .emp_overlay-content button[type="submit"]:hover {
+    background-color: #45A049;
+  }
+  
+.emp_overlay-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none; 
+    border: none; 
+    padding: 0; 
+    cursor: pointer;
+    font-size: 1.5em; 
+    color: #333; 
+    outline: none; 
+  }
+  
+  .emp_overlay-close-button:hover,
+  .emp_overlay-close-button:focus {
+    background: none; 
+    border: none;
+    color: #555;
+  }
+  
+
+  
+  

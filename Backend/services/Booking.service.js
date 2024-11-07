@@ -1,9 +1,9 @@
 import { OtherService,Employee } from '../database.js';
 
 const bookingsService = {
-    async getBookingsByDate(date) {
+    async getBookingsByDate(date,service_id) {
         try {
-            const bookings = await  OtherService.getBookingsByDate(date);
+            const bookings = await  OtherService.getBookingsByDate(date,service_id);
             return bookings;
         } catch (error) {
             console.error("Error in bookingsService - getBookingsByDate:", error);

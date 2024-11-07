@@ -20,7 +20,6 @@ const SignUpService = {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
 
-            // Set default image path if not provided
             const defaultImagePath = '/uploads/profile-images/default.jpg';
 
             // Create user with default image if no image is specified

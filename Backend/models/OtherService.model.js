@@ -103,7 +103,7 @@ export default function OtherServicesBookingModel(db) {
             const sql = 'DELETE FROM services_bookings WHERE booking_id = ?';
             return db.query(sql, [booking_id]);
         },
-        async getBookingsByDate(date) {
+        async getBookingsByDate(date, service_id) {
             try {
                 const sql = `
                     SELECT sb.booking_id, sb.booking_date, sb.time_slot, u.firstName AS customer_name, 
@@ -113,15 +113,16 @@ export default function OtherServicesBookingModel(db) {
                     JOIN users u ON p.user_id = u.user_id
                     JOIN services s ON sb.service_id = s.service_id
                     JOIN employees e ON sb.employee_id = e.employee_id
-                    WHERE sb.booking_date = ?
+                    WHERE sb.booking_date = ? AND sb.service_id = ?
                 `;
-                const bookings = await db.query(sql, [date]);
+                const bookings = await db.query(sql, [date, service_id]);
                 return bookings;
             } catch (error) {
                 console.error("Error fetching bookings by date:", error);
                 throw new Error("An error occurred while fetching bookings.");
             }
         }
+        
     };
 
     return OtherServicesBooking;

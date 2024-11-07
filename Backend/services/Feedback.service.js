@@ -21,6 +21,16 @@ const FeedbackService = {
             console.error(`Error creating feedback: ${error.message}`);
             return { error: 'Error creating feedback' };
         }
+    },
+    async getFeedbackByTypeAndDate(type, startDate, endDate) {
+        try {
+            console.log(type)
+            const feedbackResults = await CustomerFeedback.findFeedbackByTypeAndDate(type, startDate, endDate);
+            return feedbackResults;
+        } catch (error) {
+            console.error(`Error retrieving feedback: ${error.message}`);
+            return { error: 'Error retrieving feedback' };
+        }
     }
 };
 

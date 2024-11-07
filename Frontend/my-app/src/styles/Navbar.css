@@ -6,9 +6,7 @@
     z-index: 10; 
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;  /* Ensure that the content inside the navbar is properly aligned */
-    justify-content: space-between;  /* Space out the logo, nav links, and user info */
-    padding: 10px 50px;  /* Add some padding to give it room and ensure proper alignment */
+
 }
 
 .logo {
@@ -138,6 +136,5 @@ nav a:hover, .dropdown-toggle:hover {
     background-color: transparent;
     text-decoration: none; 
 }
-
 
 

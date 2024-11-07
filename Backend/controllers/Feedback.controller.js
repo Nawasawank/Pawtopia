@@ -29,7 +29,29 @@ const FeedbackController = {
             console.error(`Error in createFeedback: ${error.message}`);
             return res.status(500).json({ error: 'Failed to create feedback' });
         }
+    },
+    async getFeedbackByTypeAndDate(req, res) {
+        const { type } = req.query;
+        const startDate = req.query.startDate.trim(); // Remove extra spaces or newlines
+        const endDate = req.query.endDate.trim(); // Remove extra spaces or newlines
+    
+        try {
+            const feedbackResults = await FeedbackService.getFeedbackByTypeAndDate(type, startDate, endDate);
+    
+            if (feedbackResults && feedbackResults.length >= 0) {
+                return res.status(200).json({
+                    message: 'Feedback retrieved successfully',
+                    feedback: feedbackResults
+                });
+            } else {
+                return res.status(404).json({ message: 'No feedback found for the specified criteria' });
+            }
+        } catch (error) {
+            console.error(`Error in getFeedbackByTypeAndDate: ${error.message}`);
+            return res.status(500).json({ error: 'Failed to retrieve feedback' });
+        }
     }
+    
 };
 
 export default FeedbackController;

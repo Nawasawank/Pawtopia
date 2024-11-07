@@ -5,7 +5,7 @@ export default function CustomerFeedbackModel(db) {
                 CREATE TABLE IF NOT EXISTS customer_feedback (
                     feedback_id INT AUTO_INCREMENT PRIMARY KEY,
                     user_id INT NOT NULL,
-                    booking_id INT NOT NULL,
+                    booking_id INT NULL,
                     comment TEXT,
                     rating INT NULL,
                     feedback_type ENUM('General', 'Technical'),
@@ -80,11 +80,36 @@ export default function CustomerFeedbackModel(db) {
             const sql = 'SELECT * FROM customer_feedback WHERE booking_id = ?';
             return db.query(sql, [bookingId]);
         },
+        async findFeedbackByTypeAndDate(feedbackType, startDate, endDate) {
+            try {
+                const sql = `
+                    SELECT * FROM customer_feedback 
+                    WHERE feedback_type = ? 
+                    AND DATE(created_at) BETWEEN ? AND ?
+                `;
+                
+                const formattedStartDate = new Date(startDate).toISOString().split('T')[0];
+                const formattedEndDate = new Date(endDate).toISOString().split('T')[0];
+                
+
+                const result = await db.query(sql, [feedbackType, formattedStartDate, formattedEndDate]);
         
-        async deleteFeedback(feedbackId) {
-            const sql = 'DELETE FROM customer_feedback WHERE feedback_id = ?';
-            return db.query(sql, [feedbackId]);
+        
+                return result;
+            } catch (error) {
+                console.error('Error retrieving feedback by type and date:', error);
+                throw error;
+            }
         }
+        
+        
+
+        
+        
+        
+        
+        
+        
     };
 
     return CustomerFeedback;

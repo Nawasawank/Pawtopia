@@ -43,12 +43,7 @@ function DeveloperNavbar() {
         </Link>
       </div>
       <nav>
-        <ul>
-          <li><Link to="/projects">Projects</Link></li>
-          <li><Link to="/tasks">Tasks</Link></li>
-          <li><Link to="/issues">Issues</Link></li>
-          <li><Link to="/settings">Settings</Link></li>
-        </ul>
+        
       </nav>
       <div className="user-info">
         <span>Hi! {name}</span>

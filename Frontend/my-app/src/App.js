@@ -40,6 +40,8 @@ import 'daterangepicker/daterangepicker.css';
 import 'jquery';
 import 'moment';
 import 'daterangepicker';
+import EmployeeManagementPage from './pages/EmployeeManagePage.jsx';
+import BookingManagementPage from './pages/BookingManagePage.jsx';
 
 
 
@@ -133,6 +135,22 @@ function App() {
           }
         />
 
+<Route 
+          path="/employee"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <EmployeeManagementPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/booking"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <BookingManagementPage />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="/" element={<LogInPage />} />
       </Routes>

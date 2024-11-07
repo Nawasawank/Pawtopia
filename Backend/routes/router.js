@@ -15,6 +15,9 @@ import bookingsController from '../controllers/Booking.controller.js';
 
 const route = Router();
 
+//admin name for navbar
+route.get('/admin_name', isAuth, InfoController.getAdminProfile);
+
 route.post('/register', SignUpController.register);
 route.post('/login', LoginController.login);
 
@@ -23,8 +26,6 @@ route.put('/upload-photo',isAuth, upload.single('profileImage'), UpdatePhotoCont
 
 //Get user name and picture for navbar
 route.get('/profile', isAuth, InfoController.getUserProfile);
-//Get admin name for navbar
-route.get('/admin_name', isAuth, InfoController.getAdminProfile);
 //Get developer name for navbar
 route.get('/dev_name', isAuth, InfoController.getDeveloperProfile);
 
@@ -64,10 +65,14 @@ route.put('/employees/update/:employeeId',isAuth, EmployeeController.updateEmplo
 //add employee
 route.post('/employees',isAuth, EmployeeController.addEmployee);
 //delete employee
-route.delete('/employees/:employeeId',isAuth, EmployeeController.deleteEmployee);
+route.delete('/delete/employees/:employeeId',isAuth, EmployeeController.deleteEmployee);
 
 //get boooking by date
 route.get('/bookings/by-date',isAuth, bookingsController.getBookingsByDate);
+
+//get feed back
+route.get('/feedback',isAuth, FeedbackController.getFeedbackByTypeAndDate);
+
 
 
 

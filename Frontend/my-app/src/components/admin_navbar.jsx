@@ -13,12 +13,11 @@ function AdminNavbar() {
       if (!token) return;
 
       try {
-        const response = await api.get('/admin_name', {
+        const response = await api.get('/api/admin_name', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
-        
         if (response.status === 200) {
-          setName(response.data.name);
+          setName(response.data.Name);
         }
       } catch (error) {
         console.error('Error fetching admin name:', error);
@@ -52,9 +51,10 @@ function AdminNavbar() {
         </ul>
       </nav>
       <div className="user-info">
-        <span>Hi! {name}</span>
-        <button onClick={handleLogout} className="logout-button">Log Out</button>
-      </div>
+    <span>Hi! {name}</span>
+    <button onClick={handleLogout} className="logout-button">Log Out</button>
+  </div>
+
     </header>
   );
 }

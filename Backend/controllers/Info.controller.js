@@ -68,6 +68,7 @@ const InfoController = {
     async getAdminProfile(req, res) {
         const { id: userId } = req.user;
 
+        console.log(req.user)
         try {
             const admin = await InfoService.getAdminProfile(userId);
             console.log(admin)

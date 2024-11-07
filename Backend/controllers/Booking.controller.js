@@ -3,11 +3,11 @@ import bookingsService from '../services/Booking.service.js';
 const bookingsController = {
     async getBookingsByDate(req, res) {
         try {
-            const { date } = req.query;
+            const { date, service_id } = req.query;
             if (!date) {
                 return res.status(400).json({ error: "Date parameter is required" });
             }
-            const bookings = await bookingsService.getBookingsByDate(date);
+            const bookings = await bookingsService.getBookingsByDate(date, service_id);
             res.status(200).json(bookings);
         } catch (error) {
             console.error("Error in bookingsController - getBookingsByDate:", error);
