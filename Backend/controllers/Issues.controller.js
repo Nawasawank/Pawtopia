@@ -3,6 +3,8 @@ import IssueService from '../services/Issues.service.js';
 const IssuesController = {
     async createIssue(req, res) {
         const { id: employee_id } = req.user;
+        console.log(employee_id);
+        
         const { developer_id, issue, issue_description, status } = req.body;
 
         try {
@@ -13,6 +15,7 @@ const IssuesController = {
                 issue_description,
                 status: status
             };
+            console.log(issueData)
 
             const result = await IssueService.createIssue(issueData);
 

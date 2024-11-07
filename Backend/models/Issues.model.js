@@ -20,16 +20,18 @@ export default function IssueModel(db) {
 
         async createIssue(issueData) {
             try {
+                console.log("Issues ----->", issueData);
+                
                 const sql = `
                     INSERT INTO issues (employee_id, developer_id, issue, issue_description, status)
                     VALUES (?, ?, ?, ?, ?)
                 `;
                 const params = [
-                    issueData.admin_id,
+                    issueData.employee_id,
                     issueData.developer_id ,
                     issueData.issue,
                     issueData.issue_description,
-                    issueData.status || 'open'
+                    issueData.status 
                 ];
 
                 const result = await db.query(sql, params);
