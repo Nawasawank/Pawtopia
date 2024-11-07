@@ -66,27 +66,23 @@ const HistoryPage = () => {
     const handleDeleteBooking = async (appointment) => {
         const { booking_id, service_name } = appointment;
     
+        const serviceMapping = {
+            'Grooming': 1,
+            'Pet Park': 2,
+            'Swimming': 3,
+            'Vaccination': 4,
+        };
+    
+        const service_id = serviceMapping[service_name];
+    
+        if (!service_id) {
+            console.error('Unknown service name:', service_name);
+            return;
+        }
+    
         if (!window.confirm('Are you sure you want to delete this booking?')) return;
     
-        let deleteEndpoint = '';
-    
-        switch (service_name) {
-            case 'Grooming':
-                deleteEndpoint = `/api/delete-booking/grooming/${booking_id}`;
-                break;
-            case 'Pet Park':
-                deleteEndpoint = `/api/delete-booking/petpark/${booking_id}`;
-                break;
-            case 'Swimming':
-                deleteEndpoint = `/api/delete-booking/swimming/${booking_id}`;
-                break;
-            case 'Vaccination':
-                deleteEndpoint = `/api/delete-booking/vaccination/${booking_id}`;
-                break;
-            default:
-                console.error('Unknown service name:', service_name);
-                return;
-        }
+        const deleteEndpoint = `/api/${service_id}/${booking_id}`;
     
         try {
             await api.delete(deleteEndpoint, {
@@ -101,6 +97,8 @@ const HistoryPage = () => {
             alert('Failed to delete booking. Please try again.');
         }
     };
+    
+    
 
     const handleSubmitFeedback = async (feedback) => {
         try {
