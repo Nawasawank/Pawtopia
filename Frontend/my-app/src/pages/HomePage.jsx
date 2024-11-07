@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from '../components/navbar.jsx';
+import Navbar_NotLogin from '../components/navbar_notLogin.jsx'; // Import Navbar_NotLogin
 import ContactSection from '../components/ContactSection.jsx';
 import '../styles/HomePage.css';
 import dog from '../pictures/dog_home.png';
@@ -15,10 +16,11 @@ import paw4 from '../pictures/paw4.png';
 import paw5 from '../pictures/paw5.png';
 
 const HomePage = () => {
-  console.log("Token: ", localStorage.getItem('token'))
+  const isLoggedIn = !!localStorage.getItem('token'); 
+
   return (
     <div className="homepage">
-      <Navbar />
+      {isLoggedIn ? <Navbar /> : <Navbar_NotLogin />} 
       <img src={paw1} alt="Paw Print" className="paw-image paw-image-1" />
       <img src={paw2} alt="Paw Print" className="paw-image paw-image-2" />
       <img src={paw3} alt="Paw Print" className="paw-image paw-image-3" />

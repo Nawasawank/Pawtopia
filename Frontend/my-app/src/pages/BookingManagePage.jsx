@@ -61,26 +61,26 @@ const BookingManagementPage = () => {
     <div className="booking-management-wrapper">
       <Navbar />
       <h1 className="booking-title">Booking Management</h1>
-      <div className="filter-section">
-        <div className="filter-item">
+      <div className="b-filter-section">
+        <div className="b-filter-item">
           <label>Select Service:</label>
           <select
             value={selectedService}
             onChange={(e) => setSelectedService(e.target.value)}
           >
-            <option value="">-- Select a Service --</option>
+            <option value="">Select a Service</option>
             <option value="1">Grooming Service</option>
             <option value="2">Swimming Service</option>
             <option value="3">Vaccination Service</option>
             <option value="4">Pet Park</option>
           </select>
         </div>
-        <div className="filter-item">
+        <div className="b-filter-item">
           <label>Select Date:</label>
           <DatePicker
             value={selectedDate}
             onChange={setSelectedDate}
-            onOk={handleDateOk} // Trigger fetch when "OK" is clicked
+            onOk={handleDateOk} 
             format="dd/MM/yyyy"
             style={{ width: '100%' }}
           />

@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/admin_navbar.jsx';
 import Emp_Overlay from '../components/Emp_Overlay.jsx';
+import ConfirmDeleteOverlay from '../components/ConfirmDeleteOverlay.jsx'; 
 import api from '../api';
 import '../styles/Employee.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const EmployeeManagementPage = () => {
   const [employees, setEmployees] = useState([]);
   const [selectedService, setSelectedService] = useState('');
   const [showAddOverlay, setShowAddOverlay] = useState(false);
   const [showEditOverlay, setShowEditOverlay] = useState(false);
+  const [showDeleteOverlay, setShowDeleteOverlay] = useState(false); 
   const [currentEmployee, setCurrentEmployee] = useState(null);
+  const [employeeToDelete, setEmployeeToDelete] = useState(null); 
   const [currentPage, setCurrentPage] = useState(1);
   const employeesPerPage = 10;
 
@@ -36,7 +41,6 @@ const EmployeeManagementPage = () => {
 
   const handleAddEmployee = async (employeeData) => {
     try {
-        console.log(employeeData)
       await api.post('/api/employees', employeeData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -63,15 +67,21 @@ const EmployeeManagementPage = () => {
     }
   };
 
-  const handleDeleteEmployee = async (employeeId) => {
+  const confirmDeleteEmployee = (employeeId) => {
+    setEmployeeToDelete(employeeId);
+    setShowDeleteOverlay(true); // Show the confirmation overlay
+  };
+
+  const handleDeleteEmployee = async () => {
     try {
-        console.log(employeeId)
-      await api.delete(`/api/delete/employees/${employeeId}`, {
+      await api.delete(`/api/delete/employees/${employeeToDelete}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
       fetchEmployees(selectedService);
+      setShowDeleteOverlay(false); // Close the overlay
+      setEmployeeToDelete(null); // Reset the selected employee
     } catch (error) {
       console.error('Error deleting employee:', error);
     }
@@ -81,11 +91,9 @@ const EmployeeManagementPage = () => {
     setCurrentPage(pageNumber);
   };
 
-
   const indexOfLastEmployee = currentPage * employeesPerPage;
   const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
   const currentEmployees = employees.slice(indexOfFirstEmployee, indexOfLastEmployee);
-
   const totalPages = Math.ceil(employees.length / employeesPerPage);
 
   return (
@@ -101,7 +109,7 @@ const EmployeeManagementPage = () => {
             value={selectedService}
             onChange={(e) => setSelectedService(e.target.value)}
           >
-            <option value="">-- Select a Service --</option>
+            <option value="">Select a Service</option>
             <option value="1">Grooming</option>
             <option value="2">Swimming</option>
             <option value="3">Vaccination</option>
@@ -109,7 +117,7 @@ const EmployeeManagementPage = () => {
           </select>
         </div>
         <button className="add-employee-button" onClick={() => setShowAddOverlay(true)}>
-          ➕ Add Employee
+        <FontAwesomeIcon icon={faPlus} />   Add Employee
         </button>
       </div>
 
@@ -133,7 +141,7 @@ const EmployeeManagementPage = () => {
                 <td>{employee.email}</td>
                 <td className="action-icons">
                   <button className="action-button" onClick={() => { setCurrentEmployee(employee); setShowEditOverlay(true); }}>✏️</button>
-                  <button className="action-button" onClick={() => handleDeleteEmployee(employee.employee_id)}>🗑️</button>
+                  <button className="action-button" onClick={() => confirmDeleteEmployee(employee.employee_id)}>🗑️</button>
                 </td>
               </tr>
             ))
@@ -176,6 +184,14 @@ const EmployeeManagementPage = () => {
           employee={currentEmployee}
           onClose={() => setShowEditOverlay(false)}
           onSubmit={(data) => handleUpdateEmployee(currentEmployee.employee_id, data)}
+        />
+      )}
+
+      {showDeleteOverlay && (
+        <ConfirmDeleteOverlay
+          message="Are you sure you want to delete this employee?"
+          onConfirm={handleDeleteEmployee} 
+          onCancel={() => setShowDeleteOverlay(false)} 
         />
       )}
     </div>

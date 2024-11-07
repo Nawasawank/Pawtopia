@@ -2,10 +2,19 @@ import React, { useState, useEffect } from 'react';
 import '../styles/employee_overlay.css';
 
 const Emp_Overlay = ({ title, employee = {}, onClose, onSubmit }) => {
-  const [firstName, setFirstName] = useState(employee.firstName || '');
-  const [lastName, setLastName] = useState(employee.lastName || '');
+  const [firstName, setFirstName] = useState(employee.first_name || '');
+  const [lastName, setLastName] = useState(employee.last_name || '');
   const [email, setEmail] = useState(employee.email || '');
-  const [service, setService] = useState(employee.service || '');
+  const [service, setService] = useState(employee.service_id || '');
+
+  useEffect(() => {
+    if (employee) {
+      setFirstName(employee.first_name || '');
+      setLastName(employee.last_name || '');
+      setEmail(employee.email || '');
+      setService(employee.service_id || '');
+    }
+  }, [employee]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,7 +61,7 @@ const Emp_Overlay = ({ title, employee = {}, onClose, onSubmit }) => {
             onChange={(e) => setService(e.target.value)}
             required
           >
-            <option value="">-- Select a Service --</option>
+            <option value="">Select a Service</option>
             <option value="1">Grooming</option>
             <option value="2">Swimming</option>
             <option value="3">Vaccination</option>

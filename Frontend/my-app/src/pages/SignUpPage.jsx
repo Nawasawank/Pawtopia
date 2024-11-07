@@ -1,22 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/SignUpPage.css';
-import useLocalStorage from '../hooks/useLocalStorage';
 import api from '../api.js';
+import { useNavigate } from 'react-router-dom';
+import Overlay from '../components/Overlay'; // Import the Overlay component
 
 const SignUpPage = () => {
-  const [firstName, setFirstName] = useLocalStorage('firstName', ''); 
-  const [lastName, setLastName] = useLocalStorage('lastName', ''); 
-  const [email, setEmail] = useLocalStorage('email', ''); 
-  const [tel, setTel] = useLocalStorage('tel', ''); 
-  const [password, setPassword] = useLocalStorage('password', ''); 
-  const [confirmPassword, setConfirmPassword] = useLocalStorage('confirmPassword', ''); 
+  const [firstName, setFirstName] = useState(''); 
+  const [lastName, setLastName] = useState(''); 
+  const [email, setEmail] = useState(''); 
+  const [tel, setTel] = useState(''); 
+  const [password, setPassword] = useState(''); 
+  const [confirmPassword, setConfirmPassword] = useState(''); 
+  const [petName, setPetName] = useState(''); 
+  const [petType, setPetType] = useState(''); 
+  const [petGender, setPetGender] = useState(''); 
+  const [petWeight, setPetWeight] = useState(''); 
+  const [healthConditionId, setHealthConditionId] = useState('');
 
-  // Pet Information
-  const [petName, setPetName] = useLocalStorage('petName', ''); 
-  const [petType, setPetType] = useLocalStorage('petType', ''); 
-  const [petGender, setPetGender] = useLocalStorage('petGender', ''); 
-  const [petWeight, setPetWeight] = useLocalStorage('petWeight', ''); 
-  const [healthConditionId, setHealthConditionId] = useLocalStorage('healthConditionId', '');
+  const [showSuccessOverlay, setShowSuccessOverlay] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignUp = async (event) => {
     event.preventDefault();
@@ -25,7 +27,6 @@ const SignUpPage = () => {
       alert('Passwords do not match.');
       return;
     }
-    console.log(healthConditionId)
 
     const data = {
       firstname: firstName,
@@ -37,14 +38,13 @@ const SignUpPage = () => {
       type: petType,
       gender: petGender,
       weight: petWeight,
-      health_condition_id: healthConditionId ,
+      health_condition_id: healthConditionId,
     };
-    
 
     try {
       const response = await api.post('/api/register', data);
       if (response.status === 201) {
-        alert('Sign up successful!');
+        setShowSuccessOverlay(true);  // Show success overlay
         clearForm();
       } else {
         alert(response.data.error || 'An unknown error occurred');
@@ -66,6 +66,11 @@ const SignUpPage = () => {
     setPetGender('');
     setPetWeight('');
     setHealthConditionId('');
+  };
+
+  const handleOverlayClose = () => {
+    setShowSuccessOverlay(false);
+    navigate('/login'); // Redirect to login page after overlay is closed
   };
 
   return (
@@ -204,6 +209,14 @@ const SignUpPage = () => {
           </div>
         </form>
       </div>
+
+      {showSuccessOverlay && (
+        <Overlay 
+          message="Account created successfully!" 
+          onClose={handleOverlayClose} 
+          show={showSuccessOverlay} 
+        />
+      )}
     </div>
   );
 };

@@ -52,13 +52,12 @@ body {
   
 /* Styling for the Add Employee button */
 .add-employee-button {
+  text-align: right;
     font-size: 1.2em;
     color: #666666;
     background: none;
     border: none;
     cursor: pointer;
-    display: flex;
-    align-items: center;
     gap: 5px;
     transition: none;
 }

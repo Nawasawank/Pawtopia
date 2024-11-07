@@ -42,7 +42,7 @@ import 'moment';
 import 'daterangepicker';
 import EmployeeManagementPage from './pages/EmployeeManagePage.jsx';
 import BookingManagementPage from './pages/BookingManagePage.jsx';
-
+import FeedbackManagementPage from './pages/FeedbackManage.jsx';
 
 
 function App() {
@@ -151,8 +151,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route 
+          path="/feedback"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <FeedbackManagementPage />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/" element={<LogInPage />} />
+        <Route path="/" element={<HomePage />} />
       </Routes>
     </Router>
   );

@@ -123,9 +123,10 @@ export default function CustomerFeedbackModel(db) {
         async findFeedbackByTypeAndDate(feedbackType, startDate, endDate) {
             try {
                 const sql = `
-                    SELECT * FROM customer_feedback 
-                    WHERE feedback_type = ? 
-                    AND DATE(created_at) BETWEEN ? AND ?
+                     SELECT * FROM customer_feedback 
+                     JOIN users ON users.user_id = customer_feedback.user_id
+                     WHERE feedback_type = ? 
+                     AND DATE(customer_feedback.created_at) BETWEEN ? AND ?
                 `;
                 
                 const formattedStartDate = new Date(startDate).toISOString().split('T')[0];

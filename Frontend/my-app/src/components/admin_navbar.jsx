@@ -30,7 +30,7 @@ function AdminNavbar() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
-    window.location.href = '/login';
+    window.location.href = '/';
   };
 
   return (
@@ -51,10 +51,9 @@ function AdminNavbar() {
         </ul>
       </nav>
       <div className="user-info">
-    <span>Hi! {name}</span>
-    <button onClick={handleLogout} className="logout-button">Log Out</button>
-  </div>
-
+        <span className="user-name">Hi! {name}</span>
+        <button onClick={handleLogout} className="logout-button">Log Out</button>
+      </div>
     </header>
   );
 }

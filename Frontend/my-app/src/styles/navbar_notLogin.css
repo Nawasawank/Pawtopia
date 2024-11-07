@@ -1,0 +1,100 @@
+/* Navbar Container */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 40px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+  }
+  
+  /* Logo Section */
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo img {
+    width: 50px;
+    height: auto;
+  }
+  
+  .logo h1 {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-left: 10px;
+    color: #333;
+  }
+  
+  /* Navigation Menu */
+  nav ul {
+    display: flex;
+    list-style-type: none;
+    gap: 50px;
+    margin: 0;
+    padding: 0;
+  }
+  
+  nav a, .custom-dropdown {
+    font-size: 1em;
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 5px 10px;
+  }
+  
+/* Adjusts the spacing between text and arrow */
+.custom-dropdown {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Dropdown Arrow for Services */
+.custom-dropdown::after {
+    content: "▼"; /* Adds a downward arrow symbol */
+    font-size: 0.8em;
+    color: #333; /* Same color as text */
+    margin-left: 5px; /* Adds a small gap between text and arrow */
+}
+
+/* Optional: Adjust color on hover */
+.custom-dropdown:hover::after {
+    color: #555;
+}
+
+  /* Auth Buttons */
+  .auth-buttons {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .auth-button {
+    font-size: 1em;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+  
+  .login-button {
+    background-color: #174a5a;
+    color: white;
+  }
+  
+  .register-button {
+    background-color: #d1e7dd;
+    color: #333;
+  }
+  
+  .auth-button:hover {
+    opacity: 0.8;
+  }
+  

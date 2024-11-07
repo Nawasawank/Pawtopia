@@ -6,10 +6,11 @@ import { DateRangePicker } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
 import axios from 'axios';
 import Feedback_Overlay from '../components/Feedback_Overlay.jsx';
+import ConfirmDeleteOverlay from '../components/ConfirmDeleteOverlay.jsx';
 import '../styles/History.css';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
-import api from '../api.js'
+import api from '../api.js';
 
 const HistoryPage = () => {
     const [dateRange, setDateRange] = useLocalStorage('dateRange', null);
@@ -19,6 +20,7 @@ const HistoryPage = () => {
     const [showOverlay, setShowOverlay] = useState(false);
     const [overlayMessage, setOverlayMessage] = useState('');
     const [selectedBookingId, setSelectedBookingId] = useState(null);
+    const [showDeleteOverlay, setShowDeleteOverlay] = useState(false); // Added for delete confirmation
 
     const fetchHistory = async (startDate, endDate) => {
         try {
@@ -63,42 +65,25 @@ const HistoryPage = () => {
         setShowOverlay(true);
     };
 
-    const handleDeleteBooking = async (appointment) => {
-        const { booking_id, service_name } = appointment;
-    
-        const serviceMapping = {
-            'Grooming': 1,
-            'Pet Park': 2,
-            'Swimming': 3,
-            'Vaccination': 4,
-        };
-    
-        const service_id = serviceMapping[service_name];
-    
-        if (!service_id) {
-            console.error('Unknown service name:', service_name);
-            return;
-        }
-    
-        if (!window.confirm('Are you sure you want to delete this booking?')) return;
-    
-        const deleteEndpoint = `/api/${service_id}/${booking_id}`;
-    
+    const handleDeleteBooking = (appointment) => {
+        setSelectedBookingId(appointment.booking_id);
+        setShowDeleteOverlay(true); // Show delete confirmation overlay
+    };
+
+    const confirmDeleteBooking = async () => {
         try {
-            await api.delete(deleteEndpoint, {
+            await api.delete(`/api/delete/${selectedBookingId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            setAppointments(prevAppointments => prevAppointments.filter(appt => appt.booking_id !== booking_id));
-            alert('Booking deleted successfully!');
+            setAppointments(prevAppointments => prevAppointments.filter(appt => appt.booking_id !== selectedBookingId));
+            setShowDeleteOverlay(false); 
         } catch (error) {
             console.error('Error deleting booking:', error);
             alert('Failed to delete booking. Please try again.');
         }
     };
-    
-    
 
     const handleSubmitFeedback = async (feedback) => {
         try {
@@ -246,6 +231,14 @@ const HistoryPage = () => {
                     show={showOverlay} 
                     onClose={handleCloseOverlay} 
                     onSubmitFeedback={handleSubmitFeedback} 
+                />
+            )}
+
+            {showDeleteOverlay && (
+                <ConfirmDeleteOverlay
+                    message="Are you sure you want to delete this booking?"
+                    onConfirm={confirmDeleteBooking}  // Confirm deletion
+                    onCancel={() => setShowDeleteOverlay(false)}  // Cancel and close overlay
                 />
             )}
         </div>
