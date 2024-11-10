@@ -11,7 +11,6 @@ import swimming from '../pictures/swimming.png';
 import cat from '../pictures/cat.png';
 import paw1 from '../pictures/paw1.png';
 import paw2 from '../pictures/paw2.png';
-import paw3 from '../pictures/paw3.png';
 import paw4 from '../pictures/paw4.png';
 import paw5 from '../pictures/paw5.png';
 
@@ -21,12 +20,13 @@ const HomePage = () => {
   return (
     <div className="homepage">
       {isLoggedIn ? <Navbar /> : <Navbar_NotLogin />} 
-      <img src={paw1} alt="Paw Print" className="paw-image paw-image-1" />
+      <section className="hero-section">
+        <div>
+        <img src={paw1} alt="Paw Print" className="paw-image paw-image-1" />
       <img src={paw2} alt="Paw Print" className="paw-image paw-image-2" />
-      <img src={paw3} alt="Paw Print" className="paw-image paw-image-3" />
       <img src={paw4} alt="Paw Print" className="paw-image paw-image-4" />
       <img src={paw5} alt="Paw Print" className="paw-image paw-image-5" />
-      <section className="hero-section">
+        </div>
         <div className="hero-content">
           <h2>"A Lifetime of Health</h2>
           <h2>and Happiness for Your Pet"</h2>

@@ -1,42 +1,46 @@
-
-html,body {
+/* Reset styles for HTML and Body */
+html, body {
     font-family: 'Lato', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow-x: hidden; 
-
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    width: 100%;
+    background-color: #f3edde; /* Default background */
 }
 
+/* HomePage Container */
 .homepage {
     padding: 0;
     overflow-x: hidden;
     background-color: #f3edde;
+    width: 100%;
 }
 
-
+/* Navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px 25px;
+    padding: 10px 25px;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    width: 100%;
 }
-
 
 .logo img {
     width: 120px;
     height: auto;
-    margin-left: -30px;
 }
 
-.logo img,
 .logo h1 {
     font-size: 25px;
     display: inline-block;
-    vertical-align: middle; 
-    margin-right: 0px;
+    vertical-align: middle;
+    margin-left: 10px;
 }
 
 .auth-buttons {
@@ -44,21 +48,22 @@ html,body {
     gap: 10px;
 }
 
-
 /* Hero Section */
 .hero-section {
-    font-family: Georgia, serif;
+    font-family: 'Georgia', serif;
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap; /* Allow wrapping for responsiveness */
+    justify-content: center;
     align-items: center;
-    padding: 50px;
+    padding: 40px;
     background-color: #fdf6e5;
-    flex-wrap: wrap;  
+    width: 100%;
+    height: 700px;
 }
 
 .hero-content {
     flex: 1;
-    max-width: 600px;  /* Control the width of the text block */
+    max-width: 600px;
     text-align: center;
     margin-bottom: 30px;
 }
@@ -66,17 +71,18 @@ html,body {
 .hero-content h2 {
     font-weight: 300;
     line-height: 1.4;
-    font-size: 2.4rem;  /* Adjust font size slightly */
+    font-size: 2.4rem;
     color: #333;
+    margin: 0;
 }
 
 .hero-content p {
-    text-align: center;
     font-size: 1.2rem;
     color: #666;
+    margin-top: 10px;
 }
 
-/* Resize dog image */
+/* Dog Image */
 .hero-image {
     flex: 1;
     display: flex;
@@ -85,15 +91,14 @@ html,body {
 }
 
 .hero-image img {
-    margin-top: 100px;
-    max-width: 800px;  /* Resize the image to make it a bit smaller */
+    margin-top: 30px;
+    max-width: 800px;
     width: 100%;
     height: auto;
     object-fit: cover;
 }
 
-
-
+/* Services Section */
 .services-section {
     text-align: center;
     padding: 50px;
@@ -111,9 +116,9 @@ html,body {
 
 .service-cards {
     display: flex;
+    flex-wrap: wrap; /* Allow wrapping for responsiveness */
     justify-content: space-around;
-    gap: 5px;
-    padding-top: 20px;
+    gap: 20px;
 }
 
 .service-card {
@@ -131,144 +136,145 @@ html,body {
 }
 
 .service-card:nth-child(odd) {
-    background-color: #fdf6e5; 
+    background-color: #fdf6e5;
 }
 
 .service-card:nth-child(even) {
-    background-color: #a0522d; 
-    color: white; 
+    background-color: #a0522d;
+    color: white;
 }
-
 
 .service-card:nth-child(odd):hover {
     background-color: #ece2b6;
 }
 
 .service-card:nth-child(even):hover {
-    background-color: #844323; 
+    background-color: #844323;
 }
 
 .service-card img {
-    width: 140px; 
-    height: auto; 
+    width: 140px;
+    height: auto;
     margin-bottom: 5px;
-    object-fit: contain; 
+    object-fit: contain;
 }
 
 .service-card p {
-    font-size: 20px;
+    font-size: 18px;
     margin-top: 10px;
-    margin-bottom: 0px;
-    color: inherit; 
+    margin-bottom: 0;
+    color: inherit;
     font-weight: bold;
 }
 
-
-.about-section {
-    padding: 50px;
-    text-align: center;
-}
-
-.about-section h3 {
-    font-size: 2rem;
-    color: #333;
-}
-
-.about-section p {
-    font-size: 1.2rem;
-    color: #666;
-    margin-top: 20px;
-}
-
-
+/* Cat Section */
 .cat-section {
     padding: 30px;
     background-color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px; 
+    gap: 30px;
 }
 
 .cat-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 50px; 
-    max-width: 1200px; 
+    gap: 50px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
 .cat-image img {
-    margin-top: -50px;
-    margin-left: -100px;
-    width: 500px;  
+    width: 500px;
     height: auto;
     object-fit: cover;
+    margin-left: -100px;
 }
 
 .cat-text {
     font-family: Georgia, serif;
-    margin-top: -100px;
-    margin-left: 50px;
     max-width: 600px;
-    text-align: left; 
+    text-align: left;
 }
 
 .cat-text h3 {
     font-size: 2rem;
     color: #333;
-    text-align: center;
-    border-bottom: 1px solid #333; 
-    padding-bottom: 20px; 
-    margin-bottom: 15px; 
+    text-align: left;
+    border-bottom: 1px solid #333;
+    padding-bottom: 20px;
+    margin-bottom: 15px;
     font-weight: 100;
 }
 
 .cat-text p {
-    margin-top: 30px;
+    margin-top: 15px;
     font-size: 1rem;
     color: #666;
     line-height: 1.6;
 }
 
-
-
 .paw-image {
     position: absolute;
-    width: 300px; 
+    width: 150px;
     height: auto;
-    z-index: 1;  
+    z-index: 1;
+    pointer-events: none;
 }
 
 .paw-image-1 {
-    top: 650px;  
-    left: 300px;
+    width: 250px;
+    top: 10%;
+    left: 5%;
 }
 
 .paw-image-2 {
-    top: 160px;  
-    left: 500px;
-    width: 150px;
+    width: 300px;
+    top: 5%;
+    left: 40%;
 }
 
-.paw-image-3 {
-    top: 160px;  
-    left: 900px;
-    width: 80px;
-}
 
 .paw-image-4 {
-    top: 140px;  
-    left: 20px;
-    width: 200px;
+    width: 160px;
+    top: 40%;
+    right: 10%;
 }
 
 .paw-image-5 {
-    top: 550px;  
-    left: 20px;
-    width: 190px;
+    width: 350px;
+    bottom: -5%;
+    left: 10%;
+}
+
+.hero-section {
+    position: relative; 
 }
 
 
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-content h2 {
+        font-size: 1.8rem;
+    }
 
+    .paw-image {
+        width: 100px;
+    }
+
+    .cat-section {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .cat-container {
+        flex-direction: column;
+    }
+
+    .hero-image img {
+        max-width: 100%;
+    }
+}
