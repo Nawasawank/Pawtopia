@@ -23,10 +23,10 @@ function Navbar_NotLogin() {
                   Services
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#grooming">Grooming</Dropdown.Item>
-                  <Dropdown.Item href="#veterinary">Veterinary</Dropdown.Item>
-                  <Dropdown.Item href="#vaccination">Vaccination</Dropdown.Item>
-                  <Dropdown.Item href="#pet-park">Pet Park</Dropdown.Item>
+                  <Dropdown.Item href="/grooming">Grooming</Dropdown.Item>
+                  <Dropdown.Item href="/swimming">Veterinary</Dropdown.Item>
+                  <Dropdown.Item href="/vaccination">Vaccination</Dropdown.Item>
+                  <Dropdown.Item href="/petpark">Pet Park</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </li>
