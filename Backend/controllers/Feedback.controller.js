@@ -36,7 +36,7 @@ const FeedbackController = {
 
     async getFeedback(req, res) {
         const { service_id } = req.params;
-        const { role } = req.user; 
+        const role  = 'default'; 
 
         if (!service_id) {
             return res.status(400).json({ error: 'service_id is required to retrieve feedback' });

@@ -59,14 +59,11 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LogInPage />} />
         <Route path='/signup/admin' element={<AdminSignUpPage />} />
-        
-
+        <Route path="/" element={<HomePage/>} />
         <Route 
           path="/home"
           element={
-            <ProtectedRoute>
               <HomePage />
-            </ProtectedRoute>
           }
         />
         <Route 
@@ -189,9 +186,7 @@ function App() {
         <Route 
           path="/vaccine"
           element={
-            <ProtectedRoute requiredRole="user">
               <VaccinationInfoPage />
-            </ProtectedRoute>
           }
         />
         {/* <Route 

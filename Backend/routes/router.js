@@ -23,7 +23,7 @@ route.post('/register', SignUpController.register);
 route.post('/login', LoginController.login);
 
 //feedback of each service
-route.get('/getfeedback/:service_id',isAuth,FeedbackController.getFeedback);
+route.get('/getfeedback/:service_id',FeedbackController.getFeedback);
 
 //Change Profile Picture
 route.put('/upload-photo',isAuth, upload.single('profileImage'), UpdatePhotoController.uploadProfileImage);

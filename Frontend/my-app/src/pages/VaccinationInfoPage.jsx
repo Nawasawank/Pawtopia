@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/navbar';
-import ContactSection from '../components/ContactSection';
+import Navbar from '../components/navbar.jsx';
+import Navbar_NotLogin from '../components/navbar_notLogin.jsx'; // Import Navbar_NotLogin
+import ContactSection from '../components/ContactSection.jsx';
 import api from '../api';
 import '../styles/VaccinationInfoPage.css';
 import vaccat from '../pictures/vaccat.png';
@@ -15,6 +16,7 @@ const VaccinationInfoPage = () => {
   const [error, setError] = useState(null);
   const serviceId = 3; // Service ID for vaccination
   const navigate = useNavigate(); // Initialize navigate
+  const isLoggedIn = !!localStorage.getItem('token'); // Check if user is logged in
 
   useEffect(() => {
     const fetchFeedback = async () => {
@@ -42,7 +44,7 @@ const VaccinationInfoPage = () => {
 
   return (
     <div className="vaccination-info-page">
-      <Navbar />
+      {isLoggedIn ? <Navbar /> : <Navbar_NotLogin />}  
 
       <main className="vaccination-content">
         <div className="vaccination-header">

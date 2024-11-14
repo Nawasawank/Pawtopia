@@ -68,7 +68,7 @@ function Navbar() {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item href="/grooming">Grooming</Dropdown.Item>
-                  <Dropdown.Item href="/swimming">Veterinary</Dropdown.Item>
+                  <Dropdown.Item href="/swimming">Swimming</Dropdown.Item>
                   <Dropdown.Item href="/vaccine">Vaccination</Dropdown.Item>
                   <Dropdown.Item href="/petpark">Pet Park</Dropdown.Item>
                 </Dropdown.Menu>
