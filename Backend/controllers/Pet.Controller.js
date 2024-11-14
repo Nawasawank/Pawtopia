@@ -2,12 +2,11 @@ import PetService from '../services/Pet.service.js';
 
 const PetController = {
     async addPet(req, res) {
-        const { id: userId } = req.user;
+        const { id: userId, role } = req.user; 
         const petData = req.body;
-        console.log(petData)
 
         try {
-            const newPet = await PetService.addPet(userId, petData);
+            const newPet = await PetService.addPet(userId, petData, role); 
 
             if (newPet.error) {
                 return res.status(400).json({ error: newPet.error });
@@ -24,11 +23,11 @@ const PetController = {
     },
 
     async deletePet(req, res) {
-        const { id: userId } = req.user;
+        const { id: userId, role } = req.user;
         const { petId } = req.params;
 
         try {
-            const result = await PetService.deletePet(userId, petId);
+            const result = await PetService.deletePet(userId, petId, role); 
 
             if (result.error) {
                 return res.status(400).json({ error: result.error });
@@ -42,11 +41,10 @@ const PetController = {
     },
 
     async getPetNamesAndTypes(req, res) {
-        const { id: userId } = req.user;
+        const { id: userId, role } = req.user; 
 
         try {
-            const pets = await PetService.findPetNamesAndTypes(userId);
-
+            const pets = await PetService.findPetNamesAndTypes(userId, role);
             if (pets.error) {
                 return res.status(400).json({ error: pets.error });
             }
@@ -60,11 +58,12 @@ const PetController = {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     },
+
     async getPetByUserId(req, res) {
-        const { id: userId } = req.user;
+        const { id: userId, role } = req.user;  
 
         try {
-            const pets = await PetService.findPet(userId);
+            const pets = await PetService.findPet(userId, role);  
 
             if (pets.error) {
                 return res.status(400).json({ error: pets.error });

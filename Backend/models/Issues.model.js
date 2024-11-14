@@ -1,92 +1,105 @@
-export default function IssueModel(db) {
-    const Issue = {
-        async createTable() {
+import db from '../database.js';
+
+const Issue = {
+    async createIssue(issueData, role) {
+        try {
             const sql = `
-                CREATE TABLE IF NOT EXISTS issues (
-                    issue_id INT AUTO_INCREMENT PRIMARY KEY,
-                    employee_id INT,
-                    developer_id INT,
-                    issue VARCHAR(255) NOT NULL,
-                    issue_description TEXT,
-                    status ENUM('in_progress', 'resolved') DEFAULT 'in_progress',
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                    FOREIGN KEY (employee_id) REFERENCES emp_admins(employee_id) ON DELETE CASCADE,
-                    FOREIGN KEY (developer_id) REFERENCES developers(developer_id) ON DELETE CASCADE
-                );
+                INSERT INTO issues (employee_id, developer_id, issue, issue_description, status)
+                VALUES (?, ?, ?, ?, ?)
             `;
-            await db.query(sql);
-        },
+            const params = [
+                issueData.employee_id,
+                issueData.developer_id,
+                issueData.issue,
+                issueData.issue_description,
+                issueData.status || 'in_progress',
+            ];
 
-        async createIssue(issueData) {
-            try {
-                console.log("Issues ----->", issueData);
-                
-                const sql = `
-                    INSERT INTO issues (employee_id, developer_id, issue, issue_description, status)
-                    VALUES (?, ?, ?, ?, ?)
-                `;
-                const params = [
-                    issueData.employee_id,
-                    issueData.developer_id ,
-                    issueData.issue,
-                    issueData.issue_description,
-                    issueData.status 
-                ];
-
-                const result = await db.query(sql, params);
-                return result;
-            } catch (error) {
-                console.error('Error creating issue:', error);
-                throw error;
-            }
-        },
-
-        async updateIssue(issueId, updateData) {
-            try {
-                const sql = `
-                    UPDATE issues 
-                    SET employee = ?, developer_id = ?, issue = ?, issue_description = ?, status = ?
-                    WHERE issue_id = ?
-                `;
-                const params = [
-                    updateData.employee_id || null,
-                    updateData.developer_id || null,
-                    updateData.issue,
-                    updateData.issue_description,
-                    updateData.status || 'open',
-                    issueId
-                ];
-
-                const result = await db.query(sql, params);
-                return result;
-            } catch (error) {
-                console.error('Error updating issue:', error);
-                throw error;
-            }
-        },
-
-        async findIssueById(issueId) {
-            const sql = 'SELECT * FROM issues WHERE issue_id = ?';
-            const issues = await db.query(sql, [issueId]);
-            return issues[0];
-        },
-
-        async findIssuesByDeveloper(developerId) {
-            const sql = 'SELECT * FROM issues WHERE developer_id = ?';
-            return db.query(sql, [developerId]);
-        },
-
-        async findIssuesByAdmin(adminId) {
-            const sql = 'SELECT * FROM issues WHERE admin_id = ?';
-            return db.query(sql, [adminId]);
-        },
-
-        async deleteIssue(issueId) {
-            const sql = 'DELETE FROM issues WHERE issue_id = ?';
-            return db.query(sql, [issueId]);
+            const result = await db.query(sql, params, role);  // Pass role to db.query
+            return {
+                issue_id: result.insertId,
+                ...issueData,
+            };
+        } catch (error) {
+            console.error('Error creating issue:', error);
+            throw error;
         }
-    };
+    },
 
-    return Issue;
-}
+    async updateIssue(issueId, updateData, role) {
+        try {
+            const sql = `
+                UPDATE issues 
+                SET employee_id = ?, developer_id = ?, issue = ?, issue_description = ?, status = ?
+                WHERE issue_id = ?
+            `;
+            const params = [
+                updateData.employee_id || null,
+                updateData.developer_id || null,
+                updateData.issue,
+                updateData.issue_description,
+                updateData.status || 'in_progress',
+                issueId,
+            ];
+
+            const result = await db.query(sql, params, role);  // Pass role to db.query
+            return result;
+        } catch (error) {
+            console.error('Error updating issue:', error);
+            throw error;
+        }
+    },
+
+    async findIssueById(issueId, role) {
+        try {
+            const sql = 'SELECT * FROM issues WHERE issue_id = ?';
+            const issues = await db.query(sql, [issueId], role);  // Pass role to db.query
+            return issues[0];
+        } catch (error) {
+            console.error('Error finding issue by ID:', error);
+            throw error;
+        }
+    },
+
+    async findIssuesByDeveloper(developerId, role) {
+        try {
+            const sql = 'SELECT * FROM issues WHERE developer_id = ?';
+            return await db.query(sql, [developerId], role);  // Pass role to db.query
+        } catch (error) {
+            console.error('Error finding issues by developer:', error);
+            throw error;
+        }
+    },
+
+    async findIssuesByAdmin(adminId, role) {
+        try {
+            const sql = 'SELECT * FROM issues WHERE employee_id = ?';
+            return await db.query(sql, [adminId], role);  // Pass role to db.query
+        } catch (error) {
+            console.error('Error finding issues by admin:', error);
+            throw error;
+        }
+    },
+
+    async deleteIssue(issueId, role) {
+        try {
+            const sql = 'DELETE FROM issues WHERE issue_id = ?';
+            return await db.query(sql, [issueId], role);  // Pass role to db.query
+        } catch (error) {
+            console.error('Error deleting issue:', error);
+            throw error;
+        }
+    },
+
+    async getAllIssues(role) {
+        try {
+            const sql = 'SELECT * FROM issues';
+            return await db.query(sql, [], role);  // Pass role to db.query
+        } catch (error) {
+            console.error('Error retrieving all issues:', error);
+            throw error;
+        }
+    },
+};
+
+export default Issue;

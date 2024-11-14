@@ -2,11 +2,11 @@ import HistoryService from '../services/History.service.js';
 
 const HistoryController = {
     async getAppointmentHistory(req, res) {
-        const { id: userId } = req.user;
+        const { id: userId, role } = req.user;  
         const { startDate, endDate } = req.query;
 
         try {
-            const appointments = await HistoryService.getAppointmentsWithinDateRange(userId, startDate, endDate);
+            const appointments = await HistoryService.getAppointmentsWithinDateRange(userId, startDate, endDate, role);  // Pass role to service
 
             if (appointments.error) {
                 return res.status(500).json({ error: appointments.error });

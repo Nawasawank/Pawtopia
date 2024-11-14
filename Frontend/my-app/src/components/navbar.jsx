@@ -11,14 +11,17 @@ function Navbar() {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const token = localStorage.getItem('token');  
+      const token = localStorage.getItem('token');
 
-      if (!token) return; 
+      if (!token) {
+        setUserInfo({ firstName: '', image: '' }); // Reset state if no token
+        return;
+      }
 
       try {
         const response = await api.get('/api/profile', {
           headers: {
-            'Authorization': `Bearer ${token}`,  
+            Authorization: `Bearer ${token}`, // Include token in headers
           },
         });
 
@@ -28,7 +31,7 @@ function Navbar() {
 
           setUserInfo({
             firstName: data.firstName,
-            image: profileImageUrl
+            image: profileImageUrl,
           });
         } else {
           console.error('Failed to fetch profile info');
@@ -39,18 +42,19 @@ function Navbar() {
     };
 
     fetchUserProfile();
-  }, []);
+  }, [localStorage.getItem('token')]); // Refetch profile when the token changes
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); 
-    window.location.href = '/'; 
+    localStorage.removeItem('token'); // Remove token from storage
+    setUserInfo({ firstName: '', image: '' }); // Reset user info state
+    window.location.href = '/'; // Redirect to home or login page
   };
 
   return (
     <div className="homepage-container">
       <header className="navbar">
         <div className="logo">
-        <Link to="/home">  
+          <Link to="/home">
             <img src={logo} alt="Pawtopia Logo" />
             <h1>Pawtopia</h1>
           </Link>
@@ -96,14 +100,16 @@ function Navbar() {
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.ItemText>
-              <div className="profile-info">
+                <div className="profile-info">
                   <Link to="/profile" className="profile-link">
                     <strong>Profile</strong>
                   </Link>
                 </div>
               </Dropdown.ItemText>
               <Dropdown.Divider />
-              <Dropdown.Item onClick={handleLogout} className="logout-button">Log Out</Dropdown.Item>
+              <Dropdown.Item onClick={handleLogout} className="logout-button">
+                Log Out
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>

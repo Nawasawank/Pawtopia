@@ -1,9 +1,9 @@
-import {Issues} from '../database.js'; // Make sure IssueModel is properly instantiated in database.js
+import Issue from "../models/Issues.model.js";
 
 const IssueService = {
-    async createIssue(issueData) {
+    async createIssue(issueData, role) {
         try {
-            const result = await Issues.createIssue(issueData);
+            const result = await Issue.createIssue(issueData, role);  // Pass role to model method
             return {
                 message: 'Issue created successfully',
                 issueId: result.insertId,  // Assuming `insertId` contains the new issue's ID

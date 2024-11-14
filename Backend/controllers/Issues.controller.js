@@ -2,8 +2,7 @@ import IssueService from '../services/Issues.service.js';
 
 const IssuesController = {
     async createIssue(req, res) {
-        const { id: employee_id } = req.user;
-        console.log(employee_id);
+        const { id: employee_id, role } = req.user;  
         
         const { developer_id, issue, issue_description, status } = req.body;
 
@@ -15,9 +14,8 @@ const IssuesController = {
                 issue_description,
                 status: status
             };
-            console.log(issueData)
 
-            const result = await IssueService.createIssue(issueData);
+            const result = await IssueService.createIssue(issueData, role); 
 
             if (result.error) {
                 return res.status(500).json({ error: result.error });

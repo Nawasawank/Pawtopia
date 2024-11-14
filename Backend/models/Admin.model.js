@@ -1,110 +1,93 @@
-export default function AdminModel(db) {
-    const Admin = {
-        async createTable() {
+import db from '../database.js';  // Import db.query
+
+const Admin = {
+    async createAdmin(adminData, role) {
+        try {
             const sql = `
-                CREATE TABLE IF NOT EXISTS emp_admins (
-                employee_id INT PRIMARY KEY,
-                email VARCHAR(255),
-                password VARCHAR(255) NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                FOREIGN KEY (employee_id) REFERENCES employees(employee_id) ON DELETE CASCADE
-                );
+                INSERT INTO emp_admins (employee_id, email, password) 
+                VALUES (?, ?, ?)
             `;
-            await db.query(sql);
-        },
+            const params = [
+                adminData.employee_id,
+                adminData.email,
+                adminData.password,
+            ];
+            const result = await db.query(sql, params, role);  // Pass role to db.query
+            return result;
+        } catch (error) {
+            console.error('Error creating admin:', error);
+            throw error;
+        }
+    },
 
-        async createAdmin(adminData) {
-            try {
-                const sql = `
-                    INSERT INTO emp_admins (employee_id,email, password) 
-                    VALUES (?, ?, ?)
-                `;
-                const params = [
-                    adminData.employee_id,
-                    adminData.email,
-                    adminData.password
-                ];
-
-                const result = await db.query(sql, params);
-                return result;
-            } catch (error) {
-                console.error('Error creating admin:', error);
-                throw error;
-            }
-        },
-
-        async updateAdmin(employee_id, updateData) {
-            try {
-                const sql = `
-                    UPDATE emp_admins
-                    SET employee_id = ?, password = ? 
-                    WHERE employee_id = ?
-                `;
-                const params = [
-                    updateData.employee_id,
-                    updateData.password,
-                    employee_id
-                ];
-
-                const result = await db.query(sql, params);
-                return result;
-            } catch (error) {
-                console.error('Error updating admin:', error);
-                throw error;
-            }
-        },
-
-        async findAdminById(adminId) {
+    async updateAdminPassword(employee_id, newPassword, role) {
+        try {
             const sql = `
-                SELECT * 
+                UPDATE emp_admins
+                SET password = ? 
+                WHERE employee_id = ?
+            `;
+            const params = [newPassword, employee_id];
+            const result = await db.query(sql, params, role);  // Pass role to db.query
+            return result;
+        } catch (error) {
+            console.error('Error updating admin password:', error);
+            throw error;
+        }
+    },
+
+    async findAdminById(adminId, role) {
+        try {
+            const sql = `
+                SELECT emp_admins.*, employees.first_name, employees.last_name
                 FROM emp_admins 
                 JOIN employees ON emp_admins.employee_id = employees.employee_id 
                 WHERE emp_admins.employee_id = ?
             `;
-            const admins = await db.query(sql, [adminId]);
+            const admins = await db.query(sql, [adminId], role);  // Pass role to db.query
             return admins[0];
-        },             
+        } catch (error) {
+            console.error('Error finding admin by ID:', error);
+            throw error;
+        }
+    },    
 
-        async findAdminByEmployeeId(employeeId) {
-            const sql = 'SELECT * FROM emp_admins WHERE employee_id = ?';
-            const admins = await db.query(sql, [employeeId]);
-            return admins[0];
-        },
-
-        async findAdminByEmail(email) {
+    async findAdminByEmail(email, role) {
+        try {
             const sql = `
-                SELECT *
+                SELECT emp_admins.*, employees.first_name, employees.last_name
                 FROM emp_admins
                 JOIN employees ON emp_admins.employee_id = employees.employee_id 
                 WHERE employees.email = ?
             `;
-            const admins = await db.query(sql, [email]);
+            const admins = await db.query(sql, [email], role);  // Pass role to db.query
             return admins[0];
-        },
-
-        async findAdminByTel(tel) {
-            const sql = `
-                SELECT admins.* 
-                FROM admins 
-                JOIN employees ON emp_admins.employee_id = employees.employee_id 
-                WHERE employees.tel = ?
-            `;
-            const admins = await db.query(sql, [tel]);
-            return admins[0];
-        },
-
-        async deleteAdmin(adminId) {
-            const sql = 'DELETE FROM emp_admins WHERE employee_id = ?';
-            return db.query(sql, [adminId]);
-        },
-
-        async findRandomAdminId() {
-            const sql = `SELECT employee_id FROM emp_admins ORDER BY RAND() LIMIT 1`;
-            const result = await db.query(sql);
-            return result;
+        } catch (error) {
+            console.error('Error finding admin by email:', error);
+            throw error;
         }
-    };
+    },
 
-    return Admin;
-}
+    async deleteAdmin(adminId, role) {
+        try {
+            const sql = 'DELETE FROM emp_admins WHERE employee_id = ?';
+            return db.query(sql, [adminId], role);  // Pass role to db.query
+        } catch (error) {
+            console.error('Error deleting admin:', error);
+            throw error;
+        }
+    },
+
+    async findRandomAdminId(role) {
+        try {
+            const sql = `SELECT employee_id FROM emp_admins ORDER BY RAND() LIMIT 1`;
+            const result = await db.query(sql, [], role);  // Pass role to db.query
+            return result[0];
+        } catch (error) {
+            console.error('Error finding random admin ID:', error);
+            throw error;
+        }
+    },
+};
+
+export default Admin;

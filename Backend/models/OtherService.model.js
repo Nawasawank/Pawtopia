@@ -1,129 +1,127 @@
-export default function OtherServicesBookingModel(db) {
-    const OtherServicesBooking = {
-        async createTable() {
-            const sql = `
-                CREATE TABLE IF NOT EXISTS services_bookings (
-                    booking_id INT AUTO_INCREMENT PRIMARY KEY,
-                    pet_id INT,
-                    employee_id INT,
-                    service_id INT,
-                    booking_date DATE,
-                    time_slot VARCHAR(50),
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                    FOREIGN KEY (pet_id) REFERENCES pets(pet_id) ON DELETE CASCADE,
-                    FOREIGN KEY (employee_id) REFERENCES employees(employee_id) ON DELETE CASCADE,
-                    FOREIGN KEY (service_id) REFERENCES services(service_id) ON DELETE CASCADE
-                );
+import db from '../database.js';
+
+const ServicesBooking = {
+    async createBooking(bookingData, role) {
+        try {
+            const insertSql = `
+                INSERT INTO services_bookings (pet_id, employee_id, service_id, booking_date, time_slot) 
+                VALUES (?, ?, ?, ?, ?)
             `;
-            await db.query(sql);
-        },
+            const params = [
+                bookingData.pet_id,
+                bookingData.employee_id,
+                bookingData.service_id,
+                bookingData.booking_date,
+                bookingData.time_slot,
+            ];
 
-        async createBooking(bookingData) {
-            try {
-                const insertSql = `
-                    INSERT INTO services_bookings (pet_id, employee_id, service_id, booking_date, time_slot) 
-                    VALUES (?, ?, ?, ?, ?)
-                `;
-                const params = [
-                    bookingData.pet_id,
-                    bookingData.employee_id,
-                    bookingData.service_id,
-                    bookingData.booking_date,
-                    bookingData.time_slot
-                ];
+            const result = await db.query(insertSql, params, role);  // Pass role to db.query
+            return await this.findBookingById(result.insertId, role);
+        } catch (error) {
+            console.error('Error creating service booking:', error);
+            throw error;
+        }
+    },
 
-                const insertResult = await db.query(insertSql, params);
+    async updateBooking(booking_id, updateData, role) {
+        try {
+            const sql = `
+                UPDATE services_bookings 
+                SET pet_id = ?, booking_date = ?, time_slot = ?
+                WHERE booking_id = ?
+            `;
+            const params = [
+                updateData.pet_id,
+                updateData.booking_date,
+                updateData.time_slot,
+                booking_id,
+            ];
 
-                const newBooking = await OtherServicesBooking.findBookingById(insertResult.insertId);
+            await db.query(sql, params, role);  // Pass role to db.query
+            return await this.findBookingById(booking_id, role);
+        } catch (error) {
+            console.error('Error updating service booking:', error);
+            throw error;
+        }
+    },
 
-                return newBooking;
-            } catch (error) {
-                console.error('Error creating service booking:', error);
-                throw error;
-            }
-        },
-
-        async updateBooking(booking_id, updateData) {
-            try {
-                const sql = `
-                    UPDATE services_bookings 
-                    SET pet_id = ?, booking_date = ?, time_slot = ?
-                    WHERE booking_id = ?
-                `;
-                const params = [
-                    updateData.pet_id,
-                    updateData.booking_date,
-                    updateData.time_slot,
-                    booking_id
-                ];
-        
-                const result = await db.query(sql, params);
-                
-                console.log("Update result:", result);
-
-        
-                return updateData ;
-            } catch (error) {
-                console.error('Error updating service booking:', error);
-                return { error: 'Database error occurred while updating booking' };
-            }
-        },              
-
-        async findBookingById(booking_id) {
+    async findBookingById(booking_id, role) {
+        try {
             const sql = 'SELECT * FROM services_bookings WHERE booking_id = ?';
-            const bookings = await db.query(sql, [booking_id]);
-            return bookings[0];
-        },
+            const bookings = await db.query(sql, [booking_id], role);  // Pass role to db.query
+            return bookings[0] || null;
+        } catch (error) {
+            console.error('Error finding booking by ID:', error);
+            throw error;
+        }
+    },
 
-        async findAvailableBooking(employee_id, booking_date, time_slot) {
+    async findAvailableBooking(employee_id, booking_date, time_slot, role) {
+        try {
             const sql = `
                 SELECT * FROM services_bookings 
                 WHERE employee_id = ? AND booking_date = ? AND time_slot = ?
             `;
-            const bookings = await db.query(sql, [employee_id, booking_date, time_slot]);
-            return bookings.length > 0 ? bookings[0] : null;
-        },
+            const bookings = await db.query(sql, [employee_id, booking_date, time_slot], role);  // Pass role to db.query
+            return bookings[0] || null;
+        } catch (error) {
+            console.error('Error finding available booking:', error);
+            throw error;
+        }
+    },
 
-        async findBooking(pet_id, booking_date, time_slot, service_id) {
+    async findBooking(pet_id, booking_date, time_slot, service_id, role) {
+        try {
             const sql = `
                 SELECT * FROM services_bookings 
-                WHERE pet_id = ? AND booking_date = ? AND time_slot = ? AND service_id =?
+                WHERE pet_id = ? AND booking_date = ? AND time_slot = ? AND service_id = ?
             `;
-            const bookings = await db.query(sql, [pet_id, booking_date, time_slot,service_id]);
-            return bookings.length > 0 ? bookings[0] : null;
-        },
-
-        async findBookingsByPetId(petId) {
-            const sql = 'SELECT * FROM services_bookings WHERE pet_id = ?';
-            return db.query(sql, [petId]);
-        },
-
-        async deleteBooking(booking_id) {
-            const sql = 'DELETE FROM services_bookings WHERE booking_id = ?';
-            return db.query(sql, [booking_id]);
-        },
-        async getBookingsByDate(date, service_id) {
-            try {
-                const sql = `
-                    SELECT sb.booking_id, sb.booking_date, sb.time_slot, u.firstName AS customer_name, 
-                           p.name AS pet_name, s.service_name, e.first_name AS employee_name
-                    FROM services_bookings sb
-                    JOIN pets p ON sb.pet_id = p.pet_id
-                    JOIN users u ON p.user_id = u.user_id
-                    JOIN services s ON sb.service_id = s.service_id
-                    JOIN employees e ON sb.employee_id = e.employee_id
-                    WHERE sb.booking_date = ? AND sb.service_id = ?
-                `;
-                const bookings = await db.query(sql, [date, service_id]);
-                return bookings;
-            } catch (error) {
-                console.error("Error fetching bookings by date:", error);
-                throw new Error("An error occurred while fetching bookings.");
-            }
+            const bookings = await db.query(sql, [pet_id, booking_date, time_slot, service_id], role);  // Pass role to db.query
+            return bookings[0] || null;
+        } catch (error) {
+            console.error('Error finding booking:', error);
+            throw error;
         }
-        
-    };
+    },
 
-    return OtherServicesBooking;
-}
+    async findBookingsByPetId(petId, role) {
+        try {
+            const sql = 'SELECT * FROM services_bookings WHERE pet_id = ?';
+            return await db.query(sql, [petId], role);  // Pass role to db.query
+        } catch (error) {
+            console.error('Error finding bookings by pet ID:', error);
+            throw error;
+        }
+    },
+
+    async deleteBooking(booking_id, role) {
+        try {
+            const sql = 'DELETE FROM services_bookings WHERE booking_id = ?';
+            return await db.query(sql, [booking_id], role);  // Pass role to db.query
+        } catch (error) {
+            console.error('Error deleting booking:', error);
+            throw error;
+        }
+    },
+
+    async getBookingsByDate(date, service_id, role) {
+        try {
+            const sql = `
+                SELECT sb.booking_id, sb.booking_date, sb.time_slot, u.firstName AS customer_name, 
+                       p.name AS pet_name, s.service_name, e.first_name AS employee_name
+                FROM services_bookings sb
+                JOIN pets p ON sb.pet_id = p.pet_id
+                JOIN users u ON p.user_id = u.user_id
+                JOIN services s ON sb.service_id = s.service_id
+                JOIN employees e ON sb.employee_id = e.employee_id
+                WHERE sb.booking_date = ? AND sb.service_id = ?
+            `;
+            return await db.query(sql, [date, service_id], role);  // Pass role to db.query
+        } catch (error) {
+            console.error('Error fetching bookings by date:', error);
+            throw error;
+        }
+    },
+};
+
+export default ServicesBooking;

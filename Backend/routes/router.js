@@ -22,6 +22,9 @@ route.get('/admin_name', isAuth, InfoController.getAdminProfile);
 route.post('/register', SignUpController.register);
 route.post('/login', LoginController.login);
 
+//feedback of each service
+route.get('/getfeedback/:service_id',isAuth,FeedbackController.getFeedback);
+
 //Change Profile Picture
 route.put('/upload-photo',isAuth, upload.single('profileImage'), UpdatePhotoController.uploadProfileImage);
 
@@ -43,11 +46,11 @@ route.get('/pet/NameAndType',isAuth,PetController.getPetNamesAndTypes);
 route.get('/pet/AllPet',isAuth,PetController.getPetByUserId);
 
 //Add,Delete,Update Booking
-route.post('/:service_id/book', bookingsController.addBooking);
-route.delete('/:service_id/:booking_id', bookingsController.deleteBooking);
+route.post('/:service_id/book',isAuth, bookingsController.addBooking);
+route.delete('/:service_id/:booking_id', isAuth, bookingsController.deleteBooking);
 route.get('/:service_id/:booking_id',isAuth, bookingsController.getBookingsByDate);
-route.get('/bookings/:service_id/:booking_id', bookingsController.getBookingById);
-route.put('/update/:service_id/:booking_id', bookingsController.updateBooking);
+route.get('/bookings/:service_id/:booking_id',isAuth, bookingsController.getBookingById);
+route.put('/update/:service_id/:booking_id',isAuth, bookingsController.updateBooking);
 
 //Get History
 route.get('/history',isAuth,HistoryController.getAppointmentHistory);
@@ -78,7 +81,6 @@ route.get('/feedback',isAuth, FeedbackController.getFeedbackByTypeAndDate);
 route.post('/user/issues', isAuth, FeedbackController.createTechnicalFeedback);
 
 route.post('/admin/issues',isAuth,IssuesController.createIssue);
-
 
 
 export default route;

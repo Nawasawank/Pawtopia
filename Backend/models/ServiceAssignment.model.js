@@ -1,54 +1,83 @@
-export default function ServiceAssignmentsModel(db) {
-    const ServiceAssignment = {
-        async createTable() {
+import db from '../database.js';
+
+const ServiceAssignments = {
+    async assignService(assignmentData, role) {
+        try {
             const sql = `
-                CREATE TABLE IF NOT EXISTS service_assignments (
-                    assignment_id INT AUTO_INCREMENT PRIMARY KEY,
-                    employee_id INT,
-                    service_id INT,
-                    assignment_date DATE,
-                    FOREIGN KEY (employee_id) REFERENCES employees(employee_id) ON DELETE CASCADE ON UPDATE CASCADE,
-                    FOREIGN KEY (service_id) REFERENCES services(service_id) ON DELETE CASCADE ON UPDATE CASCADE
-                );
+                INSERT INTO service_assignments (employee_id, service_id, assignment_date) 
+                VALUES (?, ?, ?)
             `;
-            await db.query(sql);
-        },
+            const params = [
+                assignmentData.employee_id,
+                assignmentData.service_id,
+                assignmentData.assignment_date || new Date().toISOString().split('T')[0], // Default to current date
+            ];
 
-        async assignService(assignmentData) {
-            try {
-                const sql = `
-                    INSERT INTO service_assignments (employee_id, service_id, assignment_date) 
-                    VALUES (?, ?, ?)
-                `;
-                const params = [
-                    assignmentData.employee_id,
-                    assignmentData.service_id,
-                    assignmentData.assignment_date
-                ];
+            const result = await db.query(sql, params, role);  // Pass role to db.query
+            return await this.findAssignmentById(result.insertId, role); // Return the created assignment
+        } catch (error) {
+            console.error('Error assigning service:', error);
+            throw error;
+        }
+    },
 
-                const result = await db.query(sql, params);
-                return result;
-            } catch (error) {
-                console.error('Error assigning service:', error);
-                throw error;
-            }
-        },
-
-        async findAssignmentsByEmployeeId(employeeId) {
+    async findAssignmentById(assignmentId, role) {
+        try {
             const sql = `
-                SELECT s.service_name, sa.assignment_date
+                SELECT sa.assignment_id, sa.assignment_date, e.first_name AS employee_name, 
+                       s.service_name
+                FROM service_assignments sa
+                JOIN employees e ON sa.employee_id = e.employee_id
+                JOIN services s ON sa.service_id = s.service_id
+                WHERE sa.assignment_id = ?
+            `;
+            const assignments = await db.query(sql, [assignmentId], role);  // Pass role to db.query
+            return assignments[0] || null; // Return null if no assignment is found
+        } catch (error) {
+            console.error('Error finding assignment by ID:', error);
+            throw error;
+        }
+    },
+
+    async findAssignmentsByEmployeeId(employeeId, role) {
+        try {
+            const sql = `
+                SELECT sa.assignment_id, sa.assignment_date, s.service_name
                 FROM service_assignments sa
                 JOIN services s ON sa.service_id = s.service_id
                 WHERE sa.employee_id = ?
             `;
-            return db.query(sql, [employeeId]);
-        },
-
-        async deleteAssignment(assignmentId) {
-            const sql = 'DELETE FROM service_assignments WHERE assignment_id = ?';
-            return db.query(sql, [assignmentId]);
+            return await db.query(sql, [employeeId], role);  // Pass role to db.query
+        } catch (error) {
+            console.error('Error finding assignments by employee ID:', error);
+            throw error;
         }
-    };
+    },
 
-    return ServiceAssignment;
-}
+    async findAssignmentsByServiceId(serviceId, role) {
+        try {
+            const sql = `
+                SELECT sa.assignment_id, sa.assignment_date, e.first_name AS employee_name
+                FROM service_assignments sa
+                JOIN employees e ON sa.employee_id = e.employee_id
+                WHERE sa.service_id = ?
+            `;
+            return await db.query(sql, [serviceId], role);  // Pass role to db.query
+        } catch (error) {
+            console.error('Error finding assignments by service ID:', error);
+            throw error;
+        }
+    },
+
+    async deleteAssignment(assignmentId, role) {
+        try {
+            const sql = 'DELETE FROM service_assignments WHERE assignment_id = ?';
+            return await db.query(sql, [assignmentId], role);  // Pass role to db.query
+        } catch (error) {
+            console.error('Error deleting assignment:', error);
+            throw error;
+        }
+    },
+};
+
+export default ServiceAssignments;

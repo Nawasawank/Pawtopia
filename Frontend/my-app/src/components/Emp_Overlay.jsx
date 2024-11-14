@@ -2,19 +2,21 @@ import React, { useState, useEffect } from 'react';
 import '../styles/employee_overlay.css';
 
 const Emp_Overlay = ({ title, employee = {}, onClose, onSubmit }) => {
+  // Use default values for adding a new employee
   const [firstName, setFirstName] = useState(employee.first_name || '');
   const [lastName, setLastName] = useState(employee.last_name || '');
   const [email, setEmail] = useState(employee.email || '');
   const [service, setService] = useState(employee.service_id || '');
 
+  // Ensure the state is initialized correctly for adding new employee
   useEffect(() => {
-    if (employee) {
+    if (employee && Object.keys(employee).length > 0) {
       setFirstName(employee.first_name || '');
       setLastName(employee.last_name || '');
       setEmail(employee.email || '');
       setService(employee.service_id || '');
     }
-  }, [employee]);
+  }, [employee]); // Only update state when employee data changes
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,7 +24,7 @@ const Emp_Overlay = ({ title, employee = {}, onClose, onSubmit }) => {
       first_name: firstName,
       last_name: lastName,
       email: email,
-      service_id: service 
+      service_id: service
     });
   };
 

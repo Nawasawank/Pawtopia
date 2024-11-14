@@ -42,7 +42,11 @@ import 'moment';
 import 'daterangepicker';
 import EmployeeManagementPage from './pages/EmployeeManagePage.jsx';
 import BookingManagementPage from './pages/BookingManagePage.jsx';
-import FeedbackManagementPage from './pages/FeedbackManage.jsx';
+import VaccinationInfoPage from './pages/VaccinationInfoPage.jsx';
+import GroomingInfoPage from './pages/GroomingInfoPage.jsx';
+import SwimmingInfoPage from './pages/SwimmingInfoPage.jsx';
+import PetParkInfoPage from './pages/PetparkInfoPage.jsx';
+
 
 
 function App() {
@@ -151,23 +155,44 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route 
-          path="/feedback"
+          path="/swimming"
           element={
-            <ProtectedRoute requiredRole="admin">
-              <FeedbackManagementPage />
+            <ProtectedRoute requiredRole="user">
+              <SwimmingInfoPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/vaccine"
+          element={
+            <ProtectedRoute requiredRole="user">
+              <VaccinationInfoPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/grooming"
+          element={
+            <ProtectedRoute requiredRole="user">
+              <GroomingInfoPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/petpark"
+          element={
+            <ProtectedRoute requiredRole="user">
+              <PetParkInfoPage />
             </ProtectedRoute>
           }
         />
 
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<LogInPage />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
-
-
-
-

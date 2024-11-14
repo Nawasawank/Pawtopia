@@ -4,8 +4,10 @@ const EmployeeController = {
     async getEmployeesByService(req, res) {
         try {
             const { serviceId } = req.params;
-            console.log(serviceId)
-            const employees = await EmployeeService.getEmployeeEachService(serviceId);
+            const { role } = req.user;  
+            console.log(serviceId);
+
+            const employees = await EmployeeService.getEmployeeEachService(serviceId, role); 
 
             if (employees.error) {
                 return res.status(500).json({ error: employees.error });
@@ -17,12 +19,15 @@ const EmployeeController = {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     },
+
     async updateEmployee(req, res) {
         try {
             const { employeeId } = req.params;
             const updateData = req.body;
+            console.log(updateData)
+            const { role } = req.user; 
 
-            const result = await EmployeeService.updateEmployee(employeeId, updateData);
+            const result = await EmployeeService.updateEmployee(employeeId, updateData, role);  
 
             if (result.error) {
                 return res.status(500).json({ error: result.error });
@@ -34,11 +39,13 @@ const EmployeeController = {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     },
+
     async addEmployee(req, res) {
         try {
             const employeeData = req.body;
+            const { role } = req.user;  // Extract role from req.user
 
-            const result = await EmployeeService.addEmployee(employeeData);
+            const result = await EmployeeService.addEmployee(employeeData, role);  // Pass role to the service
 
             if (result.error) {
                 return res.status(500).json({ error: result.error });
@@ -50,12 +57,14 @@ const EmployeeController = {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     },
+
     async deleteEmployee(req, res) {
         try {
             const { employeeId } = req.params;
-            console.log(employeeId)
+            const { role } = req.user;  // Extract role from req.user
+            console.log(employeeId);
 
-            const result = await EmployeeService.deleteEmployee(employeeId);
+            const result = await EmployeeService.deleteEmployee(employeeId, role);  // Pass role to the service
 
             if (result.error) {
                 return res.status(500).json({ error: result.error });

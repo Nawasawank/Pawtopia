@@ -109,7 +109,7 @@ const GroomingAppointmentPage = () => {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           });
-  
+          console.log(response.data.error)
       setOverlayMessage(
         response.data.error
           ? response.data.error

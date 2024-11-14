@@ -9,7 +9,6 @@ html, body {
     background-color: #f3edde; /* Default background */
 }
 
-/* HomePage Container */
 .homepage {
     margin-top: 100px;
     padding: 0;
@@ -17,8 +16,6 @@ html, body {
     background-color: #f3edde;
     width: 100%;
 }
-
-/* Navbar */
 
 .logo img {
     width: 120px;

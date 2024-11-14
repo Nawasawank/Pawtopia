@@ -1,0 +1,117 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .admin-home-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff8e6;
+    font-family: "Lato", sans-serif;
+    height: 100vh; /* Ensure full viewport height */
+    overflow: hidden; /* Prevent overflow issues */
+  }
+  
+  .admin-home-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex: 1; 
+  }
+  
+  .admin-welcome-section {
+    flex: 1;
+    padding-right: 50px;
+    margin-top: -40px;
+  }
+  
+  .admin-welcome-section h1 {
+    font-size: 40px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .divider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  .divider .icon {
+    font-size: 28px;
+    color: #ff6f61;
+  }
+  
+  .management-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .management-buttons button {
+    width: 80%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    background-color: #f4c57d;
+    border: 1px solid #d4a373;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+  
+  .management-buttons button:hover {
+    background-color: #d4a373;
+  }
+  
+  .admin-image-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90%; 
+  }
+  
+  .admin-image-section img {
+    max-width: 90%;
+    height: auto; 
+    object-fit: cover; 
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  @media (max-width: 768px) {
+    .admin-home-content {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .admin-welcome-section {
+      padding-right: 0;
+    }
+  
+    .management-buttons button {
+      width: 100%;
+    }
+  
+    .admin-image-section {
+      height: auto; /* Reset height for smaller screens */
+    }
+  
+    .admin-image-section img {
+      max-width: 100%;
+      margin-top: 20px;
+      height: auto;
+    }
+  }
+  

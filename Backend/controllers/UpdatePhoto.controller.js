@@ -3,7 +3,7 @@ import UpdatePhotoService from '../services/UpdatePhoto.service.js';
 
 const UpdatePhotoController = {
     async uploadProfileImage(req, res) {
-        const { userId } = req.body;
+        const { userId, role } = req.body; 
 
         try {
             if (!req.file) {
@@ -12,7 +12,7 @@ const UpdatePhotoController = {
 
             const profileImagePath = `/uploads/${req.file.filename}`;
 
-            const result = await UpdatePhotoService.updateProfileImage(userId, profileImagePath);
+            const result = await UpdatePhotoService.updateProfileImage(userId, profileImagePath, role);
 
             if (result.error) {
                 return res.status(400).json({ error: result.error });

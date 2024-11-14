@@ -1,9 +1,11 @@
-import { User,Admin,Developer } from '../database.js';
+import User from '../models/User.model.js';
+import Admin from '../models/Admin.model.js';
+import Developer from '../models/Developer.model.js';
 
 const InfoService = {
-    async getUserProfile(userId) {
+    async getUserProfile(userId, role) {
         try {
-            const user = await User.findUserById(userId);
+            const user = await User.findUserById(userId, role);  // Pass role to model method
 
             if (!user) {
                 return { error: 'User not found' };
@@ -18,16 +20,17 @@ const InfoService = {
             return { error: 'Error fetching user info' };
         }
     },
-    async getUserInfo(userId) {
+
+    async getUserInfo(userId, role) {
         try {
-            const user = await User.getUserWithPets(userId);
+            const user = await User.getUserWithPets(userId, role);  // Pass role to model method
     
             if (!user) {
                 return { error: 'User not found' };
             }
     
             return {
-                id: user.user_id,
+                user_id: user.user_id,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
@@ -40,6 +43,7 @@ const InfoService = {
             return { error: 'Error retrieving user profile' };
         }
     },
+
     async getAllUsersAndPetCount() {
         try {
             const users = await User.getAllUsersWithPetCount();
@@ -49,11 +53,12 @@ const InfoService = {
             }
     
             return users.map(user => ({
-                id: user.user_id,
+                user_id: user.user_id,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
                 tel: user.tel,
+                image: user.image,
                 pet_count: user.pet_count
             }));
         } catch (error) {
@@ -61,9 +66,10 @@ const InfoService = {
             return { error: 'Error retrieving users' };
         }
     },
-    async getAdminProfile(userId) {
+
+    async getAdminProfile(userId, role) {
         try {
-            const admin = await Admin.findAdminById(userId);
+            const admin = await Admin.findAdminById(userId, role);  // Pass role to model method
 
             if (!admin) {
                 return { error: 'Admin not found' };
@@ -77,9 +83,10 @@ const InfoService = {
             return { error: 'Error fetching admin info' };
         }
     },
-    async getDeveloperProfile(userId) {
+
+    async getDeveloperProfile(userId, role) {
         try {
-            const dev = await Developer.findDeveloperById(userId);
+            const dev = await Developer.findDeveloperById(userId, role);  // Pass role to model method
 
             if (!dev) {
                 return { error: 'Developer not found' };
@@ -93,7 +100,6 @@ const InfoService = {
             return { error: 'Error fetching dev info' };
         }
     },
-    
 };
 
 export default InfoService;

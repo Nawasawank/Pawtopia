@@ -7,6 +7,7 @@ import 'rsuite/dist/rsuite.min.css';
 import axios from 'axios';
 import Feedback_Overlay from '../components/Feedback_Overlay.jsx';
 import ConfirmDeleteOverlay from '../components/ConfirmDeleteOverlay.jsx';
+import Overlay from '../components/Overlay.jsx'; // Import your Overlay component
 import '../styles/History.css';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +21,9 @@ const HistoryPage = () => {
     const [showOverlay, setShowOverlay] = useState(false);
     const [overlayMessage, setOverlayMessage] = useState('');
     const [selectedBookingId, setSelectedBookingId] = useState(null);
-    const [showDeleteOverlay, setShowDeleteOverlay] = useState(false); // Added for delete confirmation
+    const [showDeleteOverlay, setShowDeleteOverlay] = useState(false); // For delete confirmation
+    const [showErrorOverlay, setShowErrorOverlay] = useState(false); // For error message
+    const [errorOverlayMessage, setErrorOverlayMessage] = useState('');
 
     const fetchHistory = async (startDate, endDate) => {
         try {
@@ -29,12 +32,12 @@ const HistoryPage = () => {
             const response = await api.get(`/api/history`, {
                 params: {
                     startDate: formattedStartDate,
-                    endDate: formattedEndDate
+                    endDate: formattedEndDate,
                 },
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
             });
             setAppointments(response.data);
             setCurrentPage(1);
@@ -67,18 +70,20 @@ const HistoryPage = () => {
 
     const handleDeleteBooking = (appointment) => {
         setSelectedBookingId(appointment.booking_id);
-        setShowDeleteOverlay(true); // Show delete confirmation overlay
+        setShowDeleteOverlay(true);
     };
 
     const confirmDeleteBooking = async () => {
         try {
             await api.delete(`/api/delete/${selectedBookingId}`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
             });
-            setAppointments(prevAppointments => prevAppointments.filter(appt => appt.booking_id !== selectedBookingId));
-            setShowDeleteOverlay(false); 
+            setAppointments((prevAppointments) =>
+                prevAppointments.filter((appt) => appt.booking_id !== selectedBookingId)
+            );
+            setShowDeleteOverlay(false);
         } catch (error) {
             console.error('Error deleting booking:', error);
             alert('Failed to delete booking. Please try again.');
@@ -93,23 +98,36 @@ const HistoryPage = () => {
                 rating: feedback.rating,
                 feedback_type: 'General',
             };
-
-            const response = await axios.post(`http://localhost:5000/api/feedback`, feedbackData, {
+    
+            const response = await api.post(`/api/feedback`, feedbackData, {
                 headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
             });
-
-            alert('Feedback submitted successfully!');
+    
+            setErrorOverlayMessage('Feedback submitted successfully!');
+            setShowErrorOverlay(true);
             setShowOverlay(false);
         } catch (error) {
-            console.error('Error submitting feedback:', error);
+            if (error.response && error.response.status === 400 && error.response.data.error === 'You already add feedback') {
+                setErrorOverlayMessage(error.response.data.error);
+                setShowErrorOverlay(true);
+            } else {
+                console.error('Error submitting feedback:', error);
+                setErrorOverlayMessage('An error occurred while submitting feedback. Please try again.');
+                setShowErrorOverlay(true);
+            }
         }
     };
+    
 
     const handleCloseOverlay = () => {
         setShowOverlay(false);
+    };
+
+    const handleCloseErrorOverlay = () => {
+        setShowErrorOverlay(false);
+        setErrorOverlayMessage('');
     };
 
     const isPastDate = (date) => {
@@ -122,7 +140,7 @@ const HistoryPage = () => {
         const { booking_id, service_name } = appointment;
         if (service_name === 'Grooming') {
             navigate(`/grooming-booking/${booking_id}`);
-        }  else if (service_name === 'Vaccination') {
+        } else if (service_name === 'Vaccination') {
             navigate(`/vaccine-booking/${booking_id}`);
         } else if (service_name === 'Swimming') {
             navigate(`/swimming-booking/${booking_id}`);
@@ -179,8 +197,8 @@ const HistoryPage = () => {
                                         {isPastDate(appointment.date) ? (
                                             <>
                                                 <p className="status-completed">Completed</p>
-                                                <button 
-                                                    className="feedback-button" 
+                                                <button
+                                                    className="feedback-button"
                                                     onClick={() => handleAddFeedback(appointment)}
                                                 >
                                                     Add Feedback
@@ -189,14 +207,14 @@ const HistoryPage = () => {
                                         ) : (
                                             <>
                                                 <p className="status-waiting">Waiting</p>
-                                                <button 
-                                                    className="edit-button" 
+                                                <button
+                                                    className="edit-button"
                                                     onClick={() => handleEditBooking(appointment)}
                                                 >
                                                     ✏️
                                                 </button>
-                                                <button 
-                                                    className="delete-button" 
+                                                <button
+                                                    className="delete-button"
                                                     onClick={() => handleDeleteBooking(appointment)}
                                                 >
                                                     🗑️
@@ -214,7 +232,9 @@ const HistoryPage = () => {
                             <button onClick={handlePreviousPage} disabled={currentPage === 1}>
                                 &lt;
                             </button>
-                            <span>Page {currentPage} of {totalPages}</span>
+                            <span>
+                                Page {currentPage} of {totalPages}
+                            </span>
                             <button onClick={handleNextPage} disabled={currentPage === totalPages}>
                                 &gt;
                             </button>
@@ -226,19 +246,27 @@ const HistoryPage = () => {
             <ContactSection />
 
             {showOverlay && (
-                <Feedback_Overlay 
-                    message={overlayMessage} 
-                    show={showOverlay} 
-                    onClose={handleCloseOverlay} 
-                    onSubmitFeedback={handleSubmitFeedback} 
+                <Feedback_Overlay
+                    message={overlayMessage}
+                    show={showOverlay}
+                    onClose={handleCloseOverlay}
+                    onSubmitFeedback={handleSubmitFeedback}
                 />
             )}
 
             {showDeleteOverlay && (
                 <ConfirmDeleteOverlay
                     message="Are you sure you want to delete this booking?"
-                    onConfirm={confirmDeleteBooking}  // Confirm deletion
-                    onCancel={() => setShowDeleteOverlay(false)}  // Cancel and close overlay
+                    onConfirm={confirmDeleteBooking} // Confirm deletion
+                    onCancel={() => setShowDeleteOverlay(false)} // Cancel and close overlay
+                />
+            )}
+
+            {showErrorOverlay && (
+                <Overlay
+                    message={errorOverlayMessage}
+                    onClose={handleCloseErrorOverlay}
+                    show={showErrorOverlay}
                 />
             )}
         </div>

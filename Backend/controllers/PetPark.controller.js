@@ -2,10 +2,11 @@ import PetParkService from '../services/PetPark.service.js';
 
 const PetParkController = {
     async addBooking(req, res) {
+        const { role } = req.user; 
         const bookingData = req.body;
 
         try {
-            const newBooking = await PetParkService.addPetParkBooking(bookingData);
+            const newBooking = await PetParkService.addPetParkBooking(bookingData, role);  
 
             if (newBooking.error) {
                 return res.status(200).json({ error: newBooking.error });
@@ -22,10 +23,11 @@ const PetParkController = {
     },
 
     async deleteBooking(req, res) {
+        const { role } = req.user; 
         const { booking_id } = req.params;
 
         try {
-            const result = await PetParkService.deletePetParkBooking(booking_id);
+            const result = await PetParkService.deletePetParkBooking(booking_id, role);  
 
             if (result.error) {
                 return res.status(400).json({ error: result.error });
@@ -39,10 +41,11 @@ const PetParkController = {
     },
 
     async getBookingById(req, res) {
+        const { role } = req.user;  
         const { booking_id } = req.params;
 
         try {
-            const booking = await PetParkService.getPetParkBookingById(booking_id);
+            const booking = await PetParkService.getPetParkBookingById(booking_id, role); 
 
             if (booking.error) {
                 return res.status(404).json({ error: booking.error });
@@ -57,21 +60,21 @@ const PetParkController = {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     },
+
     async updateBooking(req, res) {
+        const { role } = req.user;  
         const { booking_id } = req.params;
         const updateData = req.body;
-        console.log(booking_id)
-        
 
         try {
-            const updatedBooking = await PetParkService.updatePetParkBooking(booking_id, updateData);
+            const updatedBooking = await PetParkService.updatePetParkBooking(booking_id, updateData, role); 
 
             if (updatedBooking.error) {
                 return res.status(400).json({ error: updatedBooking.error });
             }
 
             return res.status(200).json({
-                message: 'Grooming booking updated successfully',
+                message: 'Pet Park booking updated successfully',
                 booking: updatedBooking
             });
         } catch (error) {

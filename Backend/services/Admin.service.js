@@ -1,21 +1,18 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { Employee, Admin } from '../database.js';
+import Employee from '../models/Employee.model.js';
+import Admin from '../models/Admin.model.js';
 
 const AdminService = {
-    async AdminSignUp(firstname, lastname, email, password,confirm_password) {
+    async AdminSignUp(firstname, lastname, email, password, role) {  // Accept role as parameter
+        console.log(role)
         try {
-            console.log(confirm_password,password)
-            if(confirm_password != password){
-                console.warn(`Password doesn't Match!`);
-                return { error: `Password doesn't Match!`};
-            }
-            const existingEmployee = await Employee.findEmployeeByDetails(firstname, lastname, email);
+            const existingEmployee = await Employee.findEmployeeByDetails(firstname, lastname, email,role);
             if (!existingEmployee) {
                 console.warn(`No matching employee found for ${firstname} ${lastname}, ${email}`);
                 return { error: 'No matching employee found' };
             }
-            const existingAdminByEmail = await Admin.findAdminByEmail(email);
+            const existingAdminByEmail = await Admin.findAdminByEmail(email, role);  // Pass role
             if (existingAdminByEmail) {
                 console.warn(`Admin with email already exists: ${email}`);
                 return { error: 'Admin with this email already exists' };
@@ -32,7 +29,7 @@ const AdminService = {
                 email,
                 password: hashedPassword,
                 employee_id: emp_id
-            });
+            }, role);  // Pass role to Admin model
 
             return newAdmin;
 
@@ -40,7 +37,8 @@ const AdminService = {
             console.error(`Error creating admin: ${error.message}`);
             return { error: 'Error creating admin' };
         }
-    },  
+    },
+
     async AdminLogIn(email, password) {
         try {
             const admin = await Admin.findAdminByEmail(email);
@@ -67,21 +65,6 @@ const AdminService = {
             return { error: 'Error during login' };
         }
     },
-    async addEmployee(employeeData) {
-        try {
-            const result = await Employee.addEmployeeAndService(employeeData);
-
-            if (result.error) {
-                throw new Error('Error adding new employee');
-            }
-
-            return result;
-        } catch (error) {
-            console.error(`Error adding employee: ${error.message}`);
-            return { error: 'Error adding new employee' };
-        }
-    }
-    
 };
 
 export default AdminService;

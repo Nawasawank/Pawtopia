@@ -1,17 +1,17 @@
 import bcrypt from 'bcryptjs';
-import { User, Pet } from '../database.js';
+import User from '../models/User.model.js';
+import Pet from '../models/Pet.model.js';
 
 const SignUpService = {
     async registerUser(firstname, lastname, email, password, tel, name, type, gender, weight, health_condition_id) {
         try {
-            console.log(health_condition_id);
-            const existingUserByEmail = await User.findUserByEmail(email);
+            const existingUserByEmail = await User.findUserByEmail(email, 'default');
             if (existingUserByEmail) {
                 console.warn(`Email already exists: ${email}`);
                 return { error: 'Email already exists' };
             }
 
-            const existingUserByTel = await User.findUserByTel(tel);
+            const existingUserByTel = await User.findUserByTel(tel, 'default');
             if (existingUserByTel) {
                 console.warn(`Phone number already exists: ${tel}`);
                 return { error: 'Phone number already exists' };
@@ -20,17 +20,16 @@ const SignUpService = {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
 
-            const defaultImagePath = '/uploads/profile-images/default.jpg';
+            const defaultImagePath = '/uploads/default.png';
 
-            // Create user with default image if no image is specified
             const newUser = await User.createUser({
                 firstName: firstname,
                 lastName: lastname,
                 email,
                 tel,
                 password: hashedPassword,
-                image: defaultImagePath 
-            });
+                image: defaultImagePath
+            }, 'default');
 
             const newPet = await Pet.createPet({
                 user_id: newUser.insertId,
@@ -39,9 +38,9 @@ const SignUpService = {
                 gender,
                 weight,
                 health_condition_id
-            });
+            }, 'default');
 
-            return { ...newUser, image: defaultImagePath }; 
+            return { ...newUser, image: defaultImagePath };
         } catch (error) {
             console.log(`Error creating user: ${error.message}`);
             return { error: 'Error creating user' };

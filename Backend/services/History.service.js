@@ -1,10 +1,11 @@
-import { User } from '../database.js';
+import User from '../models/User.model.js';
 import dayjs from 'dayjs';
 
 const HistoryService = {
-    async getAppointmentsWithinDateRange(userId, startDate, endDate) {
+    async getAppointmentsWithinDateRange(userId, startDate, endDate, role) {  // Accept role as parameter
         try {
-            const bookings = await User.getUserBookings(userId, startDate, endDate);
+            // Pass role to the model function
+            const bookings = await User.getUserBookings(userId, startDate, endDate, role); 
             const formattedBookings = bookings.map(booking => {
                 if (booking.date) {
                     try {
@@ -26,4 +27,3 @@ const HistoryService = {
 };
 
 export default HistoryService;
-

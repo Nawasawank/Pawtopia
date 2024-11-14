@@ -2,10 +2,10 @@ import InfoService from '../services/Info.service.js';
 
 const InfoController = {
     async getUserProfile(req, res) {
-        const { id: userId } = req.user;
+        const { id: userId, role } = req.user; 
 
         try {
-            const user = await InfoService.getUserProfile(userId);
+            const user = await InfoService.getUserProfile(userId, role); 
 
             if (user.error) {
                 return res.status(500).json({ error: user.error });
@@ -17,11 +17,12 @@ const InfoController = {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     },
+
     async getUserInfo(req, res) {
-        const { id: userId } = req.user;
+        const { id: userId, role } = req.user; 
     
         try {
-            const user = await InfoService.getUserInfo(userId);
+            const user = await InfoService.getUserInfo(userId, role); 
     
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
@@ -41,6 +42,7 @@ const InfoController = {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     },
+
     async getUserInfoAndPetCount(req, res) {
         try {
             const users = await InfoService.getAllUsersAndPetCount();
@@ -65,13 +67,12 @@ const InfoController = {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     },
-    async getAdminProfile(req, res) {
-        const { id: userId } = req.user;
 
-        console.log(req.user)
+    async getAdminProfile(req, res) {
+        const { id: userId, role } = req.user;
+
         try {
-            const admin = await InfoService.getAdminProfile(userId);
-            console.log(admin)
+            const admin = await InfoService.getAdminProfile(userId, role);
 
             if (admin.error) {
                 return res.status(500).json({ error: admin.error });
@@ -82,13 +83,13 @@ const InfoController = {
             console.error(`Error in getUserProfile: ${error.message}`);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-    },   
+    },
+
     async getDeveloperProfile(req, res) {
-        const { id: userId } = req.user;
+        const { id: userId, role } = req.user;
 
         try {
-            const dev = await InfoService.getDeveloperProfile(userId);
-            console.log(dev)
+            const dev = await InfoService.getDeveloperProfile(userId, role); 
 
             if (dev.error) {
                 return res.status(500).json({ error: dev.error });
@@ -99,8 +100,7 @@ const InfoController = {
             console.error(`Error in getUserProfile: ${error.message}`);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-    }, 
-    
+    },
 };
 
 export default InfoController;

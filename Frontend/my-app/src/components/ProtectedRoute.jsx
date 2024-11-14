@@ -1,8 +1,8 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode'; 
+import { jwtDecode } from 'jwt-decode';
 
-const ProtectedRoute = ({ children, requiredRole }) => {
+const ProtectedRoute = ({ children, requiredRole = "user" }) => {
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -11,17 +11,17 @@ const ProtectedRoute = ({ children, requiredRole }) => {
 
     try {
         const { exp, role } = jwtDecode(token);
-        console.log(role)
-        
+
         if (Date.now() > exp * 1000) {
-            localStorage.removeItem('token');
+            localStorage.removeItem('token'); 
             return <Navigate to="/login" />;
         }
 
-        if (requiredRole && role !== requiredRole) {
-            return <Navigate to="/unauthorized" />; 
+        if (role !== requiredRole) {
+            return <Navigate to={role === "admin" ? "/AdminHome" : "/"} />;
         }
     } catch (error) {
+        console.error('Invalid token:', error);
         localStorage.removeItem('token');
         return <Navigate to="/login" />;
     }

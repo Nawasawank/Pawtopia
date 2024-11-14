@@ -1,9 +1,9 @@
 import { OtherService, Employee } from '../database.js';
 
 const SwimmingService = {
-    async addSwimmingBooking(bookingData) {
+    async addSwimmingBooking(bookingData, role) {
         try {
-            const employee = await Employee.getRandomEmployeeForService(2);
+            const employee = await Employee.getRandomEmployeeForService(2, role); // Pass role to the function
             if (!employee) {
                 return { error: 'No available employee for the service' };
             }
@@ -16,7 +16,8 @@ const SwimmingService = {
             const available = await OtherService.findAvailableBooking(
                 employee_id,
                 bookingData.booking_date,
-                bookingData.time_slot
+                bookingData.time_slot,
+                role // Pass role to the function
             );
 
             if (available) {
@@ -27,7 +28,8 @@ const SwimmingService = {
                 bookingData.pet_id,
                 bookingData.booking_date,
                 bookingData.time_slot,
-                2
+                2,
+                role // Pass role to the function
             );
 
             if (isBook) {
@@ -40,18 +42,18 @@ const SwimmingService = {
                 service_id: 2,
                 booking_date: bookingData.booking_date,
                 time_slot: bookingData.time_slot,
-            });
+            }, role); // Pass role to the function
 
             return newBooking;
         } catch (error) {
-            console.error('Error in addVaccineBooking service:', error.message);
+            console.error('Error in addSwimmingBooking service:', error.message);
             return { error: 'Failed to add swimming booking' };
         }
     },
 
-    async deleteSwimmingBooking(booking_id) {
+    async deleteSwimmingBooking(booking_id, role) {
         try {
-            const result = await OtherService.deleteBooking(booking_id);
+            const result = await OtherService.deleteBooking(booking_id, role); // Pass role to the function
             return result;
         } catch (error) {
             console.error('Error in deleteSwimmingBooking service:', error);
@@ -59,54 +61,57 @@ const SwimmingService = {
         }
     },
 
-    async getSwimmingBookingById(booking_id) {
+    async getSwimmingBookingById(booking_id, role) {
         try {
-            const booking = await OtherService.findBookingById(booking_id);
+            const booking = await OtherService.findBookingById(booking_id, role); // Pass role to the function
             return booking;
         } catch (error) {
             console.error('Error in getSwimmingBookingById service:', error);
             return { error: 'Failed to retrieve swimming booking' };
         }
     },
-    async updateSwimmingBooking(booking_id, updateData) {
+
+    async updateSwimmingBooking(booking_id, updateData, role) {
         try {
-            const existingBooking = await OtherService.findBookingById(booking_id);
+            const existingBooking = await OtherService.findBookingById(booking_id, role); // Pass role to the function
             if (!existingBooking) {
                 return { error: 'Booking not found' };
             }
-    
+
             const employee_id = existingBooking.employee_id;
-    
+
             if (new Date(updateData.booking_date).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) {
                 return { error: 'You cannot book a date in the past' };
             }
-    
+
             const available = await OtherService.findAvailableBooking(
                 employee_id,
                 updateData.booking_date,
-                updateData.time_slot
+                updateData.time_slot,
+                role // Pass role to the function
             );
-    
+
             if (available && available.booking_id !== booking_id) {
                 return { error: 'Time slot not available' };
             }
-    
+
             const isBook = await OtherService.findBooking(
                 updateData.pet_id,
                 updateData.booking_date,
                 updateData.time_slot,
-                existingBooking.service_id
+                existingBooking.service_id,
+                role // Pass role to the function
             );
             if (isBook && isBook.booking_id !== booking_id) {
                 return { error: 'You have already booked this slot' };
             }
-    
+
             const updatedBooking = await OtherService.updateBooking(booking_id, {
                 pet_id: updateData.pet_id,
                 booking_date: updateData.booking_date,
                 time_slot: updateData.time_slot,
-            });
-    
+            }, role); // Pass role to the function
+
             return updatedBooking;
         } catch (error) {
             console.error('Error in updateSwimmingBooking service:', error);

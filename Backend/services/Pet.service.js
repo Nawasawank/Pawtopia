@@ -1,9 +1,9 @@
-import { Pet } from '../database.js';
+import Pet from "../models/Pet.model.js";
 
 const PetService = {
-    async addPet(userId, petData) {
+    async addPet(userId, petData, role) {
         try {
-            const newPet = await Pet.createPet({ ...petData, user_id: userId });
+            const newPet = await Pet.createPet({ ...petData, user_id: userId }, role); 
             return newPet;
         } catch (error) {
             console.error(`Error adding pet: ${error.message}`);
@@ -11,9 +11,9 @@ const PetService = {
         }
     },
 
-    async deletePet(userId, petId) {
+    async deletePet(userId, petId, role) {
         try {
-            const pet = await Pet.findPetById(petId);
+            const pet = await Pet.findPetById(petId, role);  
 
             if (!pet) {
                 return { error: 'Pet not found' };
@@ -23,7 +23,7 @@ const PetService = {
                 return { error: 'You are not authorized to delete this pet' };
             }
 
-            await Pet.deletePet(petId);
+            await Pet.deletePet(petId, role);  // Pass role
             return { message: 'Pet deleted successfully' };
         } catch (error) {
             console.error(`Error deleting pet: ${error.message}`);
@@ -31,18 +31,19 @@ const PetService = {
         }
     },
 
-    async findPetNamesAndTypes(userId) {
+    async findPetNamesAndTypes(userId, role) {
         try {
-            const pets = await Pet.findPetNamesAndTypesByUserId(userId);
+            const pets = await Pet.findPetNamesAndTypesByUserId(userId, role);  // Pass role
             return pets;
         } catch (error) {
             console.error(`Error fetching pet names and types: ${error.message}`);
             return { error: 'Error fetching pet names and types' };
         }
     },
-    async findPet(userId) {
+
+    async findPet(userId, role) {
         try {
-            const pets = await Pet.findPetsByUserId(userId);
+            const pets = await Pet.findPetsByUserId(userId, role);  // Pass role
             return pets;
         } catch (error) {
             console.error(`Error fetching pet names and types: ${error.message}`);
