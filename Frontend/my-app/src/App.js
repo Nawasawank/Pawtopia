@@ -42,7 +42,7 @@ import 'moment';
 import 'daterangepicker';
 import EmployeeManagementPage from './pages/EmployeeManagePage.jsx';
 import BookingManagementPage from './pages/BookingManagePage.jsx';
-// import VaccinationInfoPage from './pages/VaccinationInfoPage.jsx';
+import VaccinationInfoPage from './pages/VaccinationInfoPage.jsx';
 // import GroomingInfoPage from './pages/GroomingInfoPage.jsx';
 // import SwimmingInfoPage from './pages/SwimmingInfoPage.jsx';
 // import PetParkInfoPage from './pages/PetparkInfoPage.jsx';
@@ -178,14 +178,14 @@ function App() {
           }
         />
 
-        {/* <Route 
+         {/* <Route 
           path="/swimming"
           element={
             <ProtectedRoute requiredRole="user">
               <SwimmingInfoPage />
             </ProtectedRoute>
           }
-        />
+        /> */}
         <Route 
           path="/vaccine"
           element={
@@ -194,7 +194,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route 
+        {/* <Route 
           path="/grooming"
           element={
             <ProtectedRoute requiredRole="user">
@@ -209,7 +209,7 @@ function App() {
               <PetParkInfoPage />
             </ProtectedRoute>
           }
-        /> */}
+        />  */}
 
         <Route path="/" element={<LogInPage />} />
       </Routes>

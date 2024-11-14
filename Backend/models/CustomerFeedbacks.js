@@ -88,23 +88,26 @@ const CustomerFeedback = {
     async getFeedback(serviceId, role) {
         try {
             const sql = `
-                SELECT 
-            customer_feedback.*, 
-            services_bookings.service_id, 
-            users.firstname
-        FROM 
-            customer_feedback 
-        JOIN 
-            services_bookings 
-        ON 
-            customer_feedback.booking_id = services_bookings.booking_id
-        JOIN 
-            users 
-        ON 
-            customer_feedback.user_id = users.user_id
-        WHERE 
-            services_bookings.service_id = ?
-            `;
+            SELECT 
+                customer_feedback.*, 
+                services_bookings.service_id, 
+                users.firstname
+            FROM 
+                customer_feedback 
+            JOIN 
+                services_bookings 
+            ON 
+                customer_feedback.booking_id = services_bookings.booking_id
+            JOIN 
+                users 
+            ON 
+                customer_feedback.user_id = users.user_id
+            WHERE 
+                services_bookings.service_id = ?
+                AND customer_feedback.comment IS NOT NULL
+                AND customer_feedback.comment != ''
+            LIMIT 4;
+        `;
             return await db.query(sql, [serviceId], role);  
         } catch (error) {
             console.error('Error retrieving feedback:', error);

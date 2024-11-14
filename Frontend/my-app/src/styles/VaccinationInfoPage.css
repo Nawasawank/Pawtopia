@@ -1,0 +1,247 @@
+/* Importing Inria Serif font */
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&display=swap');
+
+/* General styling adjustments */
+html, body {
+    font-family: 'Inria Serif', serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    background-color: #f3edde;
+}
+
+/* Page container styling */
+.vaccination-info-page {
+    padding: 0;
+    overflow-x: hidden;
+    background-color: #f3edde;
+}
+
+/* Navbar styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 25px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Header section with image and text side by side */
+.vaccination-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background-color: #fff;
+    padding: 40px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 200px;
+    width: 100vw;
+    box-sizing: border-box;
+    min-height: 200px;
+}
+
+/* Image container styling */
+.image-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+}
+
+.vaccat-image {
+    width: 110%;
+    max-width: 1500px;
+    height: auto;
+    border-radius: 10px;
+}
+
+/* Positioning for heart icon */
+.heart-icon {
+    position: absolute;
+    bottom: -20px;
+    left: 20px;
+    width: 190px;
+     margin-bottom: -15px;
+}
+
+/* Positioning for drug icon */
+.drug-icon {
+    position: absolute;
+    top: -10px;
+    right: 60px;
+    width: 115px;
+}
+
+/* Text content section */
+.text-content {
+    flex: 2;
+    padding: 20px; /* Add padding for spacing around content */
+    text-align: left;
+}
+
+/* Heading styles for h1 */
+.text-content h1 {
+    font-size: 2.8em;
+    color: #000000;
+    margin-bottom: 40px;
+    text-align: center;
+    line-height: 1.1;
+}
+
+/* Subtext styling under h1 */
+.text-content h1 .subtext {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #000000;
+}
+
+/* Left alignment and styling for h2 */
+.text-content h2 {
+    text-align: left;
+    margin-top: 20px;
+    font-size: 1.8em;
+    color: #000000;
+    line-height: 1.1;
+}
+
+/* Styling for ul and li elements */
+.text-content ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    text-align: left;
+    color: #000000;
+    margin-top: 10px;
+}
+
+.text-content ul li {
+    margin-bottom: 10px;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: left;
+    color: #000000;
+}
+
+/* Button styling */
+.book-now-button {
+    margin: 20px auto 0;
+    margin-left: 140px;
+    margin-top: 70px;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #124C5F;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 1.6em;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+    display: block;
+}
+
+.book-now-button:hover {
+    background-color: #8d7bcf;
+}
+
+/* Reviews Section */
+.additional-section {
+    background-color: #fff;
+    padding: 50px 20px;
+    text-align: left;
+    margin-top: 70px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    
+}
+
+.additional-section h3 {
+    font-size: 1.8em;
+    color: #000000;
+    margin-bottom: 30px;
+    margin-left: 110px;
+    text-align: left;
+}
+
+.reviews-container {
+    display: flex;
+    justify-content: center;
+    gap: 90px;
+    flex-wrap: wrap;
+}
+
+
+/* Review Card Styling */
+.review-card {
+    background-color: #f3edde;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers content horizontally */
+    justify-content: center; /* Centers content vertically */
+    gap: 10px;
+    transition: transform 0.3s ease; /* Add smooth scale effect on hover */
+}
+
+.review-card:hover {
+    transform: scale(1.05); /* Slightly scale up on hover */
+}
+
+/* Alternating background colors for review cards */
+.review-card:nth-child(odd) {
+    background-color: #b35f31;
+    color: #fff;
+}
+
+.review-card:nth-child(even) {
+    background-color: #f8f4dd;
+    color: #000000;
+}
+
+/* Review Topic */
+.review-topic {
+    font-size: 1em;
+    font-weight: bold;
+    color: inherit;
+    text-align: center;
+}
+
+/* Review Content */
+.review-content {
+    font-size: 1em;
+    font-style: italic;
+    color: inherit;
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* Review Author */
+.review-author {
+    font-size: 0.9em;
+    font-style: italic;
+    color: inherit;
+    text-align: center;
+}
+
+/* Make all review card text centered and well spaced */
+.review-card > * {
+    text-align: center;
+}
+
+.star-rating {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px; /* Adds space between stars and review text */
+  }
+  
+  .star-icon {
+    width: 25px; /* Adjust size of the stars as needed */
+    height: auto;
+    margin-right: 1px; /* Adds space between stars */
+  }
