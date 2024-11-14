@@ -42,10 +42,13 @@ import 'moment';
 import 'daterangepicker';
 import EmployeeManagementPage from './pages/EmployeeManagePage.jsx';
 import BookingManagementPage from './pages/BookingManagePage.jsx';
-import VaccinationInfoPage from './pages/VaccinationInfoPage.jsx';
-import GroomingInfoPage from './pages/GroomingInfoPage.jsx';
-import SwimmingInfoPage from './pages/SwimmingInfoPage.jsx';
-import PetParkInfoPage from './pages/PetparkInfoPage.jsx';
+// import VaccinationInfoPage from './pages/VaccinationInfoPage.jsx';
+// import GroomingInfoPage from './pages/GroomingInfoPage.jsx';
+// import SwimmingInfoPage from './pages/SwimmingInfoPage.jsx';
+// import PetParkInfoPage from './pages/PetparkInfoPage.jsx';
+import AdminHomePage from './pages/AdminHomePage.jsx';
+import AdminSignUpPage from './pages/AdminSignUpPage.jsx'
+import FeedbackManagementPage from './pages/FeedbackManage.jsx'
 
 
 
@@ -55,6 +58,7 @@ function App() {
       <Routes>
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LogInPage />} />
+        <Route path='/signup/admin' element={<AdminSignUpPage />} />
         
 
         <Route 
@@ -148,6 +152,15 @@ function App() {
           }
         />
         <Route 
+          path="/AdminHome"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminHomePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route 
           path="/booking"
           element={
             <ProtectedRoute requiredRole="admin">
@@ -157,6 +170,15 @@ function App() {
         />
 
         <Route 
+          path="/feedback"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <FeedbackManagementPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* <Route 
           path="/swimming"
           element={
             <ProtectedRoute requiredRole="user">
@@ -187,7 +209,7 @@ function App() {
               <PetParkInfoPage />
             </ProtectedRoute>
           }
-        />
+        /> */}
 
         <Route path="/" element={<LogInPage />} />
       </Routes>
