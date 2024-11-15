@@ -4,12 +4,12 @@ const bookingsController = {
     async getBookingsByDate(req, res) {
         try {
             const { date, service_id } = req.query;
-            const { role } = req.user; // Extract the role from req.user
+            const { role } = req.user; 
             if (!date) {
                 return res.status(400).json({ error: "Date parameter is required" });
             }
 
-            const bookings = await bookingsService.getBookingsByDate(date, service_id, role); // Pass role to the service
+            const bookings = await bookingsService.getBookingsByDate(date, service_id, role); 
             res.status(200).json(bookings);
         } catch (error) {
             console.error("Error in bookingsController - getBookingsByDate:", error);
@@ -21,7 +21,7 @@ const bookingsController = {
         const { service_id } = req.params; 
         const bookingData = req.body;
         console.log(req.user)
-        const { role } = req.user; // Extract the role from req.user
+        const { role } = req.user; 
         console.log(service_id)
         console.log("role--->",role)
 

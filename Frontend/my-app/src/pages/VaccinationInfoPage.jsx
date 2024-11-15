@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/navbar.jsx';
-import Navbar_NotLogin from '../components/navbar_notLogin.jsx'; // Import Navbar_NotLogin
+import Navbar_NotLogin from '../components/navbar_notLogin.jsx'; 
 import ContactSection from '../components/ContactSection.jsx';
 import api from '../api';
 import '../styles/VaccinationInfoPage.css';

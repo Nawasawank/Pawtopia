@@ -106,6 +106,7 @@ const CustomerFeedback = {
                 services_bookings.service_id = ?
                 AND customer_feedback.comment IS NOT NULL
                 AND customer_feedback.comment != ''
+                AND CHAR_LENGTH(customer_feedback.comment) > 30
             LIMIT 4;
         `;
             return await db.query(sql, [serviceId], role);  

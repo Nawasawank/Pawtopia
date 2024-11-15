@@ -1,0 +1,288 @@
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&display=swap');
+
+/* General styling adjustments */
+html, body {
+    font-family: 'Inria Serif', serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    background-color: #f3edde;
+}
+
+/* Page container styling */
+.grooming-info-page {
+    padding: 0;
+    overflow-x: hidden;
+    background-color: #f3edde;
+}
+
+/* Navbar styling */
+.groomnavbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 25px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Header section with image and text side by side */
+.grooming-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background-color: #fff;
+    padding: 20px 10px; /* Reduced padding for a shorter height */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100vw;
+    box-sizing: border-box;
+    min-height: 150px; /* Optional: Set a smaller min-height */
+    flex-direction: row-reverse;
+    margin-right: 20px;
+    margin-top:190px;
+    /* Removed margin-top */
+}
+
+/* Image container styling */
+.groom-image-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+}
+
+/* Main grooming dog image styling */
+.doggroompic {
+    width: 350%;
+    max-width: 1500px;
+    height: auto;
+    border-radius: 10px;
+    margin-right: 400px;
+    margin-left: -600px;
+    right: 200px;
+    margin-top: -100px;
+}
+
+/* Positioning for small paw icon */
+.comb-icon {
+    position: absolute;
+    bottom: 45px;
+    margin-left: -1220px;
+    width: 200px;
+    margin-bottom: -150px;
+}
+
+/* Positioning for big paw icon */
+.takecare-icon {
+    position: absolute;
+    top: -50px;
+    left: 48px;
+    width: 180px;
+    margin-top: -60px;
+    margin-left: -550px;
+}
+
+/* Text content section */
+.groom-text-content {
+    flex: 2;
+    padding: 10px; /* Reduced padding */
+    margin-left: 130px;
+    margin-right: 550px;
+}
+
+.groom-text-content h1 {
+    font-size: 2.5em;
+    color: #000000;
+    margin-bottom: 40px;
+    line-height: 1.1;
+    text-align: right;
+    margin-left: 100px; /* Decrease this value */
+    margin-right: -700px; /* Adjust this value as needed */
+}
+
+
+/* Subtext styling under h1 */
+.groom-text-content h1 .groom-subtext {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #000000;
+}
+
+/* Left alignment and styling for h2 */
+.groom-text-content h2 {
+    text-align: center;
+    font-size: 2em;
+    color: #000000;
+    line-height: 1.1;
+    margin-right: 50px;
+    /* Removed margin-top */
+}
+
+/* Styling for ul and li elements */
+.groom-text-content ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    text-align: left;
+    color: #000000;
+    margin-top: 10px;
+}
+
+.groom-text-content ul li {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #000000;
+    margin-right: 50px;
+}
+
+/* Button styling */
+.groom-book-now-button {
+    margin: 20px auto 0;
+    margin-left: 500px;
+    margin-right: -200px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding: 10px 20px;
+    background-color: #124C5F;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 1.6em;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+    display: block;
+    width: 200px;
+}
+
+.groom-book-now-button:hover {
+    background-color: #8d7bcf;
+}
+
+/* Reviews Section */
+.groom-additional-section {
+    background-color: #fff;
+    padding: 30px 15px; /* Reduced padding for a shorter height */
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 70px;
+    /* Removed margin-top */
+}
+
+.groom-additional-section h3 {
+    font-size: 1.8em;
+    color: #000000;
+    margin-bottom: 30px;
+    margin-left: 110px;
+    text-align: left;
+}
+
+/* Reviews container */
+.groom-reviews-container {
+    display: flex;
+    justify-content: center;
+    gap: 90px;
+    flex-wrap: wrap;
+}
+
+/* Review Card Styling */
+.groom-review-card {
+    background-color: #f3edde;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 260px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.3s ease;
+    margin-bottom: 30px; /* Consistent spacing between cards */
+}
+
+.groom-review-card:hover {
+    transform: scale(1.05);
+}
+
+/* Alternating background colors for review cards */
+.groom-review-card:nth-child(odd) {
+    background-color: #b35f31;
+    color: #fff;
+}
+
+.groom-review-card:nth-child(even) {
+    background-color: #f8f4dd;
+    color: #000000;
+}
+
+/* Review Topic */
+.groom-review-topic {
+    font-size: 1em;
+    font-weight: bold;
+    color: inherit;
+    text-align: center;
+}
+
+/* Review Content */
+.groom-review-content {
+    font-size: 1em;
+    font-style: italic;
+    color: inherit;
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* Review Author */
+.groom-review-author {
+    font-size: 0.9em;
+    font-style: italic;
+    color: inherit;
+    text-align: center;
+}
+
+/* Centered text and spacing for review card content */
+.groom-review-card > * {
+    text-align: center;
+}
+
+/* Spacing between stars and review topic */
+.groom-star-rating {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    margin-top: 30px;
+}
+
+/* Star Icon Styling */
+.groom-star-icon {
+    width: 25px;
+    height: auto;
+    margin-right: 1px;
+}
+
+/* Additional styling for intro text (if needed) */
+/* Highlighted text styling */
+.groom-highlight {
+    font-size: 1.9em;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 50px;
+}
+
+/* General styling for the intro text */
+.groom-intro-text {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #000000;
+    text-align: left;
+    font-weight: bold;
+    margin-right: -550px;
+    margin-left: 140px;
+    margin-top: 50px;
+    /* Removed margin-top and margin-bottom */
+}

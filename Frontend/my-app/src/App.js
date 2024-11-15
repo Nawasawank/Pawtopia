@@ -43,9 +43,9 @@ import 'daterangepicker';
 import EmployeeManagementPage from './pages/EmployeeManagePage.jsx';
 import BookingManagementPage from './pages/BookingManagePage.jsx';
 import VaccinationInfoPage from './pages/VaccinationInfoPage.jsx';
-// import GroomingInfoPage from './pages/GroomingInfoPage.jsx';
-// import SwimmingInfoPage from './pages/SwimmingInfoPage.jsx';
-// import PetParkInfoPage from './pages/PetparkInfoPage.jsx';
+import GroomingInfoPage from './pages/GroomingInfoPage.jsx';
+import SwimmingInfoPage from './pages/SwimmingInfoPage.jsx';
+import PetParkInfoPage from './pages/PetParkInfoPage.jsx';
 import AdminHomePage from './pages/AdminHomePage.jsx';
 import AdminSignUpPage from './pages/AdminSignUpPage.jsx'
 import FeedbackManagementPage from './pages/FeedbackManage.jsx'
@@ -140,7 +140,7 @@ function App() {
           }
         />
 
-<Route 
+      <Route 
           path="/employee"
           element={
             <ProtectedRoute requiredRole="admin">
@@ -175,36 +175,31 @@ function App() {
           }
         />
 
-         {/* <Route 
+         <Route 
           path="/swimming"
           element={
-            <ProtectedRoute requiredRole="user">
+
               <SwimmingInfoPage />
-            </ProtectedRoute>
           }
-        /> */}
+        />
         <Route 
           path="/vaccine"
           element={
               <VaccinationInfoPage />
           }
         />
-        {/* <Route 
+        <Route 
           path="/grooming"
           element={
-            <ProtectedRoute requiredRole="user">
               <GroomingInfoPage />
-            </ProtectedRoute>
           }
         />
         <Route 
           path="/petpark"
           element={
-            <ProtectedRoute requiredRole="user">
               <PetParkInfoPage />
-            </ProtectedRoute>
           }
-        />  */}
+        /> 
 
         <Route path="/" element={<LogInPage />} />
       </Routes>
