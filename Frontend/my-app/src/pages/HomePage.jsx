@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../components/navbar.jsx';
-import Navbar_NotLogin from '../components/navbar_notLogin.jsx'; // Import Navbar_NotLogin
+import Navbar_NotLogin from '../components/navbar_notLogin.jsx';
 import ContactSection from '../components/ContactSection.jsx';
 import '../styles/HomePage.css';
 import dog from '../pictures/dog_home.png';
@@ -15,17 +15,30 @@ import paw4 from '../pictures/paw4.png';
 import paw5 from '../pictures/paw5.png';
 
 const HomePage = () => {
-  const isLoggedIn = !!localStorage.getItem('token'); 
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsLoggedIn(!!localStorage.getItem('token'));
+    };
+
+    // Listen for changes to localStorage
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   return (
     <div className="homepage">
       {isLoggedIn ? <Navbar /> : <Navbar_NotLogin />} 
       <section className="hero-section">
         <div>
-        <img src={paw1} alt="Paw Print" className="paw-image paw-image-1" />
-      <img src={paw2} alt="Paw Print" className="paw-image paw-image-2" />
-      <img src={paw4} alt="Paw Print" className="paw-image paw-image-4" />
-      <img src={paw5} alt="Paw Print" className="paw-image paw-image-5" />
+          <img src={paw1} alt="Paw Print" className="paw-image paw-image-1" />
+          <img src={paw2} alt="Paw Print" className="paw-image paw-image-2" />
+          <img src={paw4} alt="Paw Print" className="paw-image paw-image-4" />
+          <img src={paw5} alt="Paw Print" className="paw-image paw-image-5" />
         </div>
         <div className="hero-content">
           <h2>"A Lifetime of Health</h2>

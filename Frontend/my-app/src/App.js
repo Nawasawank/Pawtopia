@@ -69,7 +69,7 @@ function App() {
         <Route 
           path="/vaccine-booking" 
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="user">
               <VaccineAppointmentPage />
             </ProtectedRoute>
           }
@@ -77,7 +77,7 @@ function App() {
         <Route 
           path="/vaccine-booking/:booking_id?" 
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="user">
               <VaccineAppointmentPage />
             </ProtectedRoute>
           }
@@ -85,7 +85,7 @@ function App() {
         <Route 
           path="/petpark-booking" 
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="user">
               <PetParkAppointmentPage />
             </ProtectedRoute>
           }
@@ -93,7 +93,7 @@ function App() {
         <Route 
           path="/petpark-booking/:booking_id?" 
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="user"> 
               <PetParkAppointmentPage />
             </ProtectedRoute>
           }
@@ -101,7 +101,7 @@ function App() {
         <Route 
           path="/grooming-booking" 
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="user">
               <GroomingAppointmentPage />
             </ProtectedRoute>
           }
@@ -109,7 +109,7 @@ function App() {
         <Route 
           path="/swimming-booking" 
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="user">
               <SwimmingAppointmentPage />
             </ProtectedRoute>
           }
@@ -117,7 +117,7 @@ function App() {
         <Route 
           path="/swimming-booking/:booking_id?" 
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="user">
               <SwimmingAppointmentPage />
             </ProtectedRoute>
           }
@@ -126,7 +126,7 @@ function App() {
         <Route 
           path="/history" 
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="user">
               <HistoryPage />
             </ProtectedRoute>
           }
@@ -134,7 +134,7 @@ function App() {
         <Route 
           path="/grooming-booking/:booking_id?" 
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="user">
               <GroomingAppointmentPage />
             </ProtectedRoute>
           }

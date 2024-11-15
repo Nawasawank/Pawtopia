@@ -4,51 +4,63 @@ import logo from '../pictures/logo.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/Navbar.css';
 import api from '../api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Navbar_NotLogin from './navbar_notLogin';
 
 function Navbar() {
   const [userInfo, setUserInfo] = useState({ firstName: '', image: '' });
+  const navigate = useNavigate();
+  const role = localStorage.getItem('role'); // Check the role from localStorage
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      const token = localStorage.getItem('token');
+    // Only fetch user profile if the role is "user"
+    if (role === 'user') {
+      const fetchUserProfile = async () => {
+        const token = localStorage.getItem('token');
 
-      if (!token) {
-        setUserInfo({ firstName: '', image: '' }); // Reset state if no token
-        return;
-      }
-
-      try {
-        const response = await api.get('/api/profile', {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include token in headers
-          },
-        });
-
-        if (response.status === 200) {
-          const data = response.data;
-          const profileImageUrl = `${api.defaults.baseURL}${data.image}`;
-
-          setUserInfo({
-            firstName: data.firstName,
-            image: profileImageUrl,
-          });
-        } else {
-          console.error('Failed to fetch profile info');
+        if (!token) {
+          setUserInfo({ firstName: '', image: '' }); // Reset state if no token
+          return;
         }
-      } catch (error) {
-        console.error('Error fetching profile info:', error);
-      }
-    };
 
-    fetchUserProfile();
-  }, [localStorage.getItem('token')]); // Refetch profile when the token changes
+        try {
+          const response = await api.get('/api/profile', {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include token in headers
+            },
+          });
+
+          if (response.status === 200) {
+            const data = response.data;
+            const profileImageUrl = `${api.defaults.baseURL}${data.image}`;
+
+            setUserInfo({
+              firstName: data.firstName,
+              image: profileImageUrl,
+            });
+          } else {
+            console.error('Failed to fetch profile info');
+          }
+        } catch (error) {
+          console.error('Error fetching profile info:', error);
+        }
+      };
+
+      fetchUserProfile();
+    }
+  }, [role]); 
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove token from storage
-    setUserInfo({ firstName: '', image: '' }); // Reset user info state
-    window.location.href = '/'; // Redirect to home or login page
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    setUserInfo({ firstName: '', image: '' });
+    navigate('/'); 
   };
+
+  console.log(role)
+  if (role !== 'user') {
+    return <Navbar_NotLogin />;
+  }
 
   return (
     <div className="homepage-container">

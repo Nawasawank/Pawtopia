@@ -1,23 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import '../styles/LogInPage.css';
 import useLocalStorage from '../hooks/useLocalStorage';
 import api from '../api'; 
+import Overlay from '../components/Overlay';
 
 const LogInPage = () => {
     const [email, setEmail] = useLocalStorage('email', '');
     const [password, setPassword] = useState(''); 
-    const [error, setError] = useState(null); 
+    const [overlayMessage, setOverlayMessage] = useState(''); 
+    const [showOverlay, setShowOverlay] = useState(false); 
     const navigate = useNavigate();
+    const emailRef = useRef(null); // Reference to the email input field
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
+    
         const loginData = {
             email,
             password,
         };
-
+    
         try {
             const response = await api.post('/api/login', loginData);
             if (response.status === 200) {
@@ -25,21 +28,33 @@ const LogInPage = () => {
                 localStorage.setItem('token', token);
                 localStorage.setItem('role', role);  
                 alert('Login successful!');
-                console.log('Token:', token);
-                console.log('Role:', role);
                 if (role === 'admin') {
                     navigate('/AdminHome');
-                } else if (role === 'developer') {
-                    navigate('/developer-dashboard');
                 } else {
-                    navigate('/home');  
+                    navigate('/home'); // Navigate to home to refresh with new state
                 }
-            } else {
-                setError(response.data.error || 'Login failed');
             }
         } catch (error) {
-            console.error('Error logging in:', error);
-            setError('An error occurred during login. Please try again.');
+            if (error.response && error.response.data && error.response.data.error) {
+                const errorMessage = error.response.data.error;
+                if (errorMessage === 'Email not found' || errorMessage === 'Invalid Password') {
+                    setOverlayMessage(errorMessage); 
+                } else {
+                    setOverlayMessage('An error occurred during login. Please try again.');
+                }
+            } else {
+                setOverlayMessage('An error occurred during login. Please try again.');
+            }
+            setShowOverlay(true); 
+        }
+    };
+
+    const closeOverlay = () => {
+        setShowOverlay(false);
+        setEmail(''); // Reset email to initial state
+        setPassword(''); // Reset password to initial state
+        if (emailRef.current) {
+            emailRef.current.focus(); // Return focus to the email field
         }
     };
 
@@ -57,6 +72,7 @@ const LogInPage = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)} 
                             required
+                            ref={emailRef} // Set the reference for email input
                         />
                     </div>
                     <div className="login-input-container">
@@ -70,13 +86,20 @@ const LogInPage = () => {
                             required
                         />
                     </div>
-                    {error && <p className="error-message">{error}</p>}
                     <button type="submit" className="login-btn">Submit</button>
                 </form>
                 <div className="signup-link">
                     <p><a href="/signup">Don't have an account? </a></p>
                 </div>
             </div>
+
+            {/* Render the Overlay component only if showOverlay is true */}
+            {showOverlay && (
+                <Overlay 
+                    message={overlayMessage} 
+                    onClose={closeOverlay} // Call closeOverlay to close overlay and refocus
+                />
+            )}
         </div>
     );
 };

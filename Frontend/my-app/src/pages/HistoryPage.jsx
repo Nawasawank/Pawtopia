@@ -4,7 +4,6 @@ import Navbar from '../components/navbar.jsx';
 import ContactSection from '../components/ContactSection.jsx';
 import { DateRangePicker } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
-import axios from 'axios';
 import Feedback_Overlay from '../components/Feedback_Overlay.jsx';
 import ConfirmDeleteOverlay from '../components/ConfirmDeleteOverlay.jsx';
 import Overlay from '../components/Overlay.jsx'; // Import your Overlay component
@@ -61,7 +60,7 @@ const HistoryPage = () => {
     };
 
     const handleAddFeedback = (appointment) => {
-        setOverlayMessage("Add Feedback or Rating here!");
+        setOverlayMessage('Add Feedback or Rating here!');
         if (appointment.booking_type === 'other_service') {
             setSelectedBookingId(appointment.booking_id);
         }
@@ -91,6 +90,12 @@ const HistoryPage = () => {
     };
 
     const handleSubmitFeedback = async (feedback) => {
+        if (!feedback.rating || feedback.rating < 1 || feedback.rating > 5) {
+            setErrorOverlayMessage('Please select a rating before submitting your feedback.');
+            setShowErrorOverlay(true);
+            return;
+        }
+
         try {
             const feedbackData = {
                 booking_id: selectedBookingId,
@@ -98,18 +103,31 @@ const HistoryPage = () => {
                 rating: feedback.rating,
                 feedback_type: 'General',
             };
-    
-            const response = await api.post(`/api/feedback`, feedbackData, {
+
+            await api.post(`/api/feedback`, feedbackData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-    
+
+            // Update the state to reflect feedback submission
+            setAppointments((prevAppointments) =>
+                prevAppointments.map((appointment) =>
+                    appointment.booking_id === selectedBookingId
+                        ? { ...appointment, has_feedback: true }
+                        : appointment
+                )
+            );
+
             setErrorOverlayMessage('Feedback submitted successfully!');
             setShowErrorOverlay(true);
             setShowOverlay(false);
         } catch (error) {
-            if (error.response && error.response.status === 400 && error.response.data.error === 'You already add feedback') {
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                error.response.data.error === 'You already add feedback'
+            ) {
                 setErrorOverlayMessage(error.response.data.error);
                 setShowErrorOverlay(true);
             } else {
@@ -119,7 +137,6 @@ const HistoryPage = () => {
             }
         }
     };
-    
 
     const handleCloseOverlay = () => {
         setShowOverlay(false);
@@ -195,15 +212,16 @@ const HistoryPage = () => {
                                     <div className="appointment-status">
                                         <p>{dayjs(appointment.date).format('D MMM YYYY')}</p>
                                         {isPastDate(appointment.date) ? (
-                                            <>
-                                                <p className="status-completed">Completed</p>
+                                            appointment.has_feedback ? (
+                                                <p className="status-feedback">Feedback Submitted</p>
+                                            ) : (
                                                 <button
                                                     className="feedback-button"
                                                     onClick={() => handleAddFeedback(appointment)}
                                                 >
                                                     Add Feedback
                                                 </button>
-                                            </>
+                                            )
                                         ) : (
                                             <>
                                                 <p className="status-waiting">Waiting</p>

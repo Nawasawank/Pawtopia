@@ -53,7 +53,8 @@ const FeedbackService = {
             console.error(`Error retrieving feedback: ${error.message}`);
             return { error: 'Error retrieving feedback' };
         }
-    }
+    },
+    
 };
 
 export default FeedbackService;

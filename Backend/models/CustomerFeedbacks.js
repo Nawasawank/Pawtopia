@@ -155,6 +155,23 @@ const CustomerFeedback = {
             throw error;
         }
     },
+    async checkHistoryFeedback(booking_id,role) {
+        try {
+            const sql = `
+                SELECT COUNT(*) AS feedback_count
+                FROM customer_feedback
+                WHERE booking_id = ?;
+            `;
+    
+            const results = await db.query(sql, [booking_id],role);
+            return results[0].feedback_count > 0;
+        } catch (error) {
+            console.error('Error checking feedback for booking_id:', error);
+            throw error;
+        }
+    }
+    
+    
 };
 
 export default CustomerFeedback;
