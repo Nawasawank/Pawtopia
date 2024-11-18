@@ -149,8 +149,23 @@ html, body {
     font-size: 18px;
     margin-top: 10px;
     margin-bottom: 0;
-    color: inherit;
+    color: #333;
     font-weight: bold;
+}
+
+.service-card p {
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+.service-card:nth-child(odd) p {
+    color: #333; 
+}
+
+.service-card:nth-child(even) p {
+    color: white; 
 }
 
 /* Cat Section */

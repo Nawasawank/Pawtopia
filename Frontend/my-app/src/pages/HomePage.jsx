@@ -13,6 +13,8 @@ import paw1 from '../pictures/paw1.png';
 import paw2 from '../pictures/paw2.png';
 import paw4 from '../pictures/paw4.png';
 import paw5 from '../pictures/paw5.png';
+import { Link } from 'react-router-dom';
+
 
 const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
@@ -52,24 +54,26 @@ const HomePage = () => {
 
       <section id="services" className="services-section">
         <h2 className="services-title">Services</h2>
+
         <div className="service-cards">
-          <div className="service-card">
+          <Link to="/vaccine" className="service-card">
             <img src={vaccine} alt="Vaccination" className="vaccine-img" />
             <p>Vaccination</p>
-          </div>
-          <div className="service-card">
+          </Link>
+          <Link to="/petpark" className="service-card">
             <img src={petpark} alt="Pet Park" className="petpark-img" />
             <p>Pet Park</p>
-          </div>
-          <div className="service-card">
+          </Link>
+          <Link to="/grooming" className="service-card">
             <img src={grooming} alt="Grooming" className="grooming-img" />
             <p>Grooming</p>
-          </div>
-          <div className="service-card">
+          </Link>
+          <Link to="/swimming" className="service-card">
             <img src={swimming} alt="Swimming" className="swimming-img" />
             <p>Swimming</p>
-          </div>
+          </Link>
         </div>
+
       </section>
 
       <section className="cat-section">
