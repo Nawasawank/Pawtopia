@@ -5,41 +5,60 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/Navbar.css';
 import api from '../api';
 import { Link, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import Navbar_NotLogin from './navbar_notLogin';
 
 function Navbar() {
   const [userInfo, setUserInfo] = useState({ firstName: '', image: '' });
+  const [isTokenValid, setIsTokenValid] = useState(!!localStorage.getItem('token'));
   const navigate = useNavigate();
-  const role = localStorage.getItem('role'); // Check the role from localStorage
 
   useEffect(() => {
-    // Only fetch user profile if the role is "user"
-    if (role === 'user') {
+    const validateToken = () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const decoded = jwtDecode(token);
+          const currentTime = Date.now() / 1000;
+          if (decoded.exp > currentTime) {
+            setIsTokenValid(true);
+            return true;
+          } else {
+            setIsTokenValid(false);
+            localStorage.removeItem('token');
+            localStorage.removeItem('role');
+            return false;
+          }
+        } catch (err) {
+          setIsTokenValid(false);
+          localStorage.removeItem('token');
+          localStorage.removeItem('role');
+        }
+      } else {
+        setIsTokenValid(false);
+      }
+      return false;
+    };
+
+    if (isTokenValid) {
+      validateToken();
+
       const fetchUserProfile = async () => {
         const token = localStorage.getItem('token');
-
-        if (!token) {
-          setUserInfo({ firstName: '', image: '' }); // Reset state if no token
-          return;
-        }
-
         try {
           const response = await api.get('/api/profile', {
             headers: {
-              Authorization: `Bearer ${token}`, // Include token in headers
+              Authorization: `Bearer ${token}`,
             },
           });
 
           if (response.status === 200) {
             const data = response.data;
             const profileImageUrl = `${api.defaults.baseURL}${data.image}`;
-
             setUserInfo({
               firstName: data.firstName,
               image: profileImageUrl,
             });
-          } else {
-            console.error('Failed to fetch profile info');
           }
         } catch (error) {
           console.error('Error fetching profile info:', error);
@@ -48,17 +67,17 @@ function Navbar() {
 
       fetchUserProfile();
     }
-  }, [role]); 
+  }, [isTokenValid]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     setUserInfo({ firstName: '', image: '' });
-    navigate('/'); 
+    setIsTokenValid(false); // Force re-render by updating state
+    navigate('/');
   };
 
-  console.log(role)
-  if (role !== 'user') {
+  if (!isTokenValid) {
     return <Navbar_NotLogin />;
   }
 

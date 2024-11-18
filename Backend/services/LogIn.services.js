@@ -42,7 +42,7 @@ const LoginService = {
                 return { error: 'Invalid Password' };
             }
             const token = jwt.sign(
-                { id: user.user_id || user.employee_id || user.developer_id, username: user.firstName || user.first_name, role },
+                { id: user.user_id || user.employee_id || user.developer_id, role },
                 process.env.JWT_SECRET,
                 { expiresIn: '3h' }
             );
