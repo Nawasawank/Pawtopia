@@ -10,9 +10,8 @@ const AdminSignUpPage = () => {
   const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
   const [adminConfirmPassword, setAdminConfirmPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState(''); 
-  const [successMessage, setSuccessMessage] = useState('');
-  const [showOverlay, setShowOverlay] = useState(false); 
+  const [overlayMessage, setOverlayMessage] = useState('');
+  const [showOverlay, setShowOverlay] = useState(false);
 
   const navigate = useNavigate();
 
@@ -21,8 +20,8 @@ const AdminSignUpPage = () => {
 
     // Check if passwords match
     if (adminPassword !== adminConfirmPassword) {
-      setErrorMessage('Passwords do not match');
-      setShowOverlay(true); 
+      setOverlayMessage('Passwords do not match');
+      setShowOverlay(true);
       return;
     }
 
@@ -36,23 +35,23 @@ const AdminSignUpPage = () => {
     try {
       const response = await api.post('/api/admin/register', data);
 
-
       if (response.status === 201) {
-        setSuccessMessage('Admin created successfully!');
-        setShowOverlay(true); 
+        setOverlayMessage('Admin created successfully!');
+        setShowOverlay(true);
+
         setTimeout(() => {
-          navigate('/login'); 
+          setShowOverlay(false);
+          navigate('/login');
         }, 2000);
       }
     } catch (error) {
-
-      setErrorMessage(error.response?.data?.error || 'Error occurred during sign-up');
-      setShowOverlay(true); 
+      setOverlayMessage(error.response?.data?.error || 'Error occurred during sign-up');
+      setShowOverlay(true);
     }
   };
 
   const handleOverlayClose = () => {
-    setShowOverlay(false); 
+    setShowOverlay(false);
   };
 
   return (
@@ -112,11 +111,13 @@ const AdminSignUpPage = () => {
         <button className="admin-submit-button" type="submit">Submit</button>
       </form>
 
-      <Overlay 
-        message={errorMessage || successMessage}  
-        onClose={handleOverlayClose} 
-        show={showOverlay} 
-      />
+      {/* Overlay component */}
+      {showOverlay && (
+        <Overlay 
+          message={overlayMessage}
+          onClose={handleOverlayClose} 
+        />
+      )}
     </div>
   );
 };
