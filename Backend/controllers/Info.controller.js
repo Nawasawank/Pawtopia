@@ -45,7 +45,8 @@ const InfoController = {
 
     async getUserInfoAndPetCount(req, res) {
         try {
-            const users = await InfoService.getAllUsersAndPetCount();
+            const { id: userId, role } = req.user;
+            const users = await InfoService.getAllUsersAndPetCount(userId,role);
     
             if (!users || users.length === 0) {
                 return res.status(404).json({ error: 'No users found' });

@@ -37,7 +37,7 @@ route.get('/dev_name', isAuth, InfoController.getDeveloperProfile);
 route.get('/info', isAuth, InfoController.getUserInfo);
 
 //Get all user and pet count 
-route.get('/allUsers', InfoController.getUserInfoAndPetCount);
+route.get('/allUsers',isAuth, InfoController.getUserInfoAndPetCount);
 
 //add pet, delete pet, get pet name and type
 route.post('/pet/add', isAuth, PetController.addPet); 

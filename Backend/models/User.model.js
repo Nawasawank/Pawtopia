@@ -174,7 +174,7 @@ const User = {
                 LEFT JOIN pets ON users.user_id = pets.user_id
                 GROUP BY users.user_id
             `;
-            const rows = await db.query(sql, [], "admin");  // Pass role to db.query
+            const rows = await db.query(sql, [], role);  // Pass role to db.query
 
             return rows.map(row => ({
                 user_id: row.user_id,

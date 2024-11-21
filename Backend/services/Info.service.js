@@ -44,9 +44,9 @@ const InfoService = {
         }
     },
 
-    async getAllUsersAndPetCount() {
+    async getAllUsersAndPetCount(userId,role) {
         try {
-            const users = await User.getAllUsersWithPetCount();
+            const users = await User.getAllUsersWithPetCount(userId,role);
     
             if (!users || users.length === 0) {
                 return { error: 'No users found' };
