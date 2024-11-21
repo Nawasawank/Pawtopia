@@ -42,7 +42,7 @@ const Feedback_Overlay = ({ message, show, onClose, onSubmitFeedback }) => {
                         </span>
                     ))}
                 </div>
-                <button className="submit-button" onClick={handleSubmit}>Submit</button>
+                <button className="submit-button-feedback" onClick={handleSubmit}>Submit</button>
             </div>
         </div>
     );

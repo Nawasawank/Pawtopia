@@ -61,9 +61,7 @@ const HistoryPage = () => {
 
     const handleAddFeedback = (appointment) => {
         setOverlayMessage('Add Feedback or Rating here!');
-        if (appointment.booking_type === 'other_service') {
-            setSelectedBookingId(appointment.booking_id);
-        }
+        setSelectedBookingId(appointment.booking_id);
         setShowOverlay(true);
     };
 

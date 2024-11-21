@@ -76,7 +76,7 @@
     color: #ffcc00;
 }
 
-.submit-button {
+.submit-button-feedback {
     background-color: #28a745;
     color: #ffffff;
     border: none;
@@ -87,6 +87,6 @@
     transition: background-color 0.2s;
 }
 
-.submit-button:hover {
+.submit-button-feedback:hover {
     background-color: #218838;
 }

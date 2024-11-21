@@ -148,8 +148,7 @@ const User = {
                     CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
                     s.service_name,
                     o.booking_id,
-                    o.booking_date AS date,
-                    'other_service' AS booking_type
+                    o.booking_date AS date
                 FROM services_bookings o
                 JOIN pets p ON o.pet_id = p.pet_id
                 JOIN employees e ON o.employee_id = e.employee_id
