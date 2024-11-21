@@ -30,7 +30,7 @@ function Navbar_NotLogin() {
                 </Dropdown.Menu>
               </Dropdown>
             </li>
-            <li><a href="#about">About Us</a></li>
+            <li><a href="/aboutus">About Us</a></li>
           </ul>
         </nav>
         <div className="auth-buttons">

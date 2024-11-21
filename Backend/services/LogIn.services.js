@@ -10,11 +10,10 @@ const LoginService = {
             let user;
             let role;
 
-            // Check for user
             const userRecord = await User.findUserByEmail(email,'default');
             if (userRecord) {
                 user = userRecord;
-                role = 'user'; // Role is user
+                role = 'user';
             }
 
             if (!user) {

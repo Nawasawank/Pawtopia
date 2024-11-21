@@ -62,12 +62,13 @@ const FeedbackController = {
 
     async createTechnicalFeedback(req, res) {
         const { id: user_id, role } = req.user;
-        const { feedback_type } = req.body;
+        const { feedback_type, comment } = req.body;
 
         try {
             const feedbackData = {
                 user_id,
                 feedback_type,
+                comment
             };
 
             const feedback = await FeedbackService.createTechnicalFeedback(feedbackData, role);

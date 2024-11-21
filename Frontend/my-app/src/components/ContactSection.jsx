@@ -7,7 +7,7 @@ import '../styles/ContactSection.css';
 const ContactSection = () => {
   return (
     <section id="contact" className="contact-section">
-      <div className="contact-container">
+      <div className="contact-cont">
         <div className="contact-info">
           <h4>Contact Us</h4>
           <p>

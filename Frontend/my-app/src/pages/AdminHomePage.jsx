@@ -25,7 +25,7 @@ const AdminHomePage = () => {
             <button onClick={() => navigate('/booking')}>Booking Management</button>
             <button onClick={() => navigate('/client')}>Client Management</button>
             <button onClick={() => navigate('/feedback')}>Feedback Management</button>
-            <button onClick={() => navigate('/report')}>Report Issue</button>
+            <button onClick={() => navigate('/issue')}>Report Issue</button>
           </div>
         </div>
       </div>

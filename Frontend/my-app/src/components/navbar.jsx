@@ -105,7 +105,7 @@ function Navbar() {
                 </Dropdown.Menu>
               </Dropdown>
             </li>
-            <li><a href="#about">About Us</a></li>
+            <li><a href="/aboutus">About Us</a></li>
             <li>
               <Dropdown>
                 <Dropdown.Toggle variant="link" id="dropdown-booking">
@@ -119,7 +119,7 @@ function Navbar() {
                 </Dropdown.Menu>
               </Dropdown>
             </li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="/contact">Contact</a></li>
             <li><a href="/history">History</a></li>
           </ul>
         </nav>

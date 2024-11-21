@@ -36,7 +36,7 @@ function AdminNavbar() {
   return (
     <header className="navbar">
       <div className="logo">
-        <Link to="/admin-dashboard">
+        <Link to="/AdminHome">
           <img src={logo} alt="Pawtopia Logo" />
           <h1>Pawtopia</h1>
         </Link>
@@ -47,7 +47,7 @@ function AdminNavbar() {
           <li><Link to="/booking">Booking</Link></li>
           <li><Link to="/client">Client</Link></li>
           <li><Link to="/feedback">Feedback</Link></li>
-          <li><Link to="/report">Report</Link></li>
+          <li><Link to="/issue">Report</Link></li>
         </ul>
       </nav>
       <div className="user-info">

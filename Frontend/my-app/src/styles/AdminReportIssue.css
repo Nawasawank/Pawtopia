@@ -1,0 +1,93 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.admin-report-issue-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #fff8e6; /* Cream background */
+    font-family: "Lato", sans-serif;
+}
+
+/* Content Section */
+.admin-report-issue-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    max-width: 1700px;
+    gap: 30px;
+    margin: 150px auto 0; /* Adjusted margin-top to move the box further down */
+    justify-content: flex-start; /* Aligns content to start */
+}
+
+/* Form Section */
+.report-issue-form-section {
+    width: 100%;
+    max-width: 600px;
+    background-color: #ffffff; /* White form background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.report-issue-form-section h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.report-issue-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+.report-issue-form input,
+.report-issue-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.submit-issue-button {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #24d917c8; /* Light orange */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-issue-button:hover {
+    background-color: #13b21b; /* Darker orange */
+}
+
+/* Responsive Design */
+@media (max-width: 1068px) {
+    .admin-report-issue-content {
+        padding: 20px;
+        margin-top: 50px; /* Reduced margin-top for smaller screens */
+    }
+
+    .report-issue-form-section {
+        padding: 15px;
+    }
+
+    .report-issue-form-section h1 {
+        font-size: 24px;
+    }
+}

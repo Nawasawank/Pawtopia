@@ -49,6 +49,9 @@ import PetParkInfoPage from './pages/PetParkInfoPage.jsx';
 import AdminHomePage from './pages/AdminHomePage.jsx';
 import AdminSignUpPage from './pages/AdminSignUpPage.jsx'
 import FeedbackManagementPage from './pages/FeedbackManage.jsx'
+import AdminReportIssue from './pages/AdminReportIssue.jsx';
+import ContactPage from './pages/ContactPage.jsx';
+import AboutUsPage from './pages/AboutUsPage.jsx';
 
 
 
@@ -139,6 +142,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route 
+          path="/contact" 
+          element={
+            <ProtectedRoute requiredRole="user">
+              <ContactPage />
+            </ProtectedRoute>
+          }
+        />
 
       <Route 
           path="/employee"
@@ -175,6 +186,15 @@ function App() {
           }
         />
 
+        <Route 
+          path="/issue"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminReportIssue />
+            </ProtectedRoute>
+          }
+        />
+
          <Route 
           path="/swimming"
           element={
@@ -198,6 +218,13 @@ function App() {
           path="/petpark"
           element={
               <PetParkInfoPage />
+          }
+        /> 
+
+        <Route 
+          path="/aboutus"
+          element={
+              <AboutUsPage />
           }
         /> 
 

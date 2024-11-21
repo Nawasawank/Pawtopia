@@ -1,0 +1,102 @@
+.contact-page {
+    font-family: 'Inria Serif', serif;
+    color: #333;
+    background-color: #f3edde;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Main Content */
+  .contact-content {
+    padding: 20px;
+    margin-top: 80px;
+  }
+  
+  /* Contact Container */
+  .contact-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 1200px;
+  }
+  
+  /* Left Section - Image */
+  .contact-image-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .manydog-image {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+  }
+  
+  /* Right Section - Form */
+  .contact-form-section {
+    flex: 1;
+    padding: 20px 40px;
+    background-color: #fff;
+    border-radius: 10px;
+  }
+  
+  .contact-form-section h1 {
+    font-size: 2.5rem;
+    color: #000;
+    margin-bottom: 10px;
+  }
+  
+  .contact-form-section p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .contact-form label {
+    font-size: 1.1rem;
+    color: #000000;
+  }
+  
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: 'Inria Serif', serif;
+  }
+  
+  .contact-form textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+  
+  .submit-button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    align-self: flex-start;
+  }
+  
+  .submit-button:hover {
+    background-color: #45a049;
+  }
+  
