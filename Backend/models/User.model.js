@@ -15,14 +15,20 @@ const User = {
                 userData.password,
                 userData.image || null,
             ];
-
-            const result = await db.query(sql, params, role);  // Pass role to db.query
-            return await this.findUserById(result.insertId, role); // Return the created user
+    
+            const result = await db.query(sql, params, role);  // Execute the query
+            console.log("Eiei", result.insertId);
+    
+            // Fetch the created user by ID
+            const createdUser = await this.findUserById(result.insertId, role);
+    
+            // Include the insertId in the returned object
+            return { ...createdUser, insertId: result.insertId };
         } catch (error) {
             console.error('Error creating user:', error);
             throw error;
         }
-    },
+    },    
 
     async updateUser(userId, updateData, role) {
         try {

@@ -22,6 +22,7 @@ const SignUpService = {
 
             const defaultImagePath = '/uploads/default.png';
 
+            // Create the user and fetch the insertId
             const newUser = await User.createUser({
                 firstName: firstname,
                 lastName: lastname,
@@ -31,8 +32,11 @@ const SignUpService = {
                 image: defaultImagePath
             }, 'default');
 
+            console.log("user_id: newUser.insertId", newUser.insertId);
+
+            // Create the pet with the new user ID
             const newPet = await Pet.createPet({
-                user_id: newUser.insertId,
+                user_id: newUser.insertId, // Correctly use the insertId here
                 name,
                 type,
                 gender,
@@ -40,14 +44,17 @@ const SignUpService = {
                 health_condition_id
             }, 'default');
 
+            console.log("Pet creation result:", newPet);
+
             console.log(newPet)
 
             return { ...newUser, image: defaultImagePath };
         } catch (error) {
-            console.log(`Error creating user: ${error.message}`);
+            console.error(`Error creating user: ${error.message}`);
             return { error: 'Error creating user' };
         }
     }
 };
 
 export default SignUpService;
+
