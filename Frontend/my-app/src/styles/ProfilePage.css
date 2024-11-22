@@ -1,0 +1,217 @@
+/* General Container */
+.profile-page__container {
+    max-width: 900px;
+    margin: 150px auto 0;
+    padding: 20px;
+    background-color: #faf4e6;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Header */
+  .profile-page__header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .profile-page__avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  
+  .profile-page__edit-btn {
+    background-color: #ffe8cc; /* Light yellow color */
+    color: #7b450c; /* Dark brown text */
+    border: none;
+    padding: 15px; /* Adjust padding for size */
+    cursor: pointer;
+    width: 90px; /* Circle width */
+    height: 50px; /* Circle height */
+    font-size: 1.2rem;
+    font-weight: bold;
+    position: absolute; /* Place it near the avatar */
+    top: 160px; /* Adjust to match the avatar's position */
+    right: 30%; /* Center relative to container */
+    transform: translateX(50%);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.profile-page__edit-btn:hover {
+    background-color: #ffcc99; /* Slightly darker hover effect */
+}
+
+  
+  /* User Info */
+  .profile-page__info {
+    margin-bottom: 30px;
+  }
+  
+  .profile-page__info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-page__info-row label {
+    flex: 1;
+    font-weight: bold;
+  }
+  
+  .profile-page__info-row input {
+    flex: 2;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .profile-page__info-row input:read-only {
+    background-color: #f1f1f1;
+  }
+  
+  /* Pets Section */
+  .profile-page__pets-heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .profile-page__pet-card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-page__pet-field {
+    margin-bottom: 15px;
+  }
+  
+  .profile-page__pet-field label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .profile-page__pet-field input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .profile-page__pet-field input:read-only {
+    background-color: #f1f1f1;
+  }
+  
+  /* Add Pet Section */
+  .profile-page__add-pet {
+    background-color: #faf4e6;
+    padding: 15px;
+    border: 1px dashed #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .profile-page__add-pet h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+  
+  .profile-page__add-pet input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  /* Buttons */
+  .profile-page__add-pet-btn,
+  .profile-page__save-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #a57b18;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .profile-page__add-pet-btn:hover,
+  .profile-page__save-btn:hover {
+    background-color: #8c6513;
+  }
+  
+  .profile-page__add-pet-btn {
+    margin-right: 15px;
+  }
+  
+  .profile-page__save-btn {
+    margin-left: 15px;
+  }
+
+
+    .profile-page__add-pet-btn,
+  .profile-page__save-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #a57b18;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .profile-page__add-pet-btn:hover,
+  .profile-page__save-btn:hover {
+    background-color: #8c6513;
+  }
+  
+  .profile-page__add-pet-btn {
+    margin-right: 15px;
+  }
+  
+  .profile-page__save-btn {
+    margin-left: 15px;
+  }
+  
+  .profile-page__delete-btn {
+    display: inline-block;
+    background-color: #d9534f; /* Bootstrap red for delete actions */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.profile-page__delete-btn:hover {
+    background-color: #c9302c; /* Slightly darker red for hover */
+    transform: translateY(-2px); /* Slight hover lift effect */
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+.profile-page__delete-btn:active {
+    background-color: #ac2925; /* Even darker red for active click */
+    transform: translateY(0); /* Remove lift effect on click */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Default shadow */
+}

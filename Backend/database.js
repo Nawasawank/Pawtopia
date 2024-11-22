@@ -22,7 +22,7 @@ const createPool = (dbUser, dbPassword) => {
 
 const pools = {
     admin: createPool(process.env.DB_ADMIN_USER, process.env.DB_ADMIN_PASS),
-    developer: createPool(process.env.DEVELOPER_DB_USER, process.env.DEVELOPER_DB_PASS),
+    developer: createPool(process.env.DB_DEVELOPER_USER, process.env.DB_DEVELOPER_PASS),
     user: createPool(process.env.DB_USER, process.env.DB_PASS),
     default: createPool(process.env.DB_DEFAULT_USER, process.env.DB_DEFAULT_PASS),
 };

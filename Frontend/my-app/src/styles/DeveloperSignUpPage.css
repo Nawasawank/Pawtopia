@@ -1,0 +1,64 @@
+.developer-register-container {
+    background-color: #a0522d;
+    padding-top: 50px;
+    font-family: "Lato", sans-serif;
+    padding-bottom: 80px;
+    overflow-x: hidden;
+    text-align: center;
+  }
+  
+  .developer-register-title {
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .developer-form-container {
+    background-color: #fff;
+    width: 40%;
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .developer-form-label {
+    text-align: left;
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: block;
+  }
+  
+  .developer-input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .developer-submit-button {
+    background-color: #70be70;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 18px;
+    cursor: pointer;
+    width: 30%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .developer-submit-button:hover {
+    background-color: #2e8b57;
+  }
+  
+  .error-message {
+    color: red;
+  }
+  
+  .success-message {
+    color: green;
+  }
+  

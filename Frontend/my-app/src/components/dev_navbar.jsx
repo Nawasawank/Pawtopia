@@ -13,12 +13,12 @@ function DeveloperNavbar() {
       if (!token) return;
 
       try {
-        const response = await api.get('/dev_name', {
+        const response = await api.get('/api/dev_name', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
-        
+
         if (response.status === 200) {
-          setName(response.data.name);
+          setName(response.data.Name);
         }
       } catch (error) {
         console.error('Error fetching developer name:', error);

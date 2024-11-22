@@ -30,6 +30,9 @@ const LogInPage = () => {
                 alert('Login successful!');
                 if (role === 'admin') {
                     navigate('/AdminHome');
+                }
+                else if(role === 'developer'){
+                    navigate('/DevHome');
                 } else {
                     navigate('/home'); // Navigate to home to refresh with new state
                 }

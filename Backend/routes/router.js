@@ -12,15 +12,18 @@ import AdminController from '../controllers/Admin.controller.js';
 import EmployeeController from '../controllers/Employee.controller.js';
 import bookingsController from '../controllers/Booking.controller.js';
 import IssuesController from '../controllers/Issues.controller.js';
+import DeveloperController from '../controllers/Developer.controller.js';
 
 
 const route = Router();
 
 //admin name for navbar
 route.get('/admin_name', isAuth, InfoController.getAdminProfile);
-
 route.post('/register', SignUpController.register);
 route.post('/login', LoginController.login);
+
+route.get('/dev/issues',isAuth,IssuesController.getIssues)
+route.put('/dev/issues/update',isAuth,IssuesController.updateIssueStatus)
 
 //feedback of each service
 route.get('/getfeedback/:service_id',FeedbackController.getFeedback);
@@ -35,6 +38,10 @@ route.get('/dev_name', isAuth, InfoController.getDeveloperProfile);
 
 //Get all user information
 route.get('/info', isAuth, InfoController.getUserInfo);
+//update user info
+route.put('/update/info',isAuth,InfoController.updateUserInfo)
+//update pet
+route.put('/update/pet/:petId',isAuth,InfoController.updatePetInfo)
 
 //Get all user and pet count 
 route.get('/allUsers',isAuth, InfoController.getUserInfoAndPetCount);
@@ -43,7 +50,7 @@ route.get('/allUsers',isAuth, InfoController.getUserInfoAndPetCount);
 route.post('/pet/add', isAuth, PetController.addPet); 
 route.delete('/pets/delete/:petId', isAuth, PetController.deletePet);
 route.get('/pet/NameAndType',isAuth,PetController.getPetNamesAndTypes);
-route.get('/pet/AllPet',isAuth,PetController.getPetByUserId);
+route.get('/pet/AllPet/:userId',isAuth,PetController.getPetByUserId);
 
 //Add,Delete,Update Booking
 route.post('/:service_id/book',isAuth, bookingsController.addBooking);
@@ -61,6 +68,9 @@ route.post('/feedback',isAuth,FeedbackController.createFeedback);
 
 //Admin
 route.post('/admin/register',AdminController.AdminSignUp);
+
+//Dev
+route.post('/dev/register',DeveloperController.DeveloperSignUp);
 
 //Get Employee in each service
 route.get('/employees/service/:serviceId',isAuth, EmployeeController.getEmployeesByService);

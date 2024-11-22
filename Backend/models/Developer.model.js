@@ -3,6 +3,7 @@ import db from '../database.js';  // Import db.query
 const Developer = {
     async createDeveloper(developerData, role) {
         try {
+            console.log("role",role)
             const sql = `
                 INSERT INTO developers (first_name, last_name, email, password)
                 VALUES (?, ?, ?, ?)
@@ -14,7 +15,7 @@ const Developer = {
                 developerData.password,
             ];
 
-            const result = await db.query(sql, params, role);  // Pass role to db.query
+            const result = await db.query(sql, params, 'default');  // Pass role to db.query
             return {
                 ...developerData,
                 developer_id: result.insertId,  // Return the ID of the newly inserted developer
@@ -61,8 +62,9 @@ const Developer = {
 
     async findDeveloperByEmail(email, role) {
         try {
+            console.log(role)
             const sql = 'SELECT * FROM developers WHERE email = ?';
-            const developers = await db.query(sql, [email], role);  // Pass role to db.query
+            const developers = await db.query(sql, [email], 'default');  // Pass role to db.query
             return developers[0];
         } catch (error) {
             console.error('Error finding developer by email:', error);

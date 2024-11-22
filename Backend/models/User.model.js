@@ -87,9 +87,10 @@ const User = {
             const sql = `
                 SELECT users.*, pets.pet_id, pets.name AS pet_name, pets.type AS pet_type, 
                        pets.gender AS pet_gender, pets.weight AS pet_weight, 
-                       pets.health_condition_id
+                       pets.health_condition_id, health_conditions.health_condition
                 FROM users
                 LEFT JOIN pets ON users.user_id = pets.user_id
+                LEFT JOIN health_conditions ON pets.health_condition_id = health_conditions.health_condition_id
                 WHERE users.user_id = ?
             `;
             const rows = await db.query(sql, [userId], role);  // Pass role to db.query
@@ -104,6 +105,7 @@ const User = {
                 lastName: rows[0].lastName,
                 email: rows[0].email,
                 tel: rows[0].tel,
+                image: rows[0].image,
                 pets: rows
                     .filter(row => row.pet_id !== null)
                     .map(row => ({
@@ -112,7 +114,7 @@ const User = {
                         type: row.pet_type,
                         gender: row.pet_gender,
                         weight: row.pet_weight,
-                        health_condition_id: row.health_condition_id,
+                        health_condition: row.health_condition,
                     })),
             };
 

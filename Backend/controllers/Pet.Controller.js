@@ -60,7 +60,9 @@ const PetController = {
     },
 
     async getPetByUserId(req, res) {
-        const { id: userId, role } = req.user;  
+        const { role } = req.user;  
+        const { userId } = req.params;
+        console.log(userId)
 
         try {
             const pets = await PetService.findPet(userId, role);  

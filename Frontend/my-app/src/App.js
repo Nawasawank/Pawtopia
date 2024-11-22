@@ -52,6 +52,10 @@ import FeedbackManagementPage from './pages/FeedbackManage.jsx'
 import AdminReportIssue from './pages/AdminReportIssue.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import AboutUsPage from './pages/AboutUsPage.jsx';
+import ProfilePage from './pages/UserProfilePage.jsx';
+import DeveloperSignUpPage from './pages/DeveloperSignUpPage.jsx';
+import IssuesPage from './pages/DeveloperHomePage.jsx';
+import ClientManagementPage from './pages/ClientManagePage.jsx';
 
 
 
@@ -62,6 +66,7 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LogInPage />} />
         <Route path='/signup/admin' element={<AdminSignUpPage />} />
+        <Route path='/signup/dev' element={<DeveloperSignUpPage />} />
         <Route path="/" element={<HomePage/>} />
         <Route 
           path="/home"
@@ -150,12 +155,28 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute requiredRole="user">
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
 
       <Route 
           path="/employee"
           element={
             <ProtectedRoute requiredRole="admin">
               <EmployeeManagementPage />
+            </ProtectedRoute>
+          }
+        />
+      <Route 
+          path="/client"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <ClientManagementPage />
             </ProtectedRoute>
           }
         />
@@ -195,6 +216,15 @@ function App() {
           }
         />
 
+        <Route 
+          path="/DevHome"
+          element={
+            <ProtectedRoute requiredRole="developer">
+              <IssuesPage />
+            </ProtectedRoute>
+          }
+        />
+
          <Route 
           path="/swimming"
           element={
@@ -227,6 +257,7 @@ function App() {
               <AboutUsPage />
           }
         /> 
+
 
         <Route path="/" element={<LogInPage />} />
       </Routes>

@@ -9,7 +9,7 @@ const bookingsController = {
                 return res.status(400).json({ error: "Date parameter is required" });
             }
 
-            const bookings = await bookingsService.getBookingsByDate(date, service_id, role); 
+            const bookings = await bookingsService.getBookingsByDate(date, service_id, 'default'); 
             res.status(200).json(bookings);
         } catch (error) {
             console.error("Error in bookingsController - getBookingsByDate:", error);

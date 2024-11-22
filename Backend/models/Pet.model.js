@@ -66,6 +66,7 @@ const Pet = {
 
     async findPetsByUserId(userId, role) {
         try {
+            console.log(userId,"eiei")
             const sql = `
                 SELECT pets.*, health_conditions.health_condition
                 FROM pets
@@ -108,6 +109,30 @@ const Pet = {
             throw error;
         }
     },
+    async updatePet(petId, updateData, role) {
+        try {
+            const sql = `
+                UPDATE pets
+                SET name = ?, gender = ?, type = ?, health_condition_id = ?, weight = ?
+                WHERE pet_id = ?
+            `;
+            const params = [
+                updateData.name,
+                updateData.gender,
+                updateData.type,
+                updateData.health_condition_id || null,
+                updateData.weight || null,
+                petId,
+            ];
+    
+            await db.query(sql, params, role); // Execute the SQL query
+            return await this.findPetById(petId, role); // Return the updated pet
+        } catch (error) {
+            console.error('Error updating pet:', error);
+            throw error;
+        }
+    }
+    
 };
 
 export default Pet;

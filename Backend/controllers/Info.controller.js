@@ -32,6 +32,7 @@ const InfoController = {
                 user_id: user.user_id,
                 firstName: user.firstName,
                 lastName: user.lastName,
+                image: user.image,
                 email: user.email,
                 tel: user.tel,
                 image: user.image,
@@ -88,6 +89,7 @@ const InfoController = {
 
     async getDeveloperProfile(req, res) {
         const { id: userId, role } = req.user;
+        console.log('checkkkk',role)
 
         try {
             const dev = await InfoService.getDeveloperProfile(userId, role); 
@@ -102,6 +104,41 @@ const InfoController = {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     },
+    async updateUserInfo(req, res) {
+        const { id: userId, role } = req.user;
+        const userUpdateData = req.body; 
+    
+        try {
+            const updatedUser = await InfoService.updateUserInfo(userId, userUpdateData, role);
+    
+            return res.status(200).json({
+                message: 'User information updated successfully',
+                user: updatedUser,
+            });
+        } catch (error) {
+            console.error('Error in updateUserInfo:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+    },
+    async updatePetInfo(req, res) {
+        const { petId } = req.params; 
+        const petUpdateData = req.body; 
+        const { role } = req.user; 
+    
+        try {
+            const updatedPet = await InfoService.updatePetInfo(petId, petUpdateData, role);
+    
+            return res.status(200).json({
+                message: 'Pet information updated successfully',
+                pet: updatedPet,
+            });
+        } catch (error) {
+            console.error('Error in updatePetInfo:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
+    
+    
 };
 
 export default InfoController;

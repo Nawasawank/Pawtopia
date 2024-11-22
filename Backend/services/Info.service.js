@@ -1,6 +1,7 @@
 import User from '../models/User.model.js';
 import Admin from '../models/Admin.model.js';
 import Developer from '../models/Developer.model.js';
+import Pet from '../models/Pet.model.js';
 
 const InfoService = {
     async getUserProfile(userId, role) {
@@ -100,6 +101,69 @@ const InfoService = {
             return { error: 'Error fetching dev info' };
         }
     },
+    async updateUserInfo(userId, userUpdateData, role) {
+        try {
+            // Fetch the current user data
+            const currentUser = await User.findUserById(userId, role);
+            if (!currentUser) {
+                return { error: 'User not found' };
+            }
+    
+            // Merge provided data with existing user data
+            const updatedData = {
+                firstName: userUpdateData.firstName || currentUser.firstName,
+                lastName: userUpdateData.lastName || currentUser.lastName,
+                email: userUpdateData.email || currentUser.email,
+                tel: userUpdateData.tel || currentUser.tel,
+                password: userUpdateData.password || currentUser.password,
+                image: userUpdateData.image || currentUser.image,
+            };
+    
+            // Pass the merged data to the model for updating
+            const updatedUser = await User.updateUser(userId, updatedData, role);
+    
+            if (!updatedUser) {
+                return { error: 'User update failed' };
+            }
+    
+            return updatedUser;
+        } catch (error) {
+            console.error('Error in updateUserInfo:', error);
+            throw new Error('Error updating user information');
+        }
+    },    
+    async updatePetInfo(petId, petUpdateData, role) {
+        try {
+            console.log(petId)
+            // Fetch current pet data to ensure pet exists
+            const currentPet = await Pet.findPetById(petId, role);
+            if (!currentPet) {
+                return { error: 'Pet not found' };
+            }
+    
+            // Merge existing pet data with the updated data
+            const updatedData = {
+                name: petUpdateData.name || currentPet.name,
+                gender: petUpdateData.gender || currentPet.gender,
+                type: petUpdateData.type || currentPet.type,
+                health_condition_id: petUpdateData.health_condition_id || currentPet.health_condition_id,
+                weight: petUpdateData.weight || currentPet.weight,
+            };
+    
+            // Call the updatePet method in the model
+            const updatedPet = await Pet.updatePet(petId, updatedData, role);
+    
+            if (!updatedPet) {
+                return { error: 'Pet update failed' };
+            }
+    
+            return updatedPet;
+        } catch (error) {
+            console.error('Error in updatePetInfo:', error);
+            throw new Error('Error updating pet information');
+        }
+    }
+        
 };
 
 export default InfoService;

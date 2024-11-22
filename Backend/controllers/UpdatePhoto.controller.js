@@ -3,8 +3,9 @@ import UpdatePhotoService from '../services/UpdatePhoto.service.js';
 
 const UpdatePhotoController = {
     async uploadProfileImage(req, res) {
-        const { userId, role } = req.body; 
-
+        const { id: userId, role } = req.user; 
+        console.log(role)
+        console.log(userId)
         try {
             if (!req.file) {
                 return res.status(400).json({ error: 'No image uploaded' });
