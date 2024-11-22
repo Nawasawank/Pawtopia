@@ -7,6 +7,7 @@ const Pet = {
                 INSERT INTO pets (user_id, name, gender, type, health_condition_id, weight) 
                 VALUES (?, ?, ?, ?, ?, ?)
             `;
+            console.log("iddd",petData.user_id)
             const params = [
                 petData.user_id,
                 petData.name,
