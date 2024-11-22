@@ -40,6 +40,8 @@ const SignUpService = {
                 health_condition_id
             }, 'default');
 
+            console.log(newPet)
+
             return { ...newUser, image: defaultImagePath };
         } catch (error) {
             console.log(`Error creating user: ${error.message}`);

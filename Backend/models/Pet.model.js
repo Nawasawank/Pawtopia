@@ -12,8 +12,8 @@ const Pet = {
                 petData.name,
                 petData.gender,
                 petData.type,
-                petData.health_condition_id || null,
-                petData.weight || null,
+                petData.health_condition_id ,
+                petData.weight 
             ];
 
             const result = await db.query(sql, params, role);  // Pass role to db.query

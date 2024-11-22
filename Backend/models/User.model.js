@@ -28,7 +28,7 @@ const User = {
         try {
             const sql = `
                 UPDATE users 
-                SET firstName = ?, lastName = ?, email = ?, tel = ?, password = ?, image = ?
+                SET firstName = ?, lastName = ?, email = ?, tel = ?, password = ?
                 WHERE user_id = ?
             `;
             const params = [
@@ -37,7 +37,6 @@ const User = {
                 updateData.email,
                 updateData.tel,
                 updateData.password,
-                updateData.image || null,
                 userId,
             ];
 

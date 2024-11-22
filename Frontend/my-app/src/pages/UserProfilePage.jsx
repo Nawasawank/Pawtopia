@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/navbar";
 import api from "../api";
 import "../styles/ProfilePage.css";
-import ContactSection from '../components/ContactSection';
+import ContactSection from "../components/ContactSection";
+import { FaTrashAlt } from "react-icons/fa"; // Import trash icon
 
 const ProfilePage = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -14,8 +15,9 @@ const ProfilePage = () => {
     type: "",
     gender: "",
     weight: "",
-    health_condition: "",
+    health_condition_id: "",
   });
+  const [deletedPets, setDeletedPets] = useState([]); // Track deleted pets
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -49,48 +51,94 @@ const ProfilePage = () => {
 
   const handlePetChange = (index, field, value) => {
     const updatedPets = [...pets];
-    updatedPets[index][field] = value;
+    // Ensure health_condition_id is updated as a number
+    updatedPets[index][field] = field === "health_condition_id" ? parseInt(value, 10) || null : value;
     setPets(updatedPets);
   };
-
-  const handleAddPet = async () => {
+  
+  const handleSaveChanges = async () => {
     try {
       const token = localStorage.getItem("token");
-      await api.post("/api/pet/add", newPet, {
-        headers: { Authorization: `Bearer ${token}` },
+  
+      // Update existing user info
+      await api.put("/api/update/info", userInfo, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+  
+      // Update existing pets
+      for (const pet of pets) {
+        if (!pet.isNew) {
+          const petData = {
+            name: pet.name,
+            type: pet.type,
+            gender: pet.gender,
+            weight: pet.weight,
+            health_condition_id: pet.health_condition_id, // Ensure correct field
+          };
 
-      // Fetch updated pets list
-      const response = await api.get("/api/info", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setPets(response.data.pets);
-
-      alert("Pet added successfully!");
+          console.log(petData)
+  
+          await api.put(`/api/update/pet/${pet.pet_id}`, petData, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        }
+      }
+  
+      // Add new pets
+      for (const pet of pets.filter((pet) => pet.isNew)) {
+        const { isNew, ...petData } = pet; // Exclude the `isNew` flag
+        await api.post("/api/pet/add", petData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+  
+      // Delete removed pets
+      for (const pet of deletedPets) {
+        await api.delete(`/api/pets/delete/${pet.pet_id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+  
+      alert("Changes saved successfully!");
+      setEditMode(false);
       setShowAddPetForm(false);
       setNewPet({
         name: "",
         type: "",
         gender: "",
         weight: "",
-        health_condition: "",
+        health_condition_id: "",
       });
+      setDeletedPets([]); // Clear deleted pets
     } catch (error) {
-      console.error("Error adding pet:", error);
+      console.error("Error saving changes:", error);
+      alert("Failed to save changes. Please try again.");
     }
   };
+  
+  const handleAddPetClick = () => {
+    setPets((prev) => [
+      ...prev,
+      { ...newPet, isNew: true },
+    ]);
+    setNewPet({
+      name: "",
+      type: "",
+      gender: "",
+      weight: "",
+      health_condition_id: "",
+    });
+    setShowAddPetForm(false);
+  };
 
-  const handleDeletePet = async (petId) => {
-    try {
-      const token = localStorage.getItem("token");
-      await api.delete(`/api/pets/delete/${petId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setPets(pets.filter((pet) => pet.pet_id !== petId));
-      alert("Pet deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting pet:", error);
+  const handleDeletePetFrontend = (pet) => {
+    setPets(pets.filter((p) => p !== pet)); // Remove pet from the frontend
+    if (!pet.isNew) {
+      setDeletedPets((prev) => [...prev, pet]); // Add to deletedPets list if not new
     }
   };
 
@@ -124,7 +172,6 @@ const ProfilePage = () => {
     <div className="profile-page">
       <Navbar />
       <div className="profile-page__container">
-        {/* Profile Header */}
         <div className="profile-page__header">
           <label htmlFor="profile-image-upload">
             <img
@@ -151,7 +198,6 @@ const ProfilePage = () => {
           </button>
         </div>
 
-        {/* User Information */}
         <div className="profile-page__info">
           <div className="profile-page__info-row">
             <label>First Name:</label>
@@ -195,10 +241,9 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Pet Information */}
         <h2 className="profile-page__pets-heading">Pet Details</h2>
         {pets.map((pet, index) => (
-          <div key={pet.pet_id} className="profile-page__pet-card">
+          <div key={index} className="profile-page__pet-card">
             <div className="profile-page__pet-field">
               <label>Name:</label>
               <input
@@ -219,10 +264,11 @@ const ProfilePage = () => {
             </div>
             <div className="profile-page__pet-field">
               <label>Gender:</label>
-              <div>
+              <div className="radio-container">
                 <label>
                   <input
                     type="radio"
+                    name={`gender-${index}`}
                     value="Female"
                     checked={pet.gender === "Female"}
                     disabled={!editMode}
@@ -232,9 +278,10 @@ const ProfilePage = () => {
                   />
                   Female
                 </label>
-                <label style={{ marginLeft: "10px" }}>
+                <label>
                   <input
                     type="radio"
+                    name={`gender-${index}`}
                     value="Male"
                     checked={pet.gender === "Male"}
                     disabled={!editMode}
@@ -261,19 +308,18 @@ const ProfilePage = () => {
               <label>Health Condition:</label>
               {editMode ? (
                 <select
-                  value={pet.health_condition || ""}
+                  value={pet.health_condition_id || ""}
                   onChange={(e) =>
-                    handlePetChange(index, "health_condition", e.target.value)
+                    handlePetChange(index, "health_condition_id", e.target.value)
                   }
                 >
-                  <option value="">None</option>
-                  <option value="Diabetes">Diabetes</option>
-                  <option value="Heart Disease">Heart Disease</option>
-                  <option value="Respiratory Infection">
-                    Respiratory Infection
-                  </option>
-                  <option value="Cancer">Cancer</option>
-                  {/* Add more options as needed */}
+                  <option value="">Select Health Condition</option>
+                  <option value="1">Cancer</option>
+                  <option value="2">Diabetes</option>
+                  <option value="3">Kidney Disease</option>
+                  <option value="4">Heart Disease</option>
+                  <option value="5">Respiratory Infection</option>
+                  <option value="6">None</option>
                 </select>
               ) : (
                 <input
@@ -283,13 +329,12 @@ const ProfilePage = () => {
                 />
               )}
             </div>
-
             {editMode && (
               <button
                 className="profile-page__delete-btn"
-                onClick={() => handleDeletePet(pet.pet_id)}
+                onClick={() => handleDeletePetFrontend(pet)}
               >
-                Delete
+                <FaTrashAlt />
               </button>
             )}
           </div>
@@ -297,91 +342,127 @@ const ProfilePage = () => {
 
         {editMode && (
           <>
-            {showAddPetForm ? (
-              <div className="profile-page__add-pet">
-                <h3>Add New Pet</h3>
-                <input
-                  type="text"
-                  placeholder="Name"
-                  value={newPet.name}
-                  onChange={(e) =>
-                    setNewPet((prev) => ({ ...prev, name: e.target.value }))
-                  }
-                />
-                <input
-                  type="text"
-                  placeholder="Type"
-                  value={newPet.type}
-                  onChange={(e) =>
-                    setNewPet((prev) => ({ ...prev, type: e.target.value }))
-                  }
-                />
-                <div>
-                  <label>
-                    <input
-                      type="radio"
-                      value="Female"
-                      checked={newPet.gender === "Female"}
-                      onChange={(e) =>
-                        setNewPet((prev) => ({
-                          ...prev,
-                          gender: e.target.value,
-                        }))
-                      }
-                    />
-                    Female
-                  </label>
-                  <label style={{ marginLeft: "10px" }}>
-                    <input
-                      type="radio"
-                      value="Male"
-                      checked={newPet.gender === "Male"}
-                      onChange={(e) =>
-                        setNewPet((prev) => ({
-                          ...prev,
-                          gender: e.target.value,
-                        }))
-                      }
-                    />
-                    Male
-                  </label>
+            <button
+              className="profile-page__add-pet-btn"
+              onClick={() => setShowAddPetForm(!showAddPetForm)}
+            >
+              {showAddPetForm ? "Cancel Adding Pet" : "Add Pet"}
+            </button>
+            {showAddPetForm && (
+              <div className="profile-page__add-pet profile-page__pet-card">
+                <div className="profile-page__pet-field">
+                  <label>Name:</label>
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    value={newPet.name}
+                    onChange={(e) =>
+                      setNewPet((prev) => ({
+                        ...prev,
+                        name: e.target.value,
+                      }))
+                    }
+                  />
                 </div>
-                <input
-                  type="text"
-                  placeholder="Weight"
-                  value={newPet.weight}
-                  onChange={(e) =>
-                    setNewPet((prev) => ({ ...prev, weight: e.target.value }))
-                  }
-                />
-                <select
-                  value={newPet.health_condition}
-                  onChange={(e) =>
-                    setNewPet((prev) => ({
-                      ...prev,
-                      health_condition: e.target.value,
-                    }))
-                  }
+                <div className="profile-page__pet-field">
+                  <label>Type:</label>
+                  <input
+                    type="text"
+                    placeholder="Type"
+                    value={newPet.type}
+                    onChange={(e) =>
+                      setNewPet((prev) => ({
+                        ...prev,
+                        type: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className="profile-page__pet-field">
+                  <label>Gender:</label>
+                  <div className="radio-container">
+                    <label>
+                      <input
+                        type="radio"
+                        name="newPetGender"
+                        value="Female"
+                        checked={newPet.gender === "Female"}
+                        onChange={(e) =>
+                          setNewPet((prev) => ({
+                            ...prev,
+                            gender: e.target.value,
+                          }))
+                        }
+                      />
+                      Female
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="newPetGender"
+                        value="Male"
+                        checked={newPet.gender === "Male"}
+                        onChange={(e) =>
+                          setNewPet((prev) => ({
+                            ...prev,
+                            gender: e.target.value,
+                          }))
+                        }
+                      />
+                      Male
+                    </label>
+                  </div>
+                </div>
+                <div className="profile-page__pet-field">
+                  <label>Weight:</label>
+                  <input
+                    type="text"
+                    placeholder="Weight"
+                    value={newPet.weight}
+                    onChange={(e) =>
+                      setNewPet((prev) => ({
+                        ...prev,
+                        weight: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className="profile-page__pet-field">
+                  <label>Health Condition:</label>
+                  <select
+                    value={newPet.health_condition_id}
+                    onChange={(e) =>
+                      setNewPet((prev) => ({
+                        ...prev,
+                        health_condition_id: parseInt(e.target.value, 10),
+                      }))
+                    }
+                  >
+                    <option value="">Select Health Condition</option>
+                    <option value="1">Cancer</option>
+                    <option value="2">Diabetes</option>
+                    <option value="3">Kidney Disease</option>
+                    <option value="4">Heart Disease</option>
+                    <option value="5">Respiratory Infection</option>
+                    <option value="6">None</option>
+                  </select>
+                </div>
+                <button
+                  className="profile-page__add-pet-btn"
+                  onClick={handleAddPetClick}
                 >
-                  <option value="">None</option>
-                  <option value="Diabetes">Diabetes</option>
-                  <option value="Heart Disease">Heart Disease</option>
-                  <option value="Respiratory Infection">
-                    Respiratory Infection
-                  </option>
-                  <option value="Cancer">Cancer</option>
-                  {/* Add more options as needed */}
-                </select>
-                <button onClick={handleAddPet}>Add Pet</button>
+                  Add Pet to List
+                </button>
               </div>
-            ) : (
-              <button
-                className="profile-page__add-pet-btn"
-                onClick={() => setShowAddPetForm(true)}
-              >
-                Add Pet
-              </button>
             )}
+            <div className="profile-page__buttons">
+              <button
+                className="profile-page__save-btn"
+                onClick={handleSaveChanges}
+              >
+                Save Changes
+              </button>
+            </div>
           </>
         )}
       </div>

@@ -116,7 +116,6 @@ const InfoService = {
                 email: userUpdateData.email || currentUser.email,
                 tel: userUpdateData.tel || currentUser.tel,
                 password: userUpdateData.password || currentUser.password,
-                image: userUpdateData.image || currentUser.image,
             };
     
             // Pass the merged data to the model for updating
