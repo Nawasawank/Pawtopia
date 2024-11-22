@@ -42,6 +42,7 @@ route.get('/info', isAuth, InfoController.getUserInfo);
 route.put('/update/info',isAuth,InfoController.updateUserInfo)
 //update pet
 route.put('/update/pet/:petId',isAuth,InfoController.updatePetInfo)
+route.delete('/deleteUserAndPets/:userId',isAuth,InfoController.deleteUserAndPets)
 
 //Get all user and pet count 
 route.get('/allUsers',isAuth, InfoController.getUserInfoAndPetCount);

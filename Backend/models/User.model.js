@@ -196,6 +196,18 @@ const User = {
             throw error;
         }
     },
+    async deleteUserById(userId,role) {
+        try {
+            const sql = `DELETE FROM users WHERE user_id = ?`;
+            const params = [userId];
+            const result = await db.query(sql, params,role); // Execute the query
+            return result; // Return the result of the deletion
+        } catch (error) {
+            console.error('Error deleting user by ID:', error);
+            throw error;
+        }
+    }
+    
 };
 
 export default User;

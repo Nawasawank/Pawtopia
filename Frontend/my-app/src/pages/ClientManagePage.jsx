@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/admin_navbar.jsx';
-import api from '../api.js';
 import PetOverlay from '../components/PetOverlay.jsx';
+import ConfirmDeleteOverlay from '../components/ConfirmDeleteOverlay.jsx';
+import api from '../api.js';
 import '../styles/ClientManagePage.css';
 
 const ClientManagementPage = () => {
   const [clients, setClients] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedClient, setSelectedClient] = useState(null); // Selected client for overlay
-  const [clientPets, setClientPets] = useState([]); // Pets of the selected client
+  const [selectedClient, setSelectedClient] = useState(null);
+  const [clientPets, setClientPets] = useState([]);
   const [showPetOverlay, setShowPetOverlay] = useState(false);
+  const [showDeleteOverlay, setShowDeleteOverlay] = useState(false);
+  const [clientToDelete, setClientToDelete] = useState(null);
   const clientsPerPage = 10;
 
   useEffect(() => {
@@ -38,8 +41,8 @@ const ClientManagementPage = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      setClientPets(response.data.pets || []); // Access the pets array directly
-      setShowPetOverlay(true); // Show the overlay once pets are fetched
+      setClientPets(response.data.pets || []);
+      setShowPetOverlay(true);
     } catch (error) {
       console.error('Error fetching pets:', error);
       setClientPets([]);
@@ -48,7 +51,43 @@ const ClientManagementPage = () => {
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
-    setCurrentPage(1); // Reset to the first page when searching
+    setCurrentPage(1);
+  };
+
+  const confirmDeleteClient = (client) => {
+    setClientToDelete(client);
+    setShowDeleteOverlay(true);
+  };
+
+  const handleDeleteClient = async () => {
+    if (!clientToDelete) return;
+
+    try {
+      await api.delete(`/api/deleteUserAndPets/${clientToDelete.user_id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      fetchClients();
+      setShowDeleteOverlay(false);
+      setClientToDelete(null);
+    } catch (error) {
+      console.error('Error deleting client:', error);
+    }
+  };
+
+  const handleDeletePet = async (petId) => {
+    try {
+      await api.delete(`/pets/delete/${petId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+
+      // Refresh pet list after deletion
+      fetchPetsByUserId(selectedClient.user_id);
+    } catch (error) {
+      console.error('Error deleting pet:', error);
+    }
   };
 
   const filteredClients = clients.filter((client) =>
@@ -94,6 +133,7 @@ const ClientManagementPage = () => {
             <th>Tel</th>
             <th>Email</th>
             <th>Pet Amount</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -111,11 +151,19 @@ const ClientManagementPage = () => {
                 >
                   {client.pet_count}
                 </td>
+                <td className="action-icons">
+                  <button
+                    className="action-button"
+                    onClick={() => confirmDeleteClient(client)}
+                  >
+                    🗑️
+                  </button>
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6" style={{ textAlign: 'center' }}>No clients found.</td>
+              <td colSpan="7" style={{ textAlign: 'center' }}>No clients found.</td>
             </tr>
           )}
         </tbody>
@@ -142,6 +190,15 @@ const ClientManagementPage = () => {
           clientName={`${selectedClient.firstName} ${selectedClient.lastName}`}
           pets={clientPets}
           onClose={() => setShowPetOverlay(false)}
+          onDeletePet={handleDeletePet}
+        />
+      )}
+
+      {showDeleteOverlay && (
+        <ConfirmDeleteOverlay
+          message="Are you sure you want to delete this client and their pets?"
+          onConfirm={handleDeleteClient}
+          onCancel={() => setShowDeleteOverlay(false)}
         />
       )}
     </div>

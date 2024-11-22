@@ -55,3 +55,20 @@ body {
 .b-filter-item .rs-input-group.rs-input-group-inside {
   width: 300px;
 }
+
+.delete-button {
+  margin-left: 80px;
+  margin-right: -10px;
+  background: none;
+  border: none;
+  color: red;
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.delete-button:hover {
+  color: darkred;
+  background: none;
+}
+

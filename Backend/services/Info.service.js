@@ -161,7 +161,26 @@ const InfoService = {
             console.error('Error in updatePetInfo:', error);
             throw new Error('Error updating pet information');
         }
+    },
+    async deleteUserAndPets(userId,role) {
+        try {
+            // Check if the user exists
+            const user = await User.findUserById(userId,role);
+            if (!user) {
+                throw new Error('User not found');
+            }
+    
+            // Delete the user (pets are deleted automatically via ON DELETE CASCADE)
+            const result = await User.deleteUserById(userId,role);
+    
+            return result; // Return the result of the deletion
+        } catch (error) {
+            console.error('Error in deleteUserAndPets:', error);
+            throw error;
+        }
     }
+    
+    
         
 };
 

@@ -3,6 +3,7 @@ import Navbar from '../components/admin_navbar.jsx';
 import { DatePicker } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
 import api from '../api.js';
+import ConfirmDeleteOverlay from '../components/ConfirmDeleteOverlay';
 import '../styles/bookingmanage.css';
 
 const BookingManagementPage = () => {
@@ -10,27 +11,24 @@ const BookingManagementPage = () => {
   const [selectedService, setSelectedService] = useState('');
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [deleteBookingId, setDeleteBookingId] = useState(null);
   const bookingsPerPage = 10;
 
   useEffect(() => {
     if (selectedService && selectedDate) {
       fetchBookings(selectedService, selectedDate);
     }
-  }, [selectedService]); 
+  }, [selectedService]);
 
   const fetchBookings = async (serviceId, date) => {
     try {
-      const localDate = date ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}` : '';
-      console.log("Adjusted Local Date:", localDate);
-      console.log("Selected Service:", serviceId);
-  
+      const localDate = date
+        ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+        : '';
       const response = await api.get(`/api/bookings/by-date?date=${localDate}&service_id=${serviceId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
-  
-      console.log("API Response:", response);
       setBookings(response.data || []);
       setCurrentPage(1);
     } catch (error) {
@@ -38,7 +36,31 @@ const BookingManagementPage = () => {
       setBookings([]);
     }
   };
-  
+
+  const confirmDeleteBooking = (bookingId) => {
+    setDeleteBookingId(bookingId);
+    setShowConfirm(true);
+  };
+
+  const handleDeleteBooking = async () => {
+    try {
+      await api.delete(`/api/${selectedService}/${deleteBookingId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+
+      setShowConfirm(false);
+      setDeleteBookingId(null);
+      // Refresh bookings after deletion
+      fetchBookings(selectedService, selectedDate);
+    } catch (error) {
+      console.error('Error deleting booking:', error);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirm(false);
+    setDeleteBookingId(null);
+  };
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -80,7 +102,7 @@ const BookingManagementPage = () => {
           <DatePicker
             value={selectedDate}
             onChange={setSelectedDate}
-            onOk={handleDateOk} 
+            onOk={handleDateOk}
             format="dd/MM/yyyy"
             style={{ width: '100%' }}
           />
@@ -95,6 +117,7 @@ const BookingManagementPage = () => {
             <th>Pet</th>
             <th>Time</th>
             <th>Employee</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -106,11 +129,21 @@ const BookingManagementPage = () => {
                 <td>{booking.pet_name}</td>
                 <td>{booking.time_slot}</td>
                 <td>{booking.employee_name}</td>
+                <td>
+                  <button
+                    className="delete-button"
+                    onClick={() => confirmDeleteBooking(booking.booking_id)}
+                  >
+                    🗑️
+                  </button>
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6" style={{ textAlign: 'center' }}>No bookings found.</td>
+              <td colSpan="6" style={{ textAlign: 'center' }}>
+                No bookings found.
+              </td>
             </tr>
           )}
         </tbody>
@@ -131,6 +164,14 @@ const BookingManagementPage = () => {
           </a>
         ))}
       </div>
+
+      {showConfirm && (
+        <ConfirmDeleteOverlay
+          message="Are you sure you want to delete this booking?"
+          onConfirm={handleDeleteBooking}
+          onCancel={handleCancelDelete}
+        />
+      )}
     </div>
   );
 };

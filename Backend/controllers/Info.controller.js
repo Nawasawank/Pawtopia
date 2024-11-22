@@ -136,9 +136,25 @@ const InfoController = {
             console.error('Error in updatePetInfo:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-    }
+    },
+        async deleteUserAndPets(req, res) {
+            const { role } = req.user; 
+            const { userId } = req.params; // Extract user ID from authenticated user
     
+            try {
+                // Call the service to delete the user (pets will be deleted automatically)
+                const result = await InfoService.deleteUserAndPets(userId,role);
     
-};
+                if (result.affectedRows === 0) {
+                    return res.status(404).json({ error: 'User not found or already deleted' });
+                }
+    
+                return res.status(200).json({ message: 'User and their pets deleted successfully' });
+            } catch (error) {
+                console.error('Error in deleteUserAndPets:', error);
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
+        },
+    };
 
 export default InfoController;
