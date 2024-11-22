@@ -2,7 +2,7 @@
   max-width: 900px;
   margin: 150px auto 0;
   padding: 20px;
-  background-color: #faf4e6;
+  background-color: #f3edde;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -21,7 +21,7 @@
 }
 
 .profile-page__edit-btn {
-  background-color: #ffe8cc;
+  background-color: #f3edde;
   color: #7b450c;
   border: none;
   padding: 15px;
@@ -298,4 +298,13 @@
 
 .profile-page__logout-btn:hover {
   background-color: #c9302c;
+}
+
+.contact-section {
+  margin-left: 0px;
+  width: 100%;
+  background-color: #f3edde;
+  padding: 20px 0;
+  text-align: center;
+  margin-top: auto; 
 }

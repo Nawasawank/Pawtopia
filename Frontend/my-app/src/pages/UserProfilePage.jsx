@@ -514,11 +514,10 @@ const handleLogout = () => {
           Log Out
         </button>
       </div>
-        
       </div>
-      
       <ContactSection />
     </div>
+    
   );
 };
 
