@@ -4,6 +4,7 @@ import api from "../api";
 import "../styles/ProfilePage.css";
 import ContactSection from "../components/ContactSection";
 import { FaTrashAlt } from "react-icons/fa"; 
+import { useNavigate } from "react-router-dom"; 
 
 const ProfilePage = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -19,6 +20,7 @@ const ProfilePage = () => {
   });
   const [deletedPets, setDeletedPets] = useState([]); // Track deleted pets
   const [imageKey, setImageKey] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -198,6 +200,13 @@ const ProfilePage = () => {
         alert("Failed to update profile picture. Please try again.");
     }
 };
+
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("role");
+  navigate("/"); // Redirect to the login page or homepage
+};
+
 
   
 
@@ -498,9 +507,16 @@ const ProfilePage = () => {
                 Save Changes
               </button>
             </div>
+            
           </>
-        )}
+        )}<div className="profile-page__logout-section">
+        <button className="profile-page__logout-btn" onClick={handleLogout}>
+          Log Out
+        </button>
       </div>
+        
+      </div>
+      
       <ContactSection />
     </div>
   );

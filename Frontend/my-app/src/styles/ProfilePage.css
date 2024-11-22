@@ -279,3 +279,23 @@
 .profile-page__save-btn:hover {
   background-color: #8c6513;
 }
+
+.profile-page__logout-section {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.profile-page__logout-btn {
+  background-color: #d9534f;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.profile-page__logout-btn:hover {
+  background-color: #c9302c;
+}
