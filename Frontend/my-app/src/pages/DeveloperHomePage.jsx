@@ -4,22 +4,28 @@ import 'rsuite/dist/rsuite.min.css';
 import api from '../api';
 import '../styles/issuesPage.css';
 import Issues_Overlay from '../components/Issues_Overlay.jsx';
-import DeveloperNavbar from '../components/dev_navbar.jsx'
+import DeveloperNavbar from '../components/dev_navbar.jsx';
 
 const IssuesPage = () => {
   const [issues, setIssues] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date()); // Set default to today's date
   const [statusUpdates, setStatusUpdates] = useState({});
   const [showOverlay, setShowOverlay] = useState(false);
   const [currentIssue, setCurrentIssue] = useState(null);
 
   useEffect(() => {
-    fetchIssues();
+    fetchIssues(new Date()); // Fetch issues for today by default
   }, []);
 
   const fetchIssues = async (date = null) => {
     try {
-      const query = date ? `?date=${date.toISOString().split('T')[0]}` : '';
+      let query = '';
+      if (date) {
+        // Format the date as YYYY-MM-DD in local time
+        const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        query = `?date=${formattedDate}`;
+      }
+  
       const response = await api.get(`/api/dev/issues${query}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -79,7 +85,7 @@ const IssuesPage = () => {
 
   return (
     <div className="issues-page-wrapper">
-        <DeveloperNavbar />
+      <DeveloperNavbar />
       <h1 className="issues-title">Reported Issues</h1>
       <div className="filter-section">
         <label>Select Date:</label>

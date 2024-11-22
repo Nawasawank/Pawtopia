@@ -3,13 +3,24 @@ import Pet from "../models/Pet.model.js";
 const PetService = {
     async addPet(userId, petData, role) {
         try {
-            const newPet = await Pet.createPet({ ...petData, user_id: userId }, role); 
+            // Ensure all fields are not empty
+            if (
+                !petData.name ||
+                !petData.type ||
+                !petData.gender ||
+                !petData.weight ||
+                !petData.health_condition_id
+            ) {
+                return { error: 'All fields are required' };
+            }
+    
+            const newPet = await Pet.createPet({ ...petData, user_id: userId }, role);
             return newPet;
         } catch (error) {
             console.error(`Error adding pet: ${error.message}`);
             return { error: 'Error adding pet' };
         }
-    },
+    },    
 
     async deletePet(userId, petId, role) {
         try {

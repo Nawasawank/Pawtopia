@@ -29,14 +29,13 @@ const Pet = {
         try {
             const sql = `
                 UPDATE pets 
-                SET name = ?, gender = ?, type = ?, health_condition_id = ?, weight = ?
+                SET name = ?, gender = ?, type = ?, weight = ?
                 WHERE pet_id = ?
             `;
             const params = [
                 updateData.name,
                 updateData.gender,
                 updateData.type,
-                updateData.health_condition_id || null,
                 updateData.weight || null,
                 petId,
             ];

@@ -111,3 +111,15 @@
 .save-button:hover {
     background-color: #2e8b57;
 }
+.issues-table select {
+    color: #333; /* Dark text for contrast */
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 8px 12px; /* Add padding for better spacing */
+    font-size: 1em; /* Adjust font size */
+    font-family: 'Lato', sans-serif; /* Match page font */
+    transition: all 0.3s ease; /* Smooth transition for hover */
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+}
+

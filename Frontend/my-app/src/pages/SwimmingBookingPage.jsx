@@ -41,7 +41,7 @@ const SwimmingAppointmentPage = () => {
       if (!booking_id) return;
 
       try {
-        const response = await api.get(`/api/bookings/2/${booking_id}`, { // Updated path
+        const response = await api.get(`/api/bookings/2/${booking_id}`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -68,12 +68,40 @@ const SwimmingAppointmentPage = () => {
     });
   }, [booking_id]);
 
+  const isTimeSlotValid = (date, timeSlot) => {
+    const now = new Date();
+    const selectedDate = new Date(date);
+    
+    // If selected date is in the future, time slot is valid
+    if (selectedDate.getDate() !== now.getDate() || 
+        selectedDate.getMonth() !== now.getMonth() || 
+        selectedDate.getFullYear() !== now.getFullYear()) {
+      return true;
+    }
+
+    // For same day bookings, check if the time slot hasn't passed
+    const [startTime] = timeSlot.split(' - ');
+    const [hours, minutes] = startTime.split(':').map(Number);
+    
+    const slotTime = new Date(selectedDate);
+    slotTime.setHours(hours, minutes, 0, 0);
+
+    return slotTime > now;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const selectedPetObj = pets.find(pet => `${pet.name} - ${pet.type}` === selectedPet);
     if (!selectedPetObj || !selectedDate || !selectedTime) {
       setOverlayMessage('Please complete all fields.');
+      setShowOverlay(true);
+      return;
+    }
+
+    // Check if the selected time slot is valid
+    if (!isTimeSlotValid(selectedDate, selectedTime)) {
+      setOverlayMessage('Cannot book this time slot as it has already passed.');
       setShowOverlay(true);
       return;
     }
@@ -86,8 +114,8 @@ const SwimmingAppointmentPage = () => {
 
     try {
       const endpoint = booking_id
-        ? `/api/update/2/${booking_id}` // Updated path for updating booking
-        : '/api/2/book'; // Updated path for creating booking
+        ? `/api/update/2/${booking_id}`
+        : '/api/2/book';
 
       const response = booking_id
         ? await api.put(endpoint, bookingData, {
@@ -103,7 +131,13 @@ const SwimmingAppointmentPage = () => {
             },
           });
 
-      setOverlayMessage(response.data.error ? response.data.error : booking_id ? 'Swimming appointment updated!' : 'Swimming appointment successful!');
+      setOverlayMessage(
+        response.data.error 
+          ? response.data.error 
+          : booking_id 
+          ? 'Swimming appointment updated!' 
+          : 'Swimming appointment successful!'
+      );
       setShowOverlay(true);
 
       if (!booking_id) {
@@ -113,7 +147,7 @@ const SwimmingAppointmentPage = () => {
       }
     } catch (error) {
       console.error('Error submitting booking:', error);
-      setOverlayMessage('Error submitting booking');
+      setOverlayMessage(error.response?.data?.message || 'Error submitting booking');
       setShowOverlay(true);
     }
   };

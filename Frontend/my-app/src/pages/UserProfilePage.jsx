@@ -3,7 +3,7 @@ import Navbar from "../components/navbar";
 import api from "../api";
 import "../styles/ProfilePage.css";
 import ContactSection from "../components/ContactSection";
-import { FaTrashAlt } from "react-icons/fa"; // Import trash icon
+import { FaTrashAlt } from "react-icons/fa"; 
 
 const ProfilePage = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -18,6 +18,7 @@ const ProfilePage = () => {
     health_condition_id: "",
   });
   const [deletedPets, setDeletedPets] = useState([]); // Track deleted pets
+  const [imageKey, setImageKey] = useState(0);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -51,16 +52,22 @@ const ProfilePage = () => {
 
   const handlePetChange = (index, field, value) => {
     const updatedPets = [...pets];
-    // Ensure health_condition_id is updated as a number
     updatedPets[index][field] = field === "health_condition_id" ? parseInt(value, 10) || null : value;
     setPets(updatedPets);
   };
-  
+
+  const handleDeletePetFrontend = (pet) => {
+    setPets((prevPets) => prevPets.filter((p) => p !== pet));
+    if (!pet.isNew) {
+      setDeletedPets((prev) => [...prev, pet]);
+    }
+  };
+
   const handleSaveChanges = async () => {
     try {
       const token = localStorage.getItem("token");
   
-      // Update existing user info
+      // Update user info
       await api.put("/api/update/info", userInfo, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -75,10 +82,8 @@ const ProfilePage = () => {
             type: pet.type,
             gender: pet.gender,
             weight: pet.weight,
-            health_condition_id: pet.health_condition_id, // Ensure correct field
+            health_condition_id: pet.health_condition_id || null,
           };
-
-          console.log(petData)
   
           await api.put(`/api/update/pet/${pet.pet_id}`, petData, {
             headers: {
@@ -90,7 +95,7 @@ const ProfilePage = () => {
   
       // Add new pets
       for (const pet of pets.filter((pet) => pet.isNew)) {
-        const { isNew, ...petData } = pet; // Exclude the `isNew` flag
+        const { isNew, ...petData } = pet;
         await api.post("/api/pet/add", petData, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -103,6 +108,21 @@ const ProfilePage = () => {
         });
       }
   
+      // Refetch user info to refresh state with updated data
+      const response = await api.get("/api/info", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      const data = response.data;
+      const profileImageUrl = `${api.defaults.baseURL}${data.image}`;
+      setUserInfo({
+        ...data,
+        image: profileImageUrl,
+      });
+      setPets(data.pets); // Update the pets with the latest data from the backend
+  
       alert("Changes saved successfully!");
       setEditMode(false);
       setShowAddPetForm(false);
@@ -113,18 +133,32 @@ const ProfilePage = () => {
         weight: "",
         health_condition_id: "",
       });
-      setDeletedPets([]); // Clear deleted pets
+      setDeletedPets([]);
     } catch (error) {
       console.error("Error saving changes:", error);
       alert("Failed to save changes. Please try again.");
     }
   };
   
+
   const handleAddPetClick = () => {
+    if (
+      !newPet.name.trim() ||
+      !newPet.type.trim() ||
+      !newPet.gender.trim() ||
+      !newPet.weight.trim() ||
+      isNaN(newPet.weight) ||
+      !newPet.health_condition_id
+    ) {
+      alert("All fields are required and weight must be a valid number.");
+      return;
+    }
+
     setPets((prev) => [
       ...prev,
       { ...newPet, isNew: true },
     ]);
+
     setNewPet({
       name: "",
       type: "",
@@ -132,14 +166,8 @@ const ProfilePage = () => {
       weight: "",
       health_condition_id: "",
     });
-    setShowAddPetForm(false);
-  };
 
-  const handleDeletePetFrontend = (pet) => {
-    setPets(pets.filter((p) => p !== pet)); // Remove pet from the frontend
-    if (!pet.isNew) {
-      setDeletedPets((prev) => [...prev, pet]); // Add to deletedPets list if not new
-    }
+    setShowAddPetForm(false);
   };
 
   const handleProfileImageChange = async (e) => {
@@ -150,23 +178,28 @@ const ProfilePage = () => {
     formData.append("profileImage", file);
 
     try {
-      const token = localStorage.getItem("token");
-      const response = await api.put("/api/upload-photo", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+        const token = localStorage.getItem("token");
+        const response = await api.put("/api/upload-photo", formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+            },
+        });
 
-      const updatedImageUrl = `${api.defaults.baseURL}${response.data.image}`;
-      setUserInfo((prev) => ({ ...prev, image: updatedImageUrl }));
+        const updatedImageUrl = `${api.defaults.baseURL}${response.data.image}`;
+        setUserInfo((prev) => ({ ...prev, image: updatedImageUrl }));
 
-      alert("Profile picture updated successfully!");
+        alert("Profile picture updated successfully!");
+        
+        // Refresh the page
+        window.location.reload();
     } catch (error) {
-      console.error("Error updating profile picture:", error);
-      alert("Failed to update profile picture. Please try again.");
+        console.error("Error updating profile picture:", error);
+        alert("Failed to update profile picture. Please try again.");
     }
-  };
+};
+
+  
 
   return (
     <div className="profile-page">
@@ -174,11 +207,13 @@ const ProfilePage = () => {
       <div className="profile-page__container">
         <div className="profile-page__header">
           <label htmlFor="profile-image-upload">
-            <img
+          <img
+              key={imageKey} // Use imageKey to force re-render
               src={userInfo?.image || "/default-avatar.png"}
               alt="User Profile"
               className="profile-page__avatar clickable"
-            />
+          />
+
           </label>
           <h2 className="profile-page__greeting">
             Hi! {userInfo?.firstName || "User"}
@@ -342,12 +377,6 @@ const ProfilePage = () => {
 
         {editMode && (
           <>
-            <button
-              className="profile-page__add-pet-btn"
-              onClick={() => setShowAddPetForm(!showAddPetForm)}
-            >
-              {showAddPetForm ? "Cancel Adding Pet" : "Add Pet"}
-            </button>
             {showAddPetForm && (
               <div className="profile-page__add-pet profile-page__pet-card">
                 <div className="profile-page__pet-field">
@@ -456,6 +485,12 @@ const ProfilePage = () => {
               </div>
             )}
             <div className="profile-page__buttons">
+              <button
+                className="profile-page__add-pet-btn"
+                onClick={() => setShowAddPetForm(!showAddPetForm)}
+              >
+                {showAddPetForm ? "Cancel Adding Pet" : "Add Pet"}
+              </button>
               <button
                 className="profile-page__save-btn"
                 onClick={handleSaveChanges}
